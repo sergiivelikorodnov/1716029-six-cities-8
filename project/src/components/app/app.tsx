@@ -1,10 +1,11 @@
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import { AppRoute } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
 import NotFound from '../not-found/not-found';
 import Login from '../login/login';
 import Property from '../property/property';
+import PrivateRoute from '../private-route/private-route';
 
 
 const Settings = {
@@ -23,10 +24,14 @@ function App(): JSX.Element {
         <Route exact path={AppRoute.Login}>
           <Login />
         </Route>
-        <Route exact path={AppRoute.Favorites}>
-          <Favorites />
-        </Route>
-        <Route exact path={AppRoute.Property}>
+        <PrivateRoute
+          exact
+          path={AppRoute.Favorites}
+          render = {() => <Favorites />}
+          authorizationStatus={AuthorizationStatus.NoAuth}
+        >
+        </PrivateRoute>
+        <Route exact path={AppRoute.Room}>
           <Property
             price={122}
           />
