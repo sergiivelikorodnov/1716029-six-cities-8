@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import Logo from '../logo/logo';
 
-function FavoritesEmpty(): JSX.Element{
+function NotFound(): JSX.Element{
   return (
-    <div className="page page--favorites-empty">
+    <div className="page">
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
@@ -18,7 +18,7 @@ function FavoritesEmpty(): JSX.Element{
                   </Link>
                 </li>
                 <li className="header__nav-item">
-                  <Link className="header__nav-link" to="/">
+                  <Link className="header__nav-link"to="/">
                     <span className="header__signout">Sign out</span>
                   </Link>
                 </li>
@@ -28,24 +28,21 @@ function FavoritesEmpty(): JSX.Element{
         </div>
       </header>
 
-      <main className="page__main page__main--favorites page__main--favorites-empty">
+      <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
-          <section className="favorites favorites--empty">
-            <h1 className="visually-hidden">Favorites (empty)</h1>
-            <div className="favorites__status-wrapper">
-              <b className="favorites__status">Nothing yet saved.</b>
-              <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
-            </div>
+          <section className="favorites">
+            <h1 className="favorites__title">Sorry, we could not find that page</h1>
+            <h2>Try to go  <Link className="header__nav-link" to="/">Home Page</Link></h2>
           </section>
         </div>
       </main>
-      <footer className="footer">
-        <a className="footer__logo-link" href="main.html">
+      <footer className="footer container">
+        <Link className="footer__logo-link" to="/">
           <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </a>
+        </Link>
       </footer>
     </div>
   );
 }
 
-export default FavoritesEmpty;
+export default NotFound;
