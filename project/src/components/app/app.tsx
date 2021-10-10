@@ -6,19 +6,24 @@ import NotFound from '../not-found/not-found';
 import Login from '../login/login';
 import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
+import { Offers } from '../../types/offer';
+import { Comments } from '../../types/comment-get';
 
+type AppScreenProps = {
+  propertyNumber: number;
+  offers: Offers;
+  comments: Comments;
+}
 
-const Settings = {
-  PROPERTY_NUMBER: 322,
-};
-
-function App(): JSX.Element {
+function App({ propertyNumber, offers, comments }: AppScreenProps): JSX.Element {
+  const [firstOffer] = offers;
+  //const [firstComment] = comments;
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <Main
-            propertyNumber={Settings.PROPERTY_NUMBER}
+            offers = {offers}
           />
         </Route>
         <Route exact path={AppRoute.Login}>
@@ -33,7 +38,8 @@ function App(): JSX.Element {
         </PrivateRoute>
         <Route exact path={AppRoute.Room}>
           <Property
-            price={122}
+            offer={firstOffer}
+            comments = {comments}
           />
         </Route>
         <Route>

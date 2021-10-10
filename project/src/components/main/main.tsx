@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
+import { Offers } from '../../types/offer';
 import Logo from '../logo/logo';
 
 type Property = {
-  propertyNumber: number;
+  offers: Offers;
 }
 
-function Main({ propertyNumber }: Property): JSX.Element{
+function Main({ offers }: Property): JSX.Element{
+  const propertyNumber: number = offers.length;
   return (
     <div className="page page--gray page--main">
       <header className="header">
