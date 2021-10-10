@@ -1,5 +1,5 @@
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../consts';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
 import NotFound from '../not-found/not-found';
