@@ -12,7 +12,6 @@ type SingleProperty = {
 function PropertyNotLogged({ offer, comments }: SingleProperty): JSX.Element{
   const { id, price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite } = offer;
   const { name, avatarUrl, isPro } = host;
-  //const { comment } = comments;
   return (
     <div className="page">
       <header className="header">
@@ -73,7 +72,7 @@ function PropertyNotLogged({ offer, comments }: SingleProperty): JSX.Element{
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: '80%'}}></span>
+                  <span style={{width: `${rating*20}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">{ rating }</span>

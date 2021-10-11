@@ -17,7 +17,6 @@ type AppScreenProps = {
 
 function App({ propertyNumber, offers, comments }: AppScreenProps): JSX.Element {
   const [firstOffer] = offers;
-  //const [firstComment] = comments;
   return (
     <BrowserRouter>
       <Switch>
