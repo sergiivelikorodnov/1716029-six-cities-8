@@ -22,7 +22,7 @@ export const offers: Offers = [
     id: 1,
     images: ['img/apartment-01.jpg', 'img/apartment-02.jpg'],
     isFavorite: true,
-    isPremium: false,
+    isPremium: true,
     location: {
       latitude: 52.35514938496378,
       longitude: 4.673877537499948,

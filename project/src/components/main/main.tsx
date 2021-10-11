@@ -2,12 +2,18 @@ import { Link } from 'react-router-dom';
 import { Offers } from '../../types/offer';
 import Logo from '../logo/logo';
 import ListOffers from '../list-offers/list-offers';
+import { useState } from 'react';
 
 type Property = {
   offers: Offers;
 }
 
 function Main({ offers }: Property): JSX.Element{
+  const [activeOffer, setActiveOffer] = useState(0);
+  const offerHandler = (id: number) => {
+    setActiveOffer(id);
+  };
+
   const propertyNumber: number = offers.length;
   return (
     <div className="page page--gray page--main">
@@ -26,7 +32,7 @@ function Main({ offers }: Property): JSX.Element{
                 </li>
                 <li className="header__nav-item">
                   <Link className="header__nav-link"  to="/">
-                    <span className="header__signout">Sign out</span>
+                    <span className="header__signout">Sign out{ activeOffer }</span>
                   </Link>
                 </li>
               </ul>
@@ -94,7 +100,10 @@ function Main({ offers }: Property): JSX.Element{
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                <ListOffers offers = {offers} />
+                <ListOffers
+                  offers={offers}
+                  onHoverOfferHandler={offerHandler}
+                />
               </div>
             </section>
             <div className="cities__right-section">
