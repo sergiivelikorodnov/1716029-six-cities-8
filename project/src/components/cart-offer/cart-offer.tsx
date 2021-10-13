@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offer';
 
 type SingleOffer = {
-  offer: Offer
+  offer: Offer;
   onHoverOfferHandler(id: number): void;
 }
 

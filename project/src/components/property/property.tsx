@@ -42,7 +42,7 @@ function Property({ offer, comments, activeClickOffer, similarOffers }: SinglePr
                 </li>
                 <li className="header__nav-item">
                   <Link className="header__nav-link" to="/">
-                    <span className="header__signout">Sign out</span>
+                    <span className="header__signout">Sign out{id }</span>
                   </Link>
                 </li>
               </ul>

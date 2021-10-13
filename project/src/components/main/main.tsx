@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Offers } from '../../types/offer';
 import Logo from '../logo/logo';
 import ListOffers from '../list-offers/list-offers';
@@ -15,9 +15,6 @@ function Main({ offers, activeClickOffer }: Property): JSX.Element{
     setActiveOffer(id);
   };
 
-  const { id }: any = useParams();
-  activeClickOffer = id;
-
   const propertyNumber: number = offers.length;
   return (
     <div className="page page--gray page--main">
@@ -31,7 +28,7 @@ function Main({ offers, activeClickOffer }: Property): JSX.Element{
                   <Link className="header__nav-link header__nav-link--profile" to="/favorites">
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com{ activeClickOffer }</span>
+                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
