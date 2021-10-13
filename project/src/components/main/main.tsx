@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Offers } from '../../types/offer';
 import Logo from '../logo/logo';
 import ListOffers from '../list-offers/list-offers';
@@ -6,13 +6,17 @@ import { useState } from 'react';
 
 type Property = {
   offers: Offers;
+  activeClickOffer: number;
 }
 
-function Main({ offers }: Property): JSX.Element{
+function Main({ offers, activeClickOffer }: Property): JSX.Element{
   const [activeOffer, setActiveOffer] = useState(0);
   const offerHandler = (id: number) => {
     setActiveOffer(id);
   };
+
+  const { id }: any = useParams();
+  activeClickOffer = id;
 
   const propertyNumber: number = offers.length;
   return (
@@ -27,12 +31,12 @@ function Main({ offers }: Property): JSX.Element{
                   <Link className="header__nav-link header__nav-link--profile" to="/favorites">
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                    <span className="header__user-name user__name">Oliver.conner@gmail.com{ activeClickOffer }</span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
                   <Link className="header__nav-link"  to="/">
-                    <span className="header__signout">Sign out{ activeOffer }</span>
+                    <span className="header__signout">Sign out</span>
                   </Link>
                 </li>
               </ul>
@@ -42,7 +46,7 @@ function Main({ offers }: Property): JSX.Element{
       </header>
 
       <main className="page__main page__main--index">
-        <h1 className="visually-hidden">Cities</h1>
+        <h1 className="visually-hidden">Cities { activeOffer }</h1>
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">

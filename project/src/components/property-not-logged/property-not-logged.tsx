@@ -5,7 +5,7 @@ type SingleProperty = {
   price: number;
 }
 
-function Property({ price }: SingleProperty): JSX.Element{
+function PropertyNotLogged({ price }: SingleProperty): JSX.Element{
   return (
     <div className="page">
       <header className="header">
@@ -284,4 +284,4 @@ function Property({ price }: SingleProperty): JSX.Element{
   );
 }
 
-export default Property;
+export default PropertyNotLogged;

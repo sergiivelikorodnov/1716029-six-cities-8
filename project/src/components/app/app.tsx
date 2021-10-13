@@ -10,19 +10,22 @@ import { Offers } from '../../types/offer';
 import { Comments } from '../../types/comment-get';
 
 type AppScreenProps = {
-  propertyNumber: number;
   offers: Offers;
   comments: Comments;
 }
 
-function App({ propertyNumber, offers, comments }: AppScreenProps): JSX.Element {
-  const [firstOffer] = offers;
+function App({ offers, comments }: AppScreenProps): JSX.Element {
+
+  const activeClickOffer = 1;
+  const [firstOffer] = offers.filter((offer) => offer.id === activeClickOffer);
+  const similarOffers = offers.slice(0, 3);
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <Main
-            offers = {offers}
+            offers={offers}
+            activeClickOffer = {activeClickOffer}
           />
         </Route>
         <Route exact path={AppRoute.Login}>
@@ -31,14 +34,19 @@ function App({ propertyNumber, offers, comments }: AppScreenProps): JSX.Element 
         <PrivateRoute
           exact
           path={AppRoute.Favorites}
-          render = {() => <Favorites />}
+          render={() => (
+            <Favorites
+              favOffers={offers}
+            />)}
           authorizationStatus={AuthorizationStatus.NoAuth}
         >
         </PrivateRoute>
         <Route exact path={AppRoute.Room}>
           <Property
             offer={firstOffer}
-            comments = {comments}
+            comments={comments}
+            activeClickOffer = {activeClickOffer}
+            similarOffers={similarOffers}
           />
         </Route>
         <Route>

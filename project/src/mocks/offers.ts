@@ -55,7 +55,7 @@ export const offers: Offers = [
       name: 'Alice',
     },
     id: 2,
-    images: ['apartment-02.jpg', 'apartment-03.jpg'],
+    images: ['img/apartment-02.jpg', 'img/apartment-03.jpg'],
     isFavorite: false,
     isPremium: false,
     location: {
@@ -79,7 +79,7 @@ export const offers: Offers = [
         longitude: 4.865168,
         zoom: 10,
       },
-      name: 'Amsterdam',
+      name: 'Cologne',
     },
     description: 'Cozy that hides behind a a river by the unique lightness of Amsterdam.',
     goods: ['Parking', 'Cable TV', 'Washing machine', 'Coffee machine', 'Dishwasher'],
@@ -91,7 +91,7 @@ export const offers: Offers = [
     },
     id: 3,
     images: ['img/apartment-03.jpg', 'img/apartment-01.jpg'],
-    isFavorite: false,
+    isFavorite: true,
     isPremium: false,
     location: {
       latitude: 52.35414938496378,
@@ -126,7 +126,7 @@ export const offers: Offers = [
     },
     id: 4,
     images: ['img/apartment-01.jpg', 'img/apartment-03.jpg'],
-    isFavorite: false,
+    isFavorite: true,
     isPremium: false,
     location: {
       latitude: 52.34414938496378,
