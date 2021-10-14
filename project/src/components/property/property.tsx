@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { AuthorizationStatus } from '../../consts';
 import { Comments } from '../../types/comment-get';
 import { Offer, Offers } from '../../types/offer';
 import { getDateTime, getHumanDate } from '../../utils/utils';
@@ -12,13 +13,15 @@ type SingleProperty = {
   comments: Comments;
   activeClickOffer: number;
   similarOffers: Offers;
+  authorizationStatus: AuthorizationStatus;
 }
 
-function Property({ offer, comments, activeClickOffer, similarOffers }: SingleProperty): JSX.Element{
+function Property({ offer, comments, activeClickOffer, similarOffers, authorizationStatus }: SingleProperty): JSX.Element{
   const { id }: any = useParams();
   activeClickOffer = id;
   const { price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite } = offer;
   const { name, avatarUrl, isPro } = host;
+  const isLogged = Boolean(AuthorizationStatus.Auth === authorizationStatus);
 
   const [activeOffer, setActiveOffer] = useState(0);
   const hoverOfferHandler = (idHover: number) => {
@@ -37,7 +40,7 @@ function Property({ offer, comments, activeClickOffer, similarOffers }: SinglePr
                   <Link className="header__nav-link header__nav-link--profile" to="/favorites">
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com{ activeOffer}</span>
+                    <span className="header__user-name user__name">Oliver.conner@gmail.com{activeOffer}</span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
@@ -169,7 +172,7 @@ function Property({ offer, comments, activeClickOffer, similarOffers }: SinglePr
                   })}
 
                 </ul>
-                <ReviewsForm />
+                { isLogged ? <ReviewsForm />: ''}
               </section>
             </div>
           </div>

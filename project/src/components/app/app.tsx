@@ -47,6 +47,7 @@ function App({ offers, comments }: AppScreenProps): JSX.Element {
             comments={comments}
             activeClickOffer = {activeClickOffer}
             similarOffers={similarOffers}
+            authorizationStatus={AuthorizationStatus.Auth}
           />
         </Route>
         <Route>
