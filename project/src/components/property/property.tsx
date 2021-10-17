@@ -111,14 +111,13 @@ function Property({ offer, comments, activeClickOffer, similarOffers, authorizat
               <div className="property__inside">
                 <h2 className="property__inside-title">What&apos;s inside</h2>
                 <ul className="property__inside-list">
-                  {goods.map((good) => {
-                    const keyValue = `${id}-${goods}`;
-                    return (
-                      <li key={keyValue} className="property__inside-item">
+                  {goods.map((good) =>
+                    (
+                      <li key={`${id}-${good}`} className="property__inside-item">
                         { good}
                       </li>
-                    );
-                  })}
+                    ),
+                  )}
                 </ul>
               </div>
               <div className="property__host">
