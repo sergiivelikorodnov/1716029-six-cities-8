@@ -8,10 +8,9 @@ import {CITY} from '../../mocks/city';
 
 type Property = {
   offers: Offers;
-  activeClickOffer: number;
 }
 
-function Main({ offers, activeClickOffer }: Property): JSX.Element{
+function Main({ offers }: Property): JSX.Element{
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
     undefined,
   );
@@ -114,7 +113,7 @@ function Main({ offers, activeClickOffer }: Property): JSX.Element{
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map city={CITY} points={offers} selectedPoint={selectedPoint} />
+                <Map city={CITY} points={offers} selectedPoint={selectedPoint} mapHeigth={'100%'}/>
               </section>
             </div>
           </div>

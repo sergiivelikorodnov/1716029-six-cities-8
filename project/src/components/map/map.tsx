@@ -9,7 +9,8 @@ import { Offers, CityOffer, Offer } from '../../types/offer';
 type Points = {
   city: CityOffer;
   points: Offers;
-  selectedPoint: Offer  | undefined;
+  selectedPoint?: Offer | undefined;
+  mapHeigth: string;
 }
 
 const defaultCustomIcon = new Icon({
@@ -24,7 +25,7 @@ const currentCustomIcon = new Icon({
   iconAnchor: [14, 39],
 });
 
-function Map({ city, points, selectedPoint }:Points): JSX.Element {
+function Map({ city, points, selectedPoint, mapHeigth }:Points): JSX.Element {
 
   const mapRef = useRef<HTMLDivElement | null>(null);
   const map = useMap(mapRef, city);
@@ -32,11 +33,9 @@ function Map({ city, points, selectedPoint }:Points): JSX.Element {
   useEffect(() => {
     if (map) {
       points.forEach((point) => {
-        // eslint-disable-next-line no-console
-        console.log(point.city);
         const marker = new Marker({
           lat: point.city.location.latitude,
-          lng: point.city.location.latitude,
+          lng: point.city.location.longitude,
         });
 
         marker
@@ -51,7 +50,7 @@ function Map({ city, points, selectedPoint }:Points): JSX.Element {
   }, [map, points, selectedPoint]);
   return (
     <div
-      style={{ height: '100%' }}
+      style={{ height: `${mapHeigth}` }}
       ref={mapRef}
     >
     </div>

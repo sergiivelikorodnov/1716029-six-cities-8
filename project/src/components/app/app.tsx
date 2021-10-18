@@ -16,8 +16,7 @@ type AppScreenProps = {
 
 function App({ offers, comments }: AppScreenProps): JSX.Element {
 
-  const activeClickOffer = 1;
-  const [firstOffer] = offers.filter((offer) => offer.id === activeClickOffer);
+  const [firstOffer] = offers.filter((offer) => offer.id === 1);
   const similarOffers = offers.slice(0, 3);
   return (
     <BrowserRouter>
@@ -25,7 +24,6 @@ function App({ offers, comments }: AppScreenProps): JSX.Element {
         <Route exact path={AppRoute.Main}>
           <Main
             offers={offers}
-            activeClickOffer = {activeClickOffer}
           />
         </Route>
         <Route exact path={AppRoute.Login}>
@@ -45,7 +43,7 @@ function App({ offers, comments }: AppScreenProps): JSX.Element {
           <Property
             offer={firstOffer}
             comments={comments}
-            activeClickOffer = {activeClickOffer}
+            activeClickOffer = {1}
             similarOffers={similarOffers}
             authorizationStatus={AuthorizationStatus.Auth}
           />
