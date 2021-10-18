@@ -1,24 +1,31 @@
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../consts';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
 import NotFound from '../not-found/not-found';
 import Login from '../login/login';
 import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
+import { Offers } from '../../types/offer';
+import { Comments } from '../../types/comment-get';
 
+type AppScreenProps = {
+  offers: Offers;
+  comments: Comments;
+}
 
-const Settings = {
-  PROPERTY_NUMBER: 322,
-};
+function App({ offers, comments }: AppScreenProps): JSX.Element {
 
-function App(): JSX.Element {
+  const activeClickOffer = 1;
+  const [firstOffer] = offers.filter((offer) => offer.id === activeClickOffer);
+  const similarOffers = offers.slice(0, 3);
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <Main
-            propertyNumber={Settings.PROPERTY_NUMBER}
+            offers={offers}
+            activeClickOffer = {activeClickOffer}
           />
         </Route>
         <Route exact path={AppRoute.Login}>
@@ -27,13 +34,20 @@ function App(): JSX.Element {
         <PrivateRoute
           exact
           path={AppRoute.Favorites}
-          render = {() => <Favorites />}
+          render={() => (
+            <Favorites
+              favOffers={offers}
+            />)}
           authorizationStatus={AuthorizationStatus.NoAuth}
         >
         </PrivateRoute>
         <Route exact path={AppRoute.Room}>
           <Property
-            price={122}
+            offer={firstOffer}
+            comments={comments}
+            activeClickOffer = {activeClickOffer}
+            similarOffers={similarOffers}
+            authorizationStatus={AuthorizationStatus.Auth}
           />
         </Route>
         <Route>
