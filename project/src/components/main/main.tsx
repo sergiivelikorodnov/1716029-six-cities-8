@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Offers } from '../../types/offer';
+import { Offer, Offers } from '../../types/offer';
 import Logo from '../logo/logo';
 import ListOffers from '../list-offers/list-offers';
 import { useState } from 'react';
+import Map from '../map/map';
+import {CITY} from '../../mocks/city';
 
 type Property = {
   offers: Offers;
@@ -10,9 +12,12 @@ type Property = {
 }
 
 function Main({ offers, activeClickOffer }: Property): JSX.Element{
-  const [activeOffer, setActiveOffer] = useState(0);
+  const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
+    undefined,
+  );
   const offerHandler = (id: number) => {
-    setActiveOffer(id);
+    const currentPoint = offers.find((point) => point.id=== id);
+    setSelectedPoint(currentPoint);
   };
 
   const propertyNumber: number = offers.length;
@@ -43,7 +48,7 @@ function Main({ offers, activeClickOffer }: Property): JSX.Element{
       </header>
 
       <main className="page__main page__main--index">
-        <h1 className="visually-hidden">Cities { activeOffer }</h1>
+        <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">
@@ -108,7 +113,9 @@ function Main({ offers, activeClickOffer }: Property): JSX.Element{
               </div>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map city={CITY} points={offers} selectedPoint={selectedPoint} />
+              </section>
             </div>
           </div>
         </div>
