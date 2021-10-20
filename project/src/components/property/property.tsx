@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link/* , useParams */ } from 'react-router-dom';
 import { AuthorizationStatus } from '../../consts';
 import { Comments } from '../../types/comment-get';
 import { Offer, Offers } from '../../types/offer';
 import { getDateTime, getHumanDate } from '../../utils/utils';
 import CartOffer from '../cart-offer/cart-offer';
 import Logo from '../logo/logo';
+import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
 
 type SingleProperty = {
@@ -17,9 +18,9 @@ type SingleProperty = {
 }
 
 function Property({ offer, comments, activeClickOffer, similarOffers, authorizationStatus }: SingleProperty): JSX.Element{
-  const { id }: any = useParams();
-  activeClickOffer = id;
-  const { price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite } = offer;
+  //const { id }: any = useParams();
+  //activeClickOffer = id;
+  const { id, price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite, city } = offer;
   const { name, avatarUrl, isPro } = host;
   const isLogged = Boolean(AuthorizationStatus.Auth === authorizationStatus);
 
@@ -175,7 +176,9 @@ function Property({ offer, comments, activeClickOffer, similarOffers, authorizat
               </section>
             </div>
           </div>
-          <section className="property__map map"></section>
+          <section className="property__map map">
+            <Map city={city} points={similarOffers} mapHeigth={'579px'}/>
+          </section>
         </section>
         <div className="container">
           <section className="near-places places">

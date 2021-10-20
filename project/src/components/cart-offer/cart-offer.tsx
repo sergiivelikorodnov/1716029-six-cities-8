@@ -10,7 +10,7 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
 
   return (
-    <article className="cities__place-card place-card" onMouseOver={()=> onHoverOfferHandler(id)}>
+    <article className="cities__place-card place-card" onMouseOver={()=> onHoverOfferHandler(id)} onMouseOut={()=> onHoverOfferHandler(0)}>
       { isPremium ?
         <div className="place-card__mark">
           <span>Premium</span>
