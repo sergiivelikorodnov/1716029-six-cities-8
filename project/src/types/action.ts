@@ -1,17 +1,11 @@
-import { type } from 'os';
+import { changeCityAction, loadListAction } from '../store/action';
 
 export enum ActionType {
-  ChangeToAmsterdam = 'city/amsterdam',
-  OffersList = 'offersList/load'
+  ChangeCity = 'changeCity',
+  LoadOfferData = 'loadOfferData',
 }
 
-export type ChangeToAmsterdam = {
-  type: ActionType.ChangeToAmsterdam;
-  payload: string;
-}
 
-export type LoadOffersList = {
-  type: ActionType.OffersList;
-}
-
-export type Action = ChangeToAmsterdam | LoadOffersList;
+export type ActionTypes =
+  | ReturnType<typeof changeCityAction>
+  | ReturnType<typeof loadListAction>

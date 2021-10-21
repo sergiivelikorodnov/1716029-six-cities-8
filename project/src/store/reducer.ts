@@ -1,14 +1,19 @@
-import { Action, ActionType } from '../types/action';
+import { DEFAULT_CITY } from '../consts';
+import { offers } from '../mocks/offers';
+import { ActionType, ActionTypes } from '../types/action';
+import { Offers } from '../types/offer';
 import { State } from '../types/state';
 
+const defaultOffers:Offers = offers.filter((offer) => offer.city.name === DEFAULT_CITY);
+
 const initialState = {
-  city: 'Amsterdam',
-  offers: 'AMSTERDAM_OFFERS',
+  city: DEFAULT_CITY,
+  offers: defaultOffers,
 };
 
-const reducer = (state: State = initialState, action: Action): State => {
+const reducer = (state: State = initialState, action: ActionTypes): State => {
   switch (action.type) {
-    case ActionType.ChangeToAmsterdam:
+    case ActionType.ChangeCity:
       return { ...state, city: state.city };
     default:
       return state;
