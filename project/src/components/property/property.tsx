@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link/* , useParams */ } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AuthorizationStatus } from '../../consts';
 import { Comments } from '../../types/comment-get';
 import { Offer, Offers } from '../../types/offer';
@@ -18,8 +18,6 @@ type SingleProperty = {
 }
 
 function Property({ offer, comments, activeClickOffer, similarOffers, authorizationStatus }: SingleProperty): JSX.Element{
-  //const { id }: any = useParams();
-  //activeClickOffer = id;
   const { id, price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite, city } = offer;
   const { name, avatarUrl, isPro } = host;
   const isLogged = Boolean(AuthorizationStatus.Auth === authorizationStatus);
