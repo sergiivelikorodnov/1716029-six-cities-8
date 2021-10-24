@@ -1,31 +1,34 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthorizationStatus } from '../../consts';
 import { Comments } from '../../types/comment-get';
-import { Offer, Offers } from '../../types/offer';
+import { Offers } from '../../types/offer';
 import { getDateTime, getHumanDate } from '../../utils/utils';
 import CartOffer from '../cart-offer/cart-offer';
 import Logo from '../logo/logo';
 import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
+import {  useParams } from 'react-router-dom';
 
 type SingleProperty = {
-  offer: Offer;
+  offers: Offers;
   comments: Comments;
-  activeClickOffer: number;
   similarOffers: Offers;
   authorizationStatus: AuthorizationStatus;
 }
-
-function Property({ offer, comments, activeClickOffer, similarOffers, authorizationStatus }: SingleProperty): JSX.Element{
-  const { id, price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite, city } = offer;
+function Property(props: SingleProperty): JSX.Element{
+  const { offers, comments, similarOffers, authorizationStatus } = props;
+  const { id: urlId } = useParams<{ id: string }>();
+  const offer = offers.filter((room) => room.id === Number(urlId));
+  // eslint-disable-next-line no-console
+  console.log(offer);
+  const [{ id, price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite }] = offer;
   const { name, avatarUrl, isPro } = host;
   const isLogged = Boolean(AuthorizationStatus.Auth === authorizationStatus);
 
-  const [activeOffer, setActiveOffer] = useState(0);
+  /*   const [activeOffer, setActiveOffer] = useState(0);
   const hoverOfferHandler = (idHover: number) => {
     setActiveOffer(idHover);
-  };
+  }; */
 
   return (
     <div className="page">
@@ -39,7 +42,7 @@ function Property({ offer, comments, activeClickOffer, similarOffers, authorizat
                   <Link className="header__nav-link header__nav-link--profile" to="/favorites">
                     <div className="header__avatar-wrapper user__avatar-wrapper">
                     </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com{activeOffer}</span>
+                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
@@ -175,14 +178,14 @@ function Property({ offer, comments, activeClickOffer, similarOffers, authorizat
             </div>
           </div>
           <section className="property__map map">
-            <Map city={city} points={similarOffers} mapHeigth={'579px'}/>
+            <Map offersList={similarOffers}/>
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {similarOffers.map((similarOffer) => <CartOffer key={similarOffer.id} offer={similarOffer} onHoverOfferHandler={hoverOfferHandler}/>)}
+              {similarOffers.map((similarOffer) => <CartOffer key={similarOffer.id} offer={similarOffer} /* onHoverOfferHandler={hoverOfferHandler} *//>)}
             </div>
           </section>
         </div>

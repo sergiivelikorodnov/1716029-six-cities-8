@@ -1,4 +1,4 @@
-import { changeCityAction, loadListAction, selecetCurrentCityAction } from '../store/action';
+import { changeCityAction, loadListAction, selectCurrentCityAction } from '../store/action';
 
 export enum ActionType {
   ChangeCity = 'changeCity',
@@ -10,4 +10,4 @@ export enum ActionType {
 export type Actions =
   | ReturnType<typeof changeCityAction>
   | ReturnType<typeof loadListAction>
-  | ReturnType<typeof selecetCurrentCityAction>
+  | ReturnType<typeof selectCurrentCityAction>

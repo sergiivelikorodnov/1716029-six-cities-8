@@ -30,9 +30,8 @@ type ConnectedComponentProps = PropsFromRedux & AppScreenProps;
 function App(props:ConnectedComponentProps): JSX.Element {
   const { cities, comments, offers, currentCity } = props;
 
-  const myOffersList = getOffersByCity(currentCity, offers);
+  const offersList = getOffersByCity(currentCity, offers);
 
-  const [firstOffer] = offers.filter((offer) => offer.id === 1);
   const similarOffers = offers.slice(0, 3);
   return (
     <BrowserRouter>
@@ -40,7 +39,7 @@ function App(props:ConnectedComponentProps): JSX.Element {
         <Route exact path={AppRoute.Main}>
           <Main
             cities = {cities}
-            offersList={offers}
+            offersList={offersList}
           />
         </Route>
         <Route exact path={AppRoute.Login}>
@@ -51,16 +50,15 @@ function App(props:ConnectedComponentProps): JSX.Element {
           path={AppRoute.Favorites}
           render={() => (
             <Favorites
-              favOffers={myOffersList}
+              favOffers={offersList}
             />)}
           authorizationStatus={AuthorizationStatus.NoAuth}
         >
         </PrivateRoute>
-        <Route exact path={AppRoute.Room}>
+        <Route exact path={`${AppRoute.Room}/:id`}>
           <Property
-            offer={firstOffer}
+            offers={offersList}
             comments={comments}
-            activeClickOffer = {1}
             similarOffers={similarOffers}
             authorizationStatus={AuthorizationStatus.Auth}
           />

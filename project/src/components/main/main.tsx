@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Offer, Offers } from '../../types/offer';
+import {  Offers } from '../../types/offer';
 import Logo from '../logo/logo';
 import ListOffers from '../list-offers/list-offers';
-import { useState } from 'react';
 import Map from '../map/map';
-import {CITY} from '../../mocks/city';
+
 import MainLocationList from '../main-location-list/main-location-list';
 
 type Property = {
@@ -13,15 +12,10 @@ type Property = {
 }
 
 function Main({ cities, offersList }: Property): JSX.Element{
-  const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
-    undefined,
-  );
-  const offerHandler = (id: number) => {
-    const currentPoint = offersList.find((point) => point.id=== id);
-    setSelectedPoint(currentPoint);
-  };
+
   const [{ city: {name} }] = offersList;
   const propertyNumber: number = offersList.length;
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -76,13 +70,12 @@ function Main({ cities, offersList }: Property): JSX.Element{
               <div className="cities__places-list places__list tabs__content">
                 <ListOffers
                   offers={offersList}
-                  onHoverOfferHandler={offerHandler}
                 />
               </div>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map city={CITY} points={offersList} selectedPoint={selectedPoint} mapHeigth={'100%'}/>
+                <Map offersList={offersList} />
               </section>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { changeCityAction } from '../../store/action';
 import { Actions } from '../../types/action';
 import { State } from '../../types/state';
@@ -8,7 +9,7 @@ type AppProps = {
   cities: string[];
 }
 
-const mapStateToProps = ({ currentCity }: State) => ({ currentCity });
+const mapStateToProps = ({ currentCity, offers }: State) => ({ currentCity, offers });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
   onChangeCity(city: string) {
@@ -29,9 +30,9 @@ function MainLocationList(props: ConnectedComponentProps): JSX.Element {
         <ul className="locations__list tabs__list">
           {cities.map((city) => (
             <li className="locations__item" key={city}>
-              <a href="/#" className={`locations__item-link ${city === currentCity ? 'tabs__item--active' : 'tabs__item'}`}>
+              <Link to="/" className={`locations__item-link ${city === currentCity ? 'tabs__item--active' : 'tabs__item'}`}>
                 <span onClick={() => onChangeCity(city)}>{city}</span>
-              </a>
+              </Link>
             </li>
           ),
 

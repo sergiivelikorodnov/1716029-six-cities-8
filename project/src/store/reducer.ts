@@ -1,15 +1,15 @@
 import { DEFAULT_CITY } from '../consts';
 import { offers } from '../mocks/offers';
 import { ActionType, Actions } from '../types/action';
-import { Offers } from '../types/offer';
+//import { Offers } from '../types/offer';
 import { State } from '../types/state';
-import { getOffersByCity } from '../utils/utils';
+//import { getOffersByCity } from '../utils/utils';
 
-const defaultOffers: Offers = getOffersByCity(DEFAULT_CITY, offers);
+//const defaultOffers: Offers = getOffersByCity(DEFAULT_CITY, offers);
 
 const initialState = {
   currentCity: DEFAULT_CITY,
-  offers: defaultOffers,
+  offers: offers,
   currentOffer: null,
 };
 
