@@ -6,15 +6,31 @@ import NotFound from '../not-found/not-found';
 import Login from '../login/login';
 import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
-import { Offers } from '../../types/offer';
 import { Comments } from '../../types/comment-get';
+import { State } from '../../types/state';
+import { connect, ConnectedProps } from 'react-redux';
+import { getOffersByCity } from '../../utils/utils';
 
 type AppScreenProps = {
-  offers: Offers;
+  cities: string[];
   comments: Comments;
 }
 
-function App({ offers, comments }: AppScreenProps): JSX.Element {
+const mapStateToProps = ({ currentCity, offers }: State) => ({
+  currentCity,
+  offers,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & AppScreenProps;
+
+
+function App(props:ConnectedComponentProps): JSX.Element {
+  const { cities, comments, offers, currentCity } = props;
+
+  const myOffersList = getOffersByCity(currentCity, offers);
 
   const [firstOffer] = offers.filter((offer) => offer.id === 1);
   const similarOffers = offers.slice(0, 3);
@@ -23,7 +39,8 @@ function App({ offers, comments }: AppScreenProps): JSX.Element {
       <Switch>
         <Route exact path={AppRoute.Main}>
           <Main
-            offers={offers}
+            cities = {cities}
+            offersList={offers}
           />
         </Route>
         <Route exact path={AppRoute.Login}>
@@ -34,7 +51,7 @@ function App({ offers, comments }: AppScreenProps): JSX.Element {
           path={AppRoute.Favorites}
           render={() => (
             <Favorites
-              favOffers={offers}
+              favOffers={myOffersList}
             />)}
           authorizationStatus={AuthorizationStatus.NoAuth}
         >
@@ -56,4 +73,5 @@ function App({ offers, comments }: AppScreenProps): JSX.Element {
   );
 }
 
-export default App;
+export {App};
+export default connector(App);
