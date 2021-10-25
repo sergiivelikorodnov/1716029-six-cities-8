@@ -36,7 +36,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & AppComponentProps
 
 function Map({ currentOffer, offersList }: ConnectedComponentProps): JSX.Element {
-  const [{city}]= offersList;
+  const [{ city }] = offersList;
 
   const mapRef = useRef<HTMLDivElement | null>(null);
   const map = useMap(mapRef, city);
@@ -45,6 +45,16 @@ function Map({ currentOffer, offersList }: ConnectedComponentProps): JSX.Element
   useEffect(() => {
     const markers: Marker[] = [];
     if (map) {
+      map.flyTo({
+        lat: city.location.latitude,
+        lng: city.location.longitude,
+      },
+      city.location.zoom,
+      {
+        animate: true,
+        duration: 2,
+      },
+      );
       offersList.forEach((offer) => {
         const { latitude, longitude } = offer.city.location;
         const marker = new Marker({
@@ -63,7 +73,7 @@ function Map({ currentOffer, offersList }: ConnectedComponentProps): JSX.Element
       });
       return () => markers.forEach((marker) => marker.removeFrom(map));
     }
-  }, [map, offersList, currentOffer?.id, currentOffer]);
+  }, [map, offersList, currentOffer?.id, currentOffer, city.location.latitude, city.location.longitude, city.location.zoom]);
   return (
     <div
       style={{ height: '100%' }}

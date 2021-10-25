@@ -13,6 +13,8 @@ function useMap(
 
   useEffect(() => {
     if (mapRef.current !== null && map === null) {
+
+
       const instance = new Map(mapRef.current, {
         center: {
           lat: latitude,
