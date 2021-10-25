@@ -19,16 +19,9 @@ function Property(props: SingleProperty): JSX.Element{
   const { offers, comments, similarOffers, authorizationStatus } = props;
   const { id: urlId } = useParams<{ id: string }>();
   const offer = offers.filter((room) => room.id === Number(urlId));
-  // eslint-disable-next-line no-console
-  console.log(offer);
   const [{ id, price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite }] = offer;
   const { name, avatarUrl, isPro } = host;
   const isLogged = Boolean(AuthorizationStatus.Auth === authorizationStatus);
-
-  /*   const [activeOffer, setActiveOffer] = useState(0);
-  const hoverOfferHandler = (idHover: number) => {
-    setActiveOffer(idHover);
-  }; */
 
   return (
     <div className="page">
@@ -185,7 +178,7 @@ function Property(props: SingleProperty): JSX.Element{
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {similarOffers.map((similarOffer) => <CartOffer key={similarOffer.id} offer={similarOffer} /* onHoverOfferHandler={hoverOfferHandler} *//>)}
+              {similarOffers.map((similarOffer) => <CartOffer key={similarOffer.id} offer={similarOffer} />)}
             </div>
           </section>
         </div>

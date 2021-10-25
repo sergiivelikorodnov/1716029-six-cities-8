@@ -5,19 +5,11 @@ import { AppRoute } from '../../consts';
 import { selectCurrentCityAction } from '../../store/action';
 import { Actions } from '../../types/action';
 import { Offer } from '../../types/offer';
-//import { State } from '../../types/state';
 
 type SingleOffer = {
   offer: Offer;
-  //onHoverOfferHandler?:(id: number) => void;
 }
 
-/* const mapStateToProps = ({ currentCity, offers, currentOffer }:State) => ({
-  currentCity,
-  offers,
-  currentOffer,
-});
- */
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
   onHoverOffer(offer: Offer | null) {
     dispatch(selectCurrentCityAction(offer));

@@ -41,12 +41,15 @@ function Map({ currentOffer, offersList }: ConnectedComponentProps): JSX.Element
   const mapRef = useRef<HTMLDivElement | null>(null);
   const map = useMap(mapRef, city);
 
+
   useEffect(() => {
+    const markers: Marker[] = [];
     if (map) {
       offersList.forEach((offer) => {
+        const { latitude, longitude } = offer.city.location;
         const marker = new Marker({
-          lat: offer.city.location.latitude,
-          lng: offer.city.location.longitude,
+          lat: latitude,
+          lng: longitude,
         });
 
         marker
@@ -56,7 +59,9 @@ function Map({ currentOffer, offersList }: ConnectedComponentProps): JSX.Element
               : defaultCustomIcon,
           )
           .addTo(map);
+        markers.push(marker);
       });
+      return () => markers.forEach((marker) => marker.removeFrom(map));
     }
   }, [map, offersList, currentOffer?.id, currentOffer]);
   return (

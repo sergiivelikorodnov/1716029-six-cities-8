@@ -75,8 +75,8 @@ export const offers: Offers = [
     bedrooms: 4,
     city: {
       location: {
-        latitude: 52.360216,
-        longitude: 4.865168,
+        latitude: 50.935173,
+        longitude: 6.953101,
         zoom: 10,
       },
       name: 'Cologne',
