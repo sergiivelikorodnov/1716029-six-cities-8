@@ -6,24 +6,40 @@ import NotFound from '../not-found/not-found';
 import Login from '../login/login';
 import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
-import { Offers } from '../../types/offer';
 import { Comments } from '../../types/comment-get';
+import { State } from '../../types/state';
+import { connect, ConnectedProps } from 'react-redux';
+import { getOffersByCity } from '../../utils/utils';
 
 type AppScreenProps = {
-  offers: Offers;
+  cities: string[];
   comments: Comments;
 }
 
-function App({ offers, comments }: AppScreenProps): JSX.Element {
+const mapStateToProps = ({ currentCity, offers }: State) => ({
+  currentCity,
+  offers,
+});
 
-  const [firstOffer] = offers.filter((offer) => offer.id === 1);
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & AppScreenProps;
+
+
+function App(props:ConnectedComponentProps): JSX.Element {
+  const { cities, comments, offers, currentCity } = props;
+
+  const offersList = getOffersByCity(currentCity, offers);
+
   const similarOffers = offers.slice(0, 3);
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <Main
-            offers={offers}
+            cities = {cities}
+            offersList={offersList}
           />
         </Route>
         <Route exact path={AppRoute.Login}>
@@ -34,16 +50,15 @@ function App({ offers, comments }: AppScreenProps): JSX.Element {
           path={AppRoute.Favorites}
           render={() => (
             <Favorites
-              favOffers={offers}
+              favOffers={offersList}
             />)}
           authorizationStatus={AuthorizationStatus.NoAuth}
         >
         </PrivateRoute>
-        <Route exact path={AppRoute.Room}>
+        <Route exact path={`${AppRoute.Room}/:id`}>
           <Property
-            offer={firstOffer}
+            offers={offersList}
             comments={comments}
-            activeClickOffer = {1}
             similarOffers={similarOffers}
             authorizationStatus={AuthorizationStatus.Auth}
           />
@@ -56,4 +71,5 @@ function App({ offers, comments }: AppScreenProps): JSX.Element {
   );
 }
 
-export default App;
+export {App};
+export default connector(App);

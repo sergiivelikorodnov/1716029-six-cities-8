@@ -2,15 +2,14 @@ import 'leaflet';
 import { Icon, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 import { URL_MARKER_ACTIVE, URL_MARKER_DEFAULT } from '../../consts';
 import useMap from '../../hooks/use-map';
-import { Offers, CityOffer, Offer } from '../../types/offer';
+import { Offers } from '../../types/offer';
+import { State } from '../../types/state';
 
-type Points = {
-  city: CityOffer;
-  points: Offers;
-  selectedPoint?: Offer | undefined;
-  mapHeigth: string;
+type AppComponentProps = {
+  offersList: Offers;
 }
 
 const defaultCustomIcon = new Icon({
@@ -25,32 +24,60 @@ const currentCustomIcon = new Icon({
   iconAnchor: [14, 39],
 });
 
-function Map({ city, points, selectedPoint, mapHeigth }:Points): JSX.Element {
+const mapStateToProps = ({ currentOffer, currentCity, offers }: State) => ({
+  currentOffer,
+  currentCity,
+  offers,
+});
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & AppComponentProps
+
+function Map({ currentOffer, offersList }: ConnectedComponentProps): JSX.Element {
+  const [{ city }] = offersList;
+  const { latitude, longitude, zoom } = city.location;
 
   const mapRef = useRef<HTMLDivElement | null>(null);
   const map = useMap(mapRef, city);
 
+
   useEffect(() => {
+    const markers: Marker[] = [];
     if (map) {
-      points.forEach((point) => {
+      map.flyTo({
+        lat: latitude,
+        lng: longitude,
+      },
+      zoom,
+      {
+        animate: true,
+        duration: 2,
+      },
+      );
+      offersList.forEach((offer) => {
+        const { location } = offer.city;
         const marker = new Marker({
-          lat: point.city.location.latitude,
-          lng: point.city.location.longitude,
+          lat: location.latitude,
+          lng: location.longitude,
         });
 
         marker
           .setIcon(
-            selectedPoint !== undefined && point.id === selectedPoint.id
+            currentOffer !== undefined && offer.id === currentOffer?.id
               ? currentCustomIcon
               : defaultCustomIcon,
           )
           .addTo(map);
+        markers.push(marker);
       });
+      return () => markers.forEach((marker) => marker.removeFrom(map));
     }
-  }, [map, points, selectedPoint]);
+  }, [map, offersList, currentOffer?.id, currentOffer, latitude, longitude, zoom]);
   return (
     <div
-      style={{ height: `${mapHeigth}` }}
+      style={{ height: '100%' }}
       ref={mapRef}
     >
     </div>
@@ -58,4 +85,5 @@ function Map({ city, points, selectedPoint, mapHeigth }:Points): JSX.Element {
 
 }
 
-export default Map;
+export {Map};
+export default connector(Map);

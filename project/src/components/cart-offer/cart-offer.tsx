@@ -1,22 +1,37 @@
+import { Dispatch } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { AppRoute } from '../../consts';
+import { selectCurrentCityAction } from '../../store/action';
+import { Actions } from '../../types/action';
 import { Offer } from '../../types/offer';
 
 type SingleOffer = {
   offer: Offer;
-  onHoverOfferHandler(id: number): void;
 }
 
-function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
+const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+  onHoverOffer(offer: Offer | null) {
+    dispatch(selectCurrentCityAction(offer));
+  },
+});
+
+const connector = connect(null, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & SingleOffer;
+
+function CartOffer({ offer, onHoverOffer }: ConnectedComponentProps): JSX.Element {
   const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
 
   return (
-    <article className="cities__place-card place-card" onMouseOver={()=> onHoverOfferHandler(id)} onMouseOut={()=> onHoverOfferHandler(0)}>
+    <article className="cities__place-card place-card" onMouseOver={()=> (onHoverOffer)?onHoverOffer(offer):undefined} onMouseOut={()=> (onHoverOffer)?onHoverOffer(null):undefined}>
       { isPremium ?
         <div className="place-card__mark">
           <span>Premium</span>
         </div>: ''}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`/offer/${id}`}>
+        <Link to={`${AppRoute.Room}/${id}`}>
           <img className="place-card__image" src={ previewImage } width="260" height="200" alt={ title} />
         </Link>
       </div>
@@ -40,7 +55,7 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${id}`}>{ title }</Link>
+          <Link to={`${AppRoute.Room}/${id}`}>{ title }</Link>
         </h2>
         <p className="place-card__type">Private room</p>
       </div>
@@ -48,4 +63,5 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   );
 }
 
-export default CartOffer;
+export {CartOffer};
+export default connector(CartOffer);
