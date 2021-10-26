@@ -25,7 +25,7 @@ function CartOffer({ offer, onHoverOffer }: ConnectedComponentProps): JSX.Elemen
   const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
 
   return (
-    <article className="cities__place-card place-card" onMouseOver={()=> (onHoverOffer)?onHoverOffer(offer):undefined} onMouseOut={()=> (onHoverOffer)?onHoverOffer(null):undefined}>
+    <article className="cities__place-card place-card" onMouseOver={()=> onHoverOffer && onHoverOffer(offer)} onMouseOut={()=> onHoverOffer && onHoverOffer(null)}>
       { isPremium ?
         <div className="place-card__mark">
           <span>Premium</span>

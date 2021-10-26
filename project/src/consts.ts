@@ -20,6 +20,13 @@ export const CITIES: string[] = [
   'Dusseldorf',
 ];
 
+export const SortingType = {
+  POPULAR : 'Popular',
+  PRICE_UP : 'Price: low to high',
+  PRICE_DOWN : 'Price: high to low',
+  TOP_RATED : 'Top rated first',
+};
+
 export const URL_MARKER_DEFAULT = 'img/pin.svg';
 export const URL_MARKER_ACTIVE = 'img/pin-active.svg';
 

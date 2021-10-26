@@ -21,7 +21,7 @@ function Property(props: SingleProperty): JSX.Element{
   const offer = offers.filter((room) => room.id === Number(urlId));
   const [{ id, price, rating, bedrooms, title, description, host, images, maxAdults, goods, isPremium, isFavorite }] = offer;
   const { name, avatarUrl, isPro } = host;
-  const isLogged = Boolean(AuthorizationStatus.Auth === authorizationStatus);
+  const isLogged = AuthorizationStatus.Auth === authorizationStatus;
 
   return (
     <div className="page">

@@ -11,5 +11,5 @@ export function getDateTime(date: string): string {
 }
 
 export function getOffersByCity(currentCity: string, offers: Offers): Offers {
-  return (offers.filter((offer) => offer.city.name === currentCity));
+  return offers.filter((offer) => offer.city.name === currentCity);
 }
