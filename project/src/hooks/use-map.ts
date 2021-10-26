@@ -2,19 +2,15 @@ import { Map, TileLayer } from 'leaflet';
 import { MutableRefObject, useEffect, useState } from 'react';
 import { CityOffer } from '../types/offer';
 
-
 function useMap(
   mapRef: MutableRefObject<HTMLElement | null>,
   city: CityOffer,
-): Map | null{
+): Map | null {
   const [map, setMap] = useState<Map | null>(null);
   const { latitude, longitude, zoom } = city.location;
 
-
   useEffect(() => {
     if (mapRef.current !== null && map === null) {
-
-
       const instance = new Map(mapRef.current, {
         center: {
           lat: latitude,

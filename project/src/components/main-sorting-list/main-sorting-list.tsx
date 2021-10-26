@@ -1,34 +1,58 @@
 import { useState } from 'react';
 import { SortingType } from '../../consts';
 
+type Sorting = {
+  onSelectedSortTypeHandler: (sortType: string) => void;
+  onSelectedSortType: string;
+};
 
-function MainSortingList(): JSX.Element{
+function MainSortingList({
+  onSelectedSortType,
+  onSelectedSortTypeHandler,
+}: Sorting): JSX.Element {
   const [isSortOpening, setIsSortOpening] = useState(false);
-  const [selectedSortType, setSelectedSortType] = useState(SortingType.POPULAR);
 
   const sortOpenHandler = () => {
     setIsSortOpening(!isSortOpening);
   };
 
-  const selectedSortTypeHandler = () => {
+  const selectedSortTypeHandler = (sortType: string) => {
     setIsSortOpening(!isSortOpening);
-    setSelectedSortType(SortingType.PRICE_DOWN);
   };
 
   return (
     <form className="places__sorting" action="#" method="get">
-      <span className="places__sorting-caption">Sort by</span>
-      <span onClick={sortOpenHandler} className="places__sorting-type" tabIndex={0}>
-        {selectedSortType}
+      <span className="places__sorting-caption">Sort by </span>
+      <span
+        onClick={sortOpenHandler}
+        className="places__sorting-type"
+        tabIndex={0}
+      >
+        {onSelectedSortType}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      <ul className={`places__options places__options--custom places__options${isSortOpening ? '--opened' : ''}`}>
-        <li className="places__option" tabIndex={0}>{ SortingType.POPULAR }</li>
-        <li className="places__option" tabIndex={0}>{ SortingType.PRICE_UP }</li>
-        <li onClick={selectedSortTypeHandler} className="places__option" tabIndex={0}>{ SortingType.PRICE_DOWN }</li>
-        <li className="places__option" tabIndex={0}>{ SortingType.TOP_RATED }</li>
+      <ul
+        className={`places__options places__options--custom places__options${
+          isSortOpening ? '--opened' : ''
+        }`}
+      >
+        {Object.values(SortingType).map((value) => (
+          <li
+            key={value}
+            onClick={() => {
+              onSelectedSortTypeHandler(value);
+              selectedSortTypeHandler(value);
+            }}
+            className={`places__option ${
+              onSelectedSortType === value ? 'places__option--active' : ''
+            }`}
+            tabIndex={0}
+          >
+            {value}
+          </li>
+        ))}
       </ul>
     </form>
   );

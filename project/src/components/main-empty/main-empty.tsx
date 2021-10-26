@@ -11,10 +11,14 @@ function MainEmpty(): JSX.Element {
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <Link className="header__nav-link header__nav-link--profile" to="/favorites">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                  <Link
+                    className="header__nav-link header__nav-link--profile"
+                    to="/favorites"
+                  >
+                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                    <span className="header__user-name user__name">
+                      Oliver.conner@gmail.com
+                    </span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
@@ -59,7 +63,10 @@ function MainEmpty(): JSX.Element {
                 </a>
               </li>
               <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active" href="#">
+                <a
+                  className="locations__item-link tabs__item tabs__item--active"
+                  href="#"
+                >
                   <span>Dusseldorf</span>
                 </a>
               </li>
@@ -71,7 +78,10 @@ function MainEmpty(): JSX.Element {
             <section className="cities__no-places">
               <div className="cities__status-wrapper tabs__content">
                 <b className="cities__status">No places to stay available</b>
-                <p className="cities__status-description">We could not find any property available at the moment in Dusseldorf</p>
+                <p className="cities__status-description">
+                  We could not find any property available at the moment in
+                  Dusseldorf
+                </p>
               </div>
             </section>
             <div className="cities__right-section"></div>

@@ -14,7 +14,7 @@ import { getOffersByCity } from '../../utils/utils';
 type AppScreenProps = {
   cities: string[];
   comments: Comments;
-}
+};
 
 const mapStateToProps = ({ currentCity, offers }: State) => ({
   currentCity,
@@ -26,8 +26,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & AppScreenProps;
 
-
-function App(props:ConnectedComponentProps): JSX.Element {
+function App(props: ConnectedComponentProps): JSX.Element {
   const { cities, comments, offers, currentCity } = props;
 
   const offersList = getOffersByCity(currentCity, offers);
@@ -37,10 +36,7 @@ function App(props:ConnectedComponentProps): JSX.Element {
     <BrowserRouter>
       <Switch>
         <Route exact path={AppRoute.Main}>
-          <Main
-            cities = {cities}
-            offersList={offersList}
-          />
+          <Main cities={cities} offersList={offersList} />
         </Route>
         <Route exact path={AppRoute.Login}>
           <Login />
@@ -48,10 +44,7 @@ function App(props:ConnectedComponentProps): JSX.Element {
         <PrivateRoute
           exact
           path={AppRoute.Favorites}
-          render={() => (
-            <Favorites
-              favOffers={offersList}
-            />)}
+          render={() => <Favorites favOffers={offersList} />}
           authorizationStatus={AuthorizationStatus.NoAuth}
         >
         </PrivateRoute>
@@ -71,5 +64,5 @@ function App(props:ConnectedComponentProps): JSX.Element {
   );
 }
 
-export {App};
+export { App };
 export default connector(App);
