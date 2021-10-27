@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Logo from '../logo/logo';
 
-function FavoritesEmpty(): JSX.Element{
+function FavoritesEmpty(): JSX.Element {
   return (
     <div className="page page--favorites-empty">
       <header className="header">
@@ -11,10 +11,14 @@ function FavoritesEmpty(): JSX.Element{
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <Link className="header__nav-link header__nav-link--profile" to="/favorites">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                  <Link
+                    className="header__nav-link header__nav-link--profile"
+                    to="/favorites"
+                  >
+                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                    <span className="header__user-name user__name">
+                      Oliver.conner@gmail.com
+                    </span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
@@ -34,14 +38,22 @@ function FavoritesEmpty(): JSX.Element{
             <h1 className="visually-hidden">Favorites (empty)</h1>
             <div className="favorites__status-wrapper">
               <b className="favorites__status">Nothing yet saved.</b>
-              <p className="favorites__status-description">Save properties to narrow down search or plan your future trips.</p>
+              <p className="favorites__status-description">
+                Save properties to narrow down search or plan your future trips.
+              </p>
             </div>
           </section>
         </div>
       </main>
       <footer className="footer">
         <a className="footer__logo-link" href="main.html">
-          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
+          <img
+            className="footer__logo"
+            src="img/logo.svg"
+            alt="6 cities logo"
+            width="64"
+            height="33"
+          />
         </a>
       </footer>
     </div>

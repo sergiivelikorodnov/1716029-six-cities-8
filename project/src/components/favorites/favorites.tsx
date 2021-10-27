@@ -7,13 +7,14 @@ import { AppRoute } from '../../consts';
 
 type FavoriteOffers = {
   favOffers: Offers;
-}
+};
 
-function Favorites({favOffers}: FavoriteOffers): JSX.Element{
-  const favoriteOffers = favOffers
-    .slice()
-    .filter((offer) => offer.isFavorite);
-  const groupedOffers = groupBy(favoriteOffers, (offer:Offer) => offer.city.name);
+function Favorites({ favOffers }: FavoriteOffers): JSX.Element {
+  const favoriteOffers = favOffers.slice().filter((offer) => offer.isFavorite);
+  const groupedOffers = groupBy(
+    favoriteOffers,
+    (offer: Offer) => offer.city.name,
+  );
   return (
     <div className="page">
       <header className="header">
@@ -23,10 +24,14 @@ function Favorites({favOffers}: FavoriteOffers): JSX.Element{
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <Link className="header__nav-link header__nav-link--profile" to="/favorites">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                  <Link
+                    className="header__nav-link header__nav-link--profile"
+                    to="/favorites"
+                  >
+                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                    <span className="header__user-name user__name">
+                      Oliver.conner@gmail.com
+                    </span>
                   </Link>
                 </li>
                 <li className="header__nav-item">
@@ -45,14 +50,26 @@ function Favorites({favOffers}: FavoriteOffers): JSX.Element{
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
-              {Object.entries(groupedOffers).map(([city, offersList]) => <ListOffersFavorite key={offersList[0].id} offers={offersList} city={city}/>)}
+              {Object.entries(groupedOffers).map(([city, offersList]) => (
+                <ListOffersFavorite
+                  key={offersList[0].id}
+                  offers={offersList}
+                  city={city}
+                />
+              ))}
             </ul>
           </section>
         </div>
       </main>
       <footer className="footer container">
         <Link className="footer__logo-link" to={AppRoute.Main}>
-          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
+          <img
+            className="footer__logo"
+            src="img/logo.svg"
+            alt="6 cities logo"
+            width="64"
+            height="33"
+          />
         </Link>
       </footer>
     </div>
