@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { AuthorizationStatus } from '../consts';
 import { Offers } from '../types/offer';
 
 export function getHumanDate(date: string): string {
@@ -24,3 +25,5 @@ export function getSortedOffersPriceDown(offers: Offers): Offers {
 export function getSortedOffersTopRated(offers: Offers): Offers {
   return offers.slice().sort((offerA, offerB) => offerA.rating - offerB.rating);
 }
+
+export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Unknown;

@@ -6,4 +6,5 @@ export type State = {
   offers: Offers;
   currentOffer: Offer | null;
   authorizationStatus: AuthorizationStatus;
+  isDataLoaded: boolean;
 }
