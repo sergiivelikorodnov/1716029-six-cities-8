@@ -3,12 +3,13 @@ import { dropToken, saveToken, Token } from '../services/token';
 import { ThunkActionResult } from '../types/action';
 import { AuthData } from '../types/auth-data';
 import { Offers } from '../types/offer';
+import { adaptBackToFront } from '../utils/utils';
 import { loadOffersAction, requireAuthorization, requireLogout } from './action';
 
 export const fetchOffersAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const { data } = await api.get<Offers>(APIRoute.Offers);
-    dispatch(loadOffersAction(data));
+    dispatch(loadOffersAction(adaptBackToFront(data)));
   };
 
 export const checkAuthAction = (): ThunkActionResult =>

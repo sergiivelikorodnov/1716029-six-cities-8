@@ -11,8 +11,10 @@ export type CityOffer = {
 
 export type HostOffer = {
   avatarUrl: string;
+  ['avatar_url']?: string;
   id: number;
   isPro: boolean;
+  ['is_pro']?: boolean;
   name: string;
 }
 
@@ -27,10 +29,14 @@ export type Offer = {
   id: number;
   images: string[];
   isFavorite: boolean;
+  ['is_favorite']?: boolean;
   isPremium: boolean,
+  ['is_premium']?: boolean,
   location: LocationOffer;
   maxAdults: number;
+  ['max_adults']?: number;
   previewImage: string;
+  ['preview_image']?: string;
   price: number;
   rating: number;
   title: string;

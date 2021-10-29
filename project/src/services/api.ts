@@ -34,6 +34,8 @@ export const CreateApi = (onUnauthorized: onUnauthorizedCallback): AxiosInstance
       const token = getToken();
 
       if (token) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         config.headers['x-token'] = token;
       }
       return config;
