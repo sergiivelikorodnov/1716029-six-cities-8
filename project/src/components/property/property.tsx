@@ -12,13 +12,14 @@ import { useParams } from 'react-router-dom';
 type SingleProperty = {
   offers: Offers;
   comments: Comments;
-  similarOffers: Offers;
   authorizationStatus: AuthorizationStatus;
 };
 function Property(props: SingleProperty): JSX.Element {
-  const { offers, comments, similarOffers, authorizationStatus } = props;
+  const { offers, comments, authorizationStatus } = props;
   const { id: urlId } = useParams<{ id: string }>();
   const offer = offers.filter((room) => room.id === Number(urlId));
+  const similarOffers = offers.filter((room) => room.id !== Number(urlId)).slice(0, 3);
+
   const [
     {
       id,

@@ -61,7 +61,8 @@ function Map({
         },
       );
       offersList.forEach((offer) => {
-        const { location } = offer.city;
+        const { location } = offer;
+
         const marker = new Marker({
           lat: location.latitude,
           lng: location.longitude,

@@ -7,18 +7,20 @@ import Login from '../login/login';
 import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
 import { Comments } from '../../types/comment-get';
-import { State } from '../../types/state';
 import { connect, ConnectedProps } from 'react-redux';
 import { getOffersByCity } from '../../utils/utils';
+import { State } from '../../types/state';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 type AppScreenProps = {
   cities: string[];
   comments: Comments;
 };
 
-const mapStateToProps = ({ currentCity, offers }: State) => ({
+const mapStateToProps = ({ currentCity, offers, isDataLoaded }: State) => ({
   currentCity,
   offers,
+  isDataLoaded,
 });
 
 const connector = connect(mapStateToProps);
@@ -27,11 +29,16 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & AppScreenProps;
 
 function App(props: ConnectedComponentProps): JSX.Element {
-  const { cities, comments, offers, currentCity } = props;
+  const { cities, comments, offers, currentCity, isDataLoaded } = props;
+
+  if (!isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   const offersList = getOffersByCity(currentCity, offers);
 
-  const similarOffers = offers.slice(0, 3);
   return (
     <BrowserRouter>
       <Switch>
@@ -52,7 +59,6 @@ function App(props: ConnectedComponentProps): JSX.Element {
           <Property
             offers={offersList}
             comments={comments}
-            similarOffers={similarOffers}
             authorizationStatus={AuthorizationStatus.Auth}
           />
         </Route>

@@ -94,8 +94,8 @@ function Main({ cities, offersList }: Property): JSX.Element {
                 to stay in {name}
               </b>
               <MainSortingList
-                onSelectedSortTypeHandler={selectedSortTypeHandler}
-                onSelectedSortType={selectedSortType}
+                selectedSortTypeHandler={selectedSortTypeHandler}
+                selectedSortType={selectedSortType}
               />
               <ListOffers offers={sortedOffers} />
             </section>
