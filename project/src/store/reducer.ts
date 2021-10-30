@@ -1,5 +1,4 @@
 import { AuthorizationStatus, DEFAULT_CITY } from '../consts';
-//import { offers } from '../mocks/offers';
 import { ActionType, Actions } from '../types/action';
 import { State } from '../types/state';
 

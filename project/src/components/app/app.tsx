@@ -38,10 +38,7 @@ function App(props: ConnectedComponentProps): JSX.Element {
   }
 
   const offersList = getOffersByCity(currentCity, offers);
-  // eslint-disable-next-line no-console
-  console.log(offers);
 
-  const similarOffers = offers.slice(0, 3);
   return (
     <BrowserRouter>
       <Switch>
@@ -62,7 +59,6 @@ function App(props: ConnectedComponentProps): JSX.Element {
           <Property
             offers={offersList}
             comments={comments}
-            similarOffers={similarOffers}
             authorizationStatus={AuthorizationStatus.Auth}
           />
         </Route>
