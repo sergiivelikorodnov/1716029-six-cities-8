@@ -3,14 +3,20 @@ import { dropEmail, saveEmail } from '../services/email';
 import { dropToken, saveToken } from '../services/token';
 import { ThunkActionResult } from '../types/action';
 import { AuthData, BackAuthInfo } from '../types/auth-data';
-import { Offers } from '../types/offer';
-import { adaptBackToFront, adaptUserBackToFront } from '../utils/utils';
-import { loadOffersAction, redirectToRoute, requireAuthorization, requireLogout, setUserAuthInfo } from './action';
+import { Offer, Offers } from '../types/offer';
+import { adaptOffersBackToFront, adaptSingleOfferBackToFront, adaptUserBackToFront } from '../utils/utils';
+import { loadOffersAction, loadSingleOfferAction, redirectToRoute, requireAuthorization, requireLogout, setUserAuthInfo } from './action';
 
 export const fetchOffersAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const { data } = await api.get<Offers>(APIRoute.Offers);
-    dispatch(loadOffersAction(adaptBackToFront(data)));
+    dispatch(loadOffersAction(adaptOffersBackToFront(data)));
+  };
+
+export const fetchSingleOfferAction = (id:number): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const { data } = await api.get<Offer>(`${APIRoute.Offers}/${id}`);
+    dispatch(loadSingleOfferAction(adaptSingleOfferBackToFront(data)));
   };
 
 export const checkAuthAction = (): ThunkActionResult =>

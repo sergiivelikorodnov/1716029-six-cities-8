@@ -43,3 +43,9 @@ export const setUserAuthInfo = (userInfo:FrontAuthInfo) =>
     type: ActionType.SetUserAuthInfo,
     payload: userInfo,
   } as const);
+
+export const loadSingleOfferAction = (offer:Offer) =>
+  ({
+    type: ActionType.LoadSingleOfferData,
+    payload: offer,
+  } as const);

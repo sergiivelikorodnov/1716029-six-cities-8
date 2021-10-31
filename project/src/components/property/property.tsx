@@ -1,26 +1,56 @@
-import { Link } from 'react-router-dom';
-import { AuthorizationStatus } from '../../consts';
 import { Comments } from '../../types/comment-get';
 import { Offers } from '../../types/offer';
-import { getDateTime, getHumanDate } from '../../utils/utils';
+import { getDateTime, getHumanDate, isLogged } from '../../utils/utils';
 import CartOffer from '../cart-offer/cart-offer';
-import Logo from '../logo/logo';
 import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
 import { useParams } from 'react-router-dom';
+import { State } from '../../types/state';
+import { connect, ConnectedProps } from 'react-redux';
+import Header from '../header/header';
+import LoadingScreen from '../loading-screen/loading-screen';
+import { ThunkAppDispatch } from '../../types/action';
+import { fetchSingleOfferAction } from '../../store/api-actions';
 
 const MAX_SIMILAR_OFFERS = 3;
 
 type SingleProperty = {
   offers: Offers;
   comments: Comments;
-  authorizationStatus: AuthorizationStatus;
 };
-function Property(props: SingleProperty): JSX.Element {
-  const { offers, comments, authorizationStatus } = props;
+
+const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer}: State) => ({
+  authorizationStatus,
+  isDataLoaded,
+  currentOffer,
+});
+
+const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
+  loadOfferData(id:number) {
+    dispatch(fetchSingleOfferAction(id));
+  },
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & SingleProperty;
+
+function Property({ offers, comments, authorizationStatus, isDataLoaded=false, loadOfferData, currentOffer } : ConnectedComponentProps): JSX.Element {
+
   const { id: urlId } = useParams<{ id: string }>();
+
   const offer = offers.filter((room) => room.id === Number(urlId));
+
   const similarOffers = offers.filter((room) => room.id !== Number(urlId)).slice(0, MAX_SIMILAR_OFFERS);
+
+
+  if (!isDataLoaded) {
+    loadOfferData(Number(urlId));
+    return (
+      <LoadingScreen />
+    );
+  }
 
   const [
     {
@@ -40,38 +70,10 @@ function Property(props: SingleProperty): JSX.Element {
     },
   ] = offer;
   const { name, avatarUrl, isPro } = host;
-  const isLogged = AuthorizationStatus.Auth === authorizationStatus;
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo />
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link
-                    className="header__nav-link header__nav-link--profile"
-                    to="/favorites"
-                  >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
-                    </span>
-                  </Link>
-                </li>
-                <li className="header__nav-item">
-                  <Link className="header__nav-link" to="/">
-                    <span className="header__signout">Sign out{id}</span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+      <Header/>
       <main className="page__main page__main--property">
         <section className="property">
           <div className="property__gallery-container container">
@@ -216,7 +218,7 @@ function Property(props: SingleProperty): JSX.Element {
                     );
                   })}
                 </ul>
-                {isLogged ? <ReviewsForm /> : ''}
+                {isLogged(authorizationStatus) ? <ReviewsForm /> : ''}
               </section>
             </div>
           </div>
@@ -241,4 +243,5 @@ function Property(props: SingleProperty): JSX.Element {
   );
 }
 
-export default Property;
+export {Property};
+export default connector(Property);

@@ -1,5 +1,5 @@
 import { Switch, Route, Router as BrowserRouter } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../consts';
+import { AppRoute } from '../../consts';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
 import NotFound from '../not-found/not-found';
@@ -60,7 +60,6 @@ function App(props: ConnectedComponentProps): JSX.Element {
           <Property
             offers={offersList}
             comments={comments}
-            authorizationStatus={AuthorizationStatus.Auth}
           />
         </Route>
         <Route>

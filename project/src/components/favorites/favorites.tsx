@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Offer, Offers } from '../../types/offer';
-import Logo from '../logo/logo';
 import ListOffersFavorite from '../list-offers-favorite/list-offers-favorite';
 import { groupBy } from 'lodash';
 import { AppRoute } from '../../consts';
+import Header from '../header/header';
 
 type FavoriteOffers = {
   favOffers: Offers;
@@ -17,33 +17,7 @@ function Favorites({ favOffers }: FavoriteOffers): JSX.Element {
   );
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo />
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link
-                    className="header__nav-link header__nav-link--profile"
-                    to="/favorites"
-                  >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
-                    </span>
-                  </Link>
-                </li>
-                <li className="header__nav-item">
-                  <Link className="header__nav-link" to="/">
-                    <span className="header__signout">Sign out</span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header/>
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">

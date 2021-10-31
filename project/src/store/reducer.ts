@@ -18,6 +18,9 @@ const reducer = (state: State = initialState, action: Actions): State => {
     case ActionType.LoadOfferData: {
       return { ...state, offers: action.payload, isDataLoaded: true };
     }
+    case ActionType.LoadSingleOfferData: {
+      return { ...state, currentOffer: action.payload, isDataLoaded: true };
+    }
     case ActionType.SelectCity:
       return { ...state, currentOffer: action.payload };
     case ActionType.SetUserAuthInfo:

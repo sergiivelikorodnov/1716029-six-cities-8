@@ -1,10 +1,11 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus } from '../../consts';
+import { AppRoute } from '../../consts';
 import { getEmail } from '../../services/email';
 import { logoutAction } from '../../store/api-actions';
 import { ThunkAppDispatch } from '../../types/action';
 import { State } from '../../types/state';
+import { isLogged } from '../../utils/utils';
 import Logo from '../logo/logo';
 
 
@@ -25,9 +26,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function Header({authorizationStatus, logout}:PropsFromRedux): JSX.Element {
 
-  const isLogged = AuthorizationStatus.Auth === authorizationStatus;
-
-  if (isLogged) {
+  if (isLogged(authorizationStatus)) {
     const email = getEmail();
     return (
       <header className="header">
