@@ -1,5 +1,6 @@
 import { AppRoute, AuthorizationStatus } from '../consts';
 import { ActionType } from '../types/action';
+import { FrontAuthInfo } from '../types/auth-data';
 import { Offer, Offers } from '../types/offer';
 
 export const changeCityAction = (newCity: string) =>
@@ -35,4 +36,10 @@ export const redirectToRoute = (url:AppRoute) =>
   ({
     type: ActionType.RedirectToRoute,
     payload: url,
+  } as const);
+
+export const setUserAuthInfo = (userInfo:FrontAuthInfo) =>
+  ({
+    type: ActionType.SetUserAuthInfo,
+    payload: userInfo,
   } as const);
