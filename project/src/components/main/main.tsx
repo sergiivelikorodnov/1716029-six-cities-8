@@ -13,13 +13,28 @@ import {
   getSortedOffersTopRated
 } from '../../utils/utils';
 import { useState } from 'react';
+import { ThunkAppDispatch } from '../../types/action';
+import { logoutAction } from '../../store/api-actions';
+import { connect, ConnectedProps } from 'react-redux';
 
 type Property = {
   cities: string[];
   offersList: Offers;
 };
 
-function Main({ cities, offersList }: Property): JSX.Element {
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  logout(){
+    dispatch(logoutAction());
+  },
+});
+
+const connector = connect(null, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type ConnectedComponentProps = PropsFromRedux & Property;
+
+function Main({ cities, offersList, logout }: ConnectedComponentProps): JSX.Element {
   const [selectedSortType, setSelectedSortType] = useState(SortingType.POPULAR);
 
   const selectedSortTypeHandler = (sortType: string) => {
@@ -70,7 +85,15 @@ function Main({ cities, offersList }: Property): JSX.Element {
                   </Link>
                 </li>
                 <li className="header__nav-item">
-                  <Link className="header__nav-link" to="/">
+                  <Link
+                    className="header__nav-link"
+                    onClick={(evt) => {
+                      evt.preventDefault();
+
+                      logout();
+                    }}
+                    to="/"
+                  >
                     <span className="header__signout">Sign out</span>
                   </Link>
                 </li>
@@ -111,4 +134,5 @@ function Main({ cities, offersList }: Property): JSX.Element {
   );
 }
 
-export default Main;
+export {Main};
+export default connector(Main);
