@@ -49,3 +49,9 @@ export const loadSingleOfferAction = (offer:Offer) =>
     type: ActionType.LoadSingleOfferData,
     payload: offer,
   } as const);
+
+export const nearbyOffersDataAction = (offers:Offers) =>
+  ({
+    type: ActionType.NearbyOffersData,
+    payload: offers,
+  } as const);

@@ -10,26 +10,27 @@ import { connect, ConnectedProps } from 'react-redux';
 import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { ThunkAppDispatch } from '../../types/action';
-import { fetchSingleOfferAction } from '../../store/api-actions';
+import { fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
 import { useEffect } from 'react';
-
-const MAX_SIMILAR_OFFERS = 3;
 
 type SingleProperty = {
   offers: Offers;
   comments: Comments;
 };
 
-const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer}: State) => ({
+const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer, nearbyOffers}: State) => ({
   authorizationStatus,
   isDataLoaded,
   currentOffer,
+  nearbyOffers,
 });
 
 const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
   loadOfferData(id:number) {
     dispatch(fetchSingleOfferAction(id));
+    dispatch(fetchNearByOffersAction(id));
   },
+
 });
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -37,10 +38,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & SingleProperty;
 
-function Property({ offers, comments, authorizationStatus, isDataLoaded, loadOfferData, currentOffer } : ConnectedComponentProps): JSX.Element {
+function Property({ offers, comments, authorizationStatus, isDataLoaded, loadOfferData, nearbyOffers, currentOffer } : ConnectedComponentProps): JSX.Element {
   const { id: urlId } = useParams<{ id: string }>();
-  //const offer = offers.filter((room) => room.id === Number(urlId));
-  const similarOffers = offers.filter((room) => room.id !== Number(urlId)).slice(0, MAX_SIMILAR_OFFERS);
 
   const {
     id,
@@ -225,7 +224,7 @@ function Property({ offers, comments, authorizationStatus, isDataLoaded, loadOff
             </div>
           </div>
           <section className="property__map map">
-            <Map offersList={similarOffers} city={city} />
+            <Map offersList={nearbyOffers} city={city} />
           </section>
         </section>
         <div className="container">
@@ -234,7 +233,7 @@ function Property({ offers, comments, authorizationStatus, isDataLoaded, loadOff
               Other places in the neighbourhood
             </h2>
             <div className="near-places__list places__list">
-              {similarOffers.map((similarOffer) => (
+              {nearbyOffers.map((similarOffer) => (
                 <CartOffer key={similarOffer.id} offer={similarOffer} />
               ))}
             </div>

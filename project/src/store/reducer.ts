@@ -8,7 +8,8 @@ const initialState = {
   currentOffer: DEFAULT_SINGLE_OFFER,
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
-  userAuthInfo:DEFAULT_USER_DATA,
+  userAuthInfo: DEFAULT_USER_DATA,
+  nearbyOffers: [],
 };
 
 const reducer = (state: State = initialState, action: Actions): State => {
@@ -19,7 +20,10 @@ const reducer = (state: State = initialState, action: Actions): State => {
       return { ...state, offers: action.payload, isDataLoaded: true };
     }
     case ActionType.LoadSingleOfferData: {
-      return { ...state, currentOffer: action.payload, isDataLoaded: true };
+      return { ...state, currentOffer: action.payload };
+    }
+    case ActionType.NearbyOffersData: {
+      return { ...state, nearbyOffers: action.payload, isDataLoaded: true };
     }
     case ActionType.SelectCity:
       return { ...state, currentOffer: action.payload };
