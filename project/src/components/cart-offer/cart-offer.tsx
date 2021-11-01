@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../../consts';
+import { AppRoute, DEFAULT_SINGLE_OFFER } from '../../consts';
 import { selectCurrentCityAction } from '../../store/action';
 import { Actions } from '../../types/action';
 import { Offer } from '../../types/offer';
@@ -11,7 +11,7 @@ type SingleOffer = {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onHoverOffer(offer: Offer | null) {
+  onHoverOffer(offer: Offer) {
     dispatch(selectCurrentCityAction(offer));
   },
 });
@@ -32,7 +32,7 @@ function CartOffer({
     <article
       className="cities__place-card place-card"
       onMouseOver={() => onHoverOffer && onHoverOffer(offer)}
-      onMouseOut={() => onHoverOffer && onHoverOffer(null)}
+      onMouseOut={() => onHoverOffer && onHoverOffer(DEFAULT_SINGLE_OFFER)}
     >
       {isPremium ? (
         <div className="place-card__mark">

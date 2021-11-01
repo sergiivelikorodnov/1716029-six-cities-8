@@ -5,8 +5,9 @@ import { Offer, Offers } from './offer';
 export type State = {
   currentCity: string;
   offers: Offers;
-  currentOffer: Offer | null;
+  currentOffer: Offer;
   authorizationStatus: AuthorizationStatus;
   isDataLoaded: boolean;
-  userAuthInfo: FrontAuthInfo | null;
+  userAuthInfo: FrontAuthInfo;
+  nearbyOffers: Offers;
 }

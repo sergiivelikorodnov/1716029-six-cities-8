@@ -11,6 +11,7 @@ import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { ThunkAppDispatch } from '../../types/action';
 import { fetchSingleOfferAction } from '../../store/api-actions';
+import { useEffect } from 'react';
 
 const MAX_SIMILAR_OFFERS = 3;
 
@@ -36,40 +37,41 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & SingleProperty;
 
-function Property({ offers, comments, authorizationStatus, isDataLoaded=false, loadOfferData, currentOffer } : ConnectedComponentProps): JSX.Element {
-
+function Property({ offers, comments, authorizationStatus, isDataLoaded, loadOfferData, currentOffer } : ConnectedComponentProps): JSX.Element {
   const { id: urlId } = useParams<{ id: string }>();
-
-  const offer = offers.filter((room) => room.id === Number(urlId));
-
+  //const offer = offers.filter((room) => room.id === Number(urlId));
   const similarOffers = offers.filter((room) => room.id !== Number(urlId)).slice(0, MAX_SIMILAR_OFFERS);
 
+  const {
+    id,
+    price,
+    rating,
+    bedrooms,
+    title,
+    description,
+    host,
+    images,
+    maxAdults,
+    goods,
+    isPremium,
+    isFavorite,
+    city,
+  } = currentOffer;
+  const { name, avatarUrl, isPro } = host;
 
-  if (!isDataLoaded) {
+
+  useEffect(() => {
+    loadOfferData(Number(urlId));
+  }, [loadOfferData, urlId]);
+
+
+  if (currentOffer !== null && !isDataLoaded) {
     loadOfferData(Number(urlId));
     return (
       <LoadingScreen />
     );
   }
 
-  const [
-    {
-      id,
-      price,
-      rating,
-      bedrooms,
-      title,
-      description,
-      host,
-      images,
-      maxAdults,
-      goods,
-      isPremium,
-      isFavorite,
-      city,
-    },
-  ] = offer;
-  const { name, avatarUrl, isPro } = host;
 
   return (
     <div className="page">

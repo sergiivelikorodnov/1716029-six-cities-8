@@ -9,7 +9,7 @@ export const changeCityAction = (newCity: string) =>
     payload: newCity,
   } as const);
 
-export const selectCurrentCityAction = (offer: Offer | null) =>
+export const selectCurrentCityAction = (offer: Offer) =>
   ({
     type: ActionType.SelectCity,
     payload: offer,

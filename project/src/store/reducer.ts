@@ -1,14 +1,14 @@
-import { AuthorizationStatus, DEFAULT_CITY } from '../consts';
+import { AuthorizationStatus, DEFAULT_CITY, DEFAULT_SINGLE_OFFER, DEFAULT_USER_DATA } from '../consts';
 import { ActionType, Actions } from '../types/action';
 import { State } from '../types/state';
 
 const initialState = {
   currentCity: DEFAULT_CITY,
   offers: [],
-  currentOffer: null,
+  currentOffer: DEFAULT_SINGLE_OFFER,
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoaded: false,
-  userAuthInfo:null,
+  userAuthInfo:DEFAULT_USER_DATA,
 };
 
 const reducer = (state: State = initialState, action: Actions): State => {
