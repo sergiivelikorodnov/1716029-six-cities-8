@@ -3,7 +3,7 @@ import { adaptSingleOfferBackToFront, getDateTime, getHumanDate, isLogged } from
 import CartOffer from '../cart-offer/cart-offer';
 import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { State } from '../../types/state';
 import { connect, ConnectedProps } from 'react-redux';
 import Header from '../header/header';
@@ -11,7 +11,7 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import { ThunkAppDispatch } from '../../types/action';
 import { fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
 import { useEffect, useState } from 'react';
-import { APIRoute } from '../../consts';
+import { APIRoute, AppRoute } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
 
@@ -40,6 +40,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & SingleProperty;
 
 function Property({ comments, authorizationStatus, isDataLoaded=false, loadOfferData, nearbyOffers, currentOffer } : ConnectedComponentProps): JSX.Element {
+  const history = useHistory();
 
   const { id: urlId } = useParams<{ id: string }>();
 
@@ -63,14 +64,8 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
 
   useEffect(() => {
     loadOfferData(Number(urlId));
-    // eslint-disable-next-line no-console
-    console.log(`isFavorite: ${isFavorite}`);
     setIsFavoriteStatus(isFavorite);
   }, [loadOfferData, urlId, isFavorite]);
-
-
-  // eslint-disable-next-line no-console
-  console.log(`isFavoriteStatus: ${isFavoriteStatus}`);
 
   if (!isDataLoaded) {
     return (
@@ -82,14 +77,10 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
     const favoriteStatus = Number(!isFavoriteStatus);
     await api.post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
-        // eslint-disable-next-line no-console
-        console.log(adaptSingleOfferBackToFront(data).isFavorite);
-
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
       },
       );
   };
-
 
   return (
     <div className="page">
@@ -120,7 +111,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  onClick = {()=>setFavoriteHandler(id)}
+                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
                   className={`property__bookmark-button ${
                     isFavoriteStatus ? 'property__bookmark-button--active' : ''
                   } button`}

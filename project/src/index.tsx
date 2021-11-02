@@ -7,7 +7,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { reducer } from './store/reducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { AuthorizationStatus, CITIES } from './consts';
+import { AuthorizationStatus } from './consts';
 import { сreateApi } from './services/api';
 import { requireAuthorization } from './store/action';
 import { ThunkAppDispatch } from './types/action';
@@ -27,7 +27,7 @@ const store = createStore(reducer, composeWithDevTools(
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App cities={CITIES} comments={comments} />
+      <App comments={comments} />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

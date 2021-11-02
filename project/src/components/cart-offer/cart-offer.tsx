@@ -1,16 +1,20 @@
-import { Dispatch, useState } from 'react';
+import { Dispatch, useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { api } from '../..';
 import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER } from '../../consts';
 import { selectCurrentCityAction } from '../../store/action';
 import { Actions } from '../../types/action';
 import { Offer } from '../../types/offer';
-import { adaptSingleOfferBackToFront } from '../../utils/utils';
+import { State } from '../../types/state';
+import { adaptSingleOfferBackToFront, isLogged } from '../../utils/utils';
 
 type SingleOffer = {
   offer: Offer;
 };
+const mapStateToProps = ({authorizationStatus}: State) => ({
+  authorizationStatus,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
   onHoverOffer(offer: Offer) {
@@ -18,32 +22,34 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
   },
 });
 
-const connector = connect(null, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & SingleOffer;
 
-function CartOffer({ offer, onHoverOffer }: ConnectedComponentProps): JSX.Element {
+function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedComponentProps): JSX.Element {
+  const history = useHistory();
   const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
-  // eslint-disable-next-line no-console
-  console.log(`Offer ${offer}`);
-
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
+  const getFavoriteStatus = async (idOffer:number): Promise<void> => {
+    await api.get<Offer>(`${APIRoute.Offers}/${idOffer}`)
+      .then(({ data }) => {
+        setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
+      },
+      );
+  };
 
-  /*   useEffect(() => {
-    // eslint-disable-next-line no-console
-    //console.log(`isFavoriteID${id}: ${isFavorite}`);
-    setIsFavoriteStatus(isFavorite);
-  }, [isFavorite]);
- */
+
+  useEffect(() => {
+    getFavoriteStatus(id);
+  }, [id, isFavorite]);
+
   const setFavoriteHandler = async (idOffer:number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
     await api.post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
-        // eslint-disable-next-line no-console
-        console.log(data);
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
       },
       );
@@ -80,7 +86,7 @@ function CartOffer({ offer, onHoverOffer }: ConnectedComponentProps): JSX.Elemen
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            onClick = {()=>setFavoriteHandler(id)}
+            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
             className={`place-card__bookmark-button ${
               isFavoriteStatus ? 'place-card__bookmark-button--active' : ''
             } button`}
