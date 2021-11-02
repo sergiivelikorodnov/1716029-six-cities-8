@@ -40,6 +40,7 @@ export enum APIRoute {
   Login = '/login',
   Logout = '/logout',
   Favorites = '/favorite',
+  Comments = '/comments'
 }
 
 export const DEFAULT_SINGLE_OFFER:Offer = {

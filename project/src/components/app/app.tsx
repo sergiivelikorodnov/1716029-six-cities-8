@@ -6,18 +6,9 @@ import NotFound from '../not-found/not-found';
 import Login from '../login/login';
 import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
-import { Comments } from '../../types/comment-get';
 import browserHistory from '../../browser-history';
 
-type AppScreenProps = {
-  comments: Comments;
-};
-
-
-function App(props: AppScreenProps): JSX.Element {
-  const { comments } = props;
-
-
+function App(): JSX.Element {
   return (
     <BrowserRouter history={browserHistory}>
       <Switch>
@@ -34,9 +25,7 @@ function App(props: AppScreenProps): JSX.Element {
         >
         </PrivateRoute>
         <Route exact path={`${AppRoute.Room}/:id`}>
-          <Property
-            comments={comments}
-          />
+          <Property/>
         </Route>
         <Route>
           <NotFound />

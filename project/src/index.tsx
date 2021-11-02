@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
-import { comments } from './mocks/comments';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -21,13 +20,14 @@ const store = createStore(reducer, composeWithDevTools(
   applyMiddleware(redirect),
 ));
 
+
 (store.dispatch as ThunkAppDispatch)(fetchOffersAction());
 (store.dispatch as ThunkAppDispatch)(checkAuthAction());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App comments={comments} />
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

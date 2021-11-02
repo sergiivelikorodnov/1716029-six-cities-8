@@ -11,6 +11,7 @@ const initialState = {
   userAuthInfo: DEFAULT_USER_DATA,
   nearbyOffers: [],
   favoritesOffers: [],
+  comments:[],
 };
 
 const reducer = (state: State = initialState, action: Actions): State => {
@@ -24,7 +25,7 @@ const reducer = (state: State = initialState, action: Actions): State => {
       return { ...state, currentOffer: action.payload };
     }
     case ActionType.NearbyOffersData: {
-      return { ...state, nearbyOffers: action.payload, isDataLoaded: true };
+      return { ...state, nearbyOffers: action.payload };
     }
     case ActionType.FavoritesOffersData: {
       return { ...state, favoritesOffers: action.payload, isDataLoaded: true };
@@ -37,6 +38,8 @@ const reducer = (state: State = initialState, action: Actions): State => {
       return { ...state, authorizationStatus: action.payload };
     case ActionType.RequireLogout:
       return { ...state, authorizationStatus: AuthorizationStatus.NoAuth };
+    case ActionType.GetCommentsData:
+      return { ...state, comments: action.payload, isDataLoaded: true };
     default:
       return state;
   }

@@ -1,4 +1,3 @@
-import { Comments } from '../../types/comment-get';
 import { adaptSingleOfferBackToFront, getDateTime, getHumanDate, isLogged } from '../../utils/utils';
 import CartOffer from '../cart-offer/cart-offer';
 import Map from '../map/map';
@@ -9,27 +8,25 @@ import { connect, ConnectedProps } from 'react-redux';
 import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { ThunkAppDispatch } from '../../types/action';
-import { fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
+import { fetchCommentssAction, fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
 import { useEffect, useState } from 'react';
 import { APIRoute, AppRoute } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
 
-type SingleProperty = {
-  comments: Comments;
-};
-
-const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer, nearbyOffers}: State) => ({
+const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer, nearbyOffers, comments}: State) => ({
   authorizationStatus,
   isDataLoaded,
   currentOffer,
   nearbyOffers,
+  comments,
 });
 
 const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
   loadOfferData(id:number) {
     dispatch(fetchSingleOfferAction(id));
     dispatch(fetchNearByOffersAction(id));
+    dispatch(fetchCommentssAction(id));
   },
 
 });
@@ -37,9 +34,8 @@ const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & SingleProperty;
 
-function Property({ comments, authorizationStatus, isDataLoaded=false, loadOfferData, nearbyOffers, currentOffer } : ConnectedComponentProps): JSX.Element {
+function Property({ comments, authorizationStatus, isDataLoaded=false, loadOfferData, nearbyOffers, currentOffer } : PropsFromRedux): JSX.Element {
   const history = useHistory();
 
   const { id: urlId } = useParams<{ id: string }>();
