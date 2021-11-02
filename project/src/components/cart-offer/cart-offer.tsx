@@ -7,7 +7,8 @@ import { selectCurrentCityAction } from '../../store/action';
 import { Actions } from '../../types/action';
 import { Offer } from '../../types/offer';
 import { State } from '../../types/state';
-import { adaptSingleOfferBackToFront, isLogged } from '../../utils/utils';
+import { isLogged } from '../../utils/utils';
+import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 
 type SingleOffer = {
   offer: Offer;

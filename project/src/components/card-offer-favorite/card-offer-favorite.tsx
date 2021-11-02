@@ -6,7 +6,7 @@ import { APIRoute } from '../../consts';
 import { fetchFavoritesOffersAction } from '../../store/api-actions';
 import { ThunkAppDispatch } from '../../types/action';
 import { Offer } from '../../types/offer';
-import { adaptSingleOfferBackToFront } from '../../utils/utils';
+import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 
 type SingleOffer = {
   offer: Offer;

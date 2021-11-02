@@ -1,4 +1,5 @@
-import { adaptSingleOfferBackToFront, getDateTime, getHumanDate, isLogged } from '../../utils/utils';
+import { getDateTime, getHumanDate, isLogged } from '../../utils/utils';
+import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import CartOffer from '../cart-offer/cart-offer';
 import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';

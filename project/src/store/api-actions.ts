@@ -6,7 +6,7 @@ import { ThunkActionResult } from '../types/action';
 import { AuthData, BackAuthInfo } from '../types/auth-data';
 import { Comments } from '../types/comment-get';
 import { Offer, Offers } from '../types/offer';
-import { adaptOffersBackToFront, adaptSingleOfferBackToFront, adaptUserBackToFront } from '../utils/utils';
+import { adaptCommentsBackToFront, adaptOffersBackToFront, adaptSingleOfferBackToFront, adaptUserBackToFront } from '../utils/adapters';
 import { favoriteOffersDataAction, getCommentsAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, redirectToRoute, requireAuthorization, requireLogout, setUserAuthInfo } from './action';
 
 export const fetchOffersAction = (): ThunkActionResult =>
@@ -39,7 +39,7 @@ export const fetchCommentssAction = (id:number): ThunkActionResult =>
     // eslint-disable-next-line no-console
     console.log(data);
 
-    dispatch(getCommentsAction(data));
+    dispatch(getCommentsAction(adaptCommentsBackToFront(data)));
   };
 
 export const checkAuthAction = (): ThunkActionResult =>
