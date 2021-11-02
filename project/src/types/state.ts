@@ -1,4 +1,5 @@
 import { AuthorizationStatus } from '../consts';
+import { FrontAuthInfo } from './auth-data';
 import { Offer, Offers } from './offer';
 
 export type State = {
@@ -7,4 +8,5 @@ export type State = {
   currentOffer: Offer | null;
   authorizationStatus: AuthorizationStatus;
   isDataLoaded: boolean;
+  userAuthInfo: FrontAuthInfo | null;
 }

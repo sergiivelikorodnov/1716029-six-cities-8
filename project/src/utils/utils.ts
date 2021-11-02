@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { AuthorizationStatus } from '../consts';
+import { BackAuthInfo, FrontAuthInfo } from '../types/auth-data';
 import { Offer, Offers } from '../types/offer';
 
 export function getHumanDate(date: string): string {
@@ -60,4 +61,15 @@ export const adaptBackToFront = (backData: Offers): Offers => {
   });
 
   return adaptedData;
+};
+
+export const adaptUserBackToFront = (backendUserData: BackAuthInfo): FrontAuthInfo => {
+  const { email, id, name } = backendUserData;
+  return {
+    avatarUrl: backendUserData.avatar_url,
+    isPro: backendUserData.is_pro,
+    email,
+    id,
+    name,
+  };
 };

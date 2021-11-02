@@ -8,19 +8,21 @@ import thunk from 'redux-thunk';
 import { reducer } from './store/reducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { AuthorizationStatus, CITIES } from './consts';
-import { CreateApi } from './services/api';
+import { сreateApi } from './services/api';
 import { requireAuthorization } from './store/action';
 import { ThunkAppDispatch } from './types/action';
-import { /* checkAuthAction,  */fetchOffersAction } from './store/api-actions';
+import { fetchOffersAction, checkAuthAction } from './store/api-actions';
+import { redirect } from './store/middlewares/redirect';
 
-const api = CreateApi(()=> store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)));
+const api = сreateApi(()=> store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)));
 
 const store = createStore(reducer, composeWithDevTools(
   applyMiddleware(thunk.withExtraArgument(api)),
+  applyMiddleware(redirect),
 ));
 
-//(store.dispatch as ThunkAppDispatch)(checkAuthAction());
 (store.dispatch as ThunkAppDispatch)(fetchOffersAction());
+(store.dispatch as ThunkAppDispatch)(checkAuthAction());
 
 ReactDOM.render(
   <React.StrictMode>

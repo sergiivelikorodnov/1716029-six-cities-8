@@ -9,6 +9,8 @@ import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
 import { useParams } from 'react-router-dom';
 
+const MAX_SIMILAR_OFFERS = 3;
+
 type SingleProperty = {
   offers: Offers;
   comments: Comments;
@@ -18,7 +20,7 @@ function Property(props: SingleProperty): JSX.Element {
   const { offers, comments, authorizationStatus } = props;
   const { id: urlId } = useParams<{ id: string }>();
   const offer = offers.filter((room) => room.id === Number(urlId));
-  const similarOffers = offers.filter((room) => room.id !== Number(urlId)).slice(0, 3);
+  const similarOffers = offers.filter((room) => room.id !== Number(urlId)).slice(0, MAX_SIMILAR_OFFERS);
 
   const [
     {

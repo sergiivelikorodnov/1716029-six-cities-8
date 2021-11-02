@@ -10,7 +10,7 @@ enum HttpCode {
 
 type onUnauthorizedCallback = () => void;
 
-export const CreateApi = (onUnauthorized: onUnauthorizedCallback): AxiosInstance => {
+export const сreateApi = (onUnauthorized: onUnauthorizedCallback): AxiosInstance => {
 
   const api = axios.create({
     baseURL: BACKEND_URL,
@@ -34,8 +34,7 @@ export const CreateApi = (onUnauthorized: onUnauthorizedCallback): AxiosInstance
       const token = getToken();
 
       if (token) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        config.headers = config.headers || {};
         config.headers['x-token'] = token;
       }
       return config;

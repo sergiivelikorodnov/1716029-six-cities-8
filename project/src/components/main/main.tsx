@@ -1,6 +1,4 @@
-import { Link } from 'react-router-dom';
 import { Offers } from '../../types/offer';
-import Logo from '../logo/logo';
 import ListOffers from '../list-offers/list-offers';
 import Map from '../map/map';
 
@@ -13,6 +11,7 @@ import {
   getSortedOffersTopRated
 } from '../../utils/utils';
 import { useState } from 'react';
+import Header from '../header/header';
 
 type Property = {
   cities: string[];
@@ -52,34 +51,7 @@ function Main({ cities, offersList }: Property): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo />
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link
-                    className="header__nav-link header__nav-link--profile"
-                    to="/favorites"
-                  >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
-                    </span>
-                  </Link>
-                </li>
-                <li className="header__nav-item">
-                  <Link className="header__nav-link" to="/">
-                    <span className="header__signout">Sign out</span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+      <Header/>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
 

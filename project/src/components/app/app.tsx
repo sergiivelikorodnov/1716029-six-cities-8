@@ -1,4 +1,4 @@
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, Router as BrowserRouter } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../consts';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
@@ -8,19 +8,21 @@ import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
 import { Comments } from '../../types/comment-get';
 import { connect, ConnectedProps } from 'react-redux';
-import { getOffersByCity } from '../../utils/utils';
+import { getOffersByCity, isCheckedAuth } from '../../utils/utils';
 import { State } from '../../types/state';
 import LoadingScreen from '../loading-screen/loading-screen';
+import browserHistory from '../../browser-history';
 
 type AppScreenProps = {
   cities: string[];
   comments: Comments;
 };
 
-const mapStateToProps = ({ currentCity, offers, isDataLoaded }: State) => ({
+const mapStateToProps = ({ currentCity, offers, authorizationStatus, isDataLoaded }: State) => ({
   currentCity,
   offers,
   isDataLoaded,
+  authorizationStatus,
 });
 
 const connector = connect(mapStateToProps);
@@ -29,9 +31,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & AppScreenProps;
 
 function App(props: ConnectedComponentProps): JSX.Element {
-  const { cities, comments, offers, currentCity, isDataLoaded } = props;
+  const { cities, comments, offers, currentCity, authorizationStatus, isDataLoaded } = props;
 
-  if (!isDataLoaded) {
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return (
       <LoadingScreen />
     );
@@ -40,7 +42,7 @@ function App(props: ConnectedComponentProps): JSX.Element {
   const offersList = getOffersByCity(currentCity, offers);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <Main cities={cities} offersList={offersList} />
@@ -52,7 +54,6 @@ function App(props: ConnectedComponentProps): JSX.Element {
           exact
           path={AppRoute.Favorites}
           render={() => <Favorites favOffers={offersList} />}
-          authorizationStatus={AuthorizationStatus.NoAuth}
         >
         </PrivateRoute>
         <Route exact path={`${AppRoute.Room}/:id`}>
