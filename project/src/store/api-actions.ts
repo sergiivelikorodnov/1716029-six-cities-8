@@ -5,9 +5,10 @@ import { dropToken, saveToken } from '../services/token';
 import { ThunkActionResult } from '../types/action';
 import { AuthData, BackAuthInfo } from '../types/auth-data';
 import { Comments } from '../types/comment-get';
+import { CommentPost } from '../types/comment-post';
 import { Offer, Offers } from '../types/offer';
 import { adaptCommentsBackToFront, adaptOffersBackToFront, adaptSingleOfferBackToFront, adaptUserBackToFront } from '../utils/adapters';
-import { favoriteOffersDataAction, getCommentsAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, redirectToRoute, requireAuthorization, requireLogout, setUserAuthInfo } from './action';
+import { favoriteOffersDataAction, getCommentsAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, postReviewAction, redirectToRoute, requireAuthorization, requireLogout, setUserAuthInfo } from './action';
 
 export const fetchOffersAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -33,13 +34,19 @@ export const fetchNearByOffersAction = (id:number): ThunkActionResult =>
     dispatch(nearbyOffersDataAction(adaptOffersBackToFront(data)));
   };
 
-export const fetchCommentssAction = (id:number): ThunkActionResult =>
+export const fetchCommentsAction = (id:number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const { data } = await api.get<Comments>(`${APIRoute.Comments}/${id}`);
+    dispatch(getCommentsAction(adaptCommentsBackToFront(data)));
+  };
+
+export const postCommentAction = (id:number, {comment, rating}:CommentPost): ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    const {data} = await api.post<CommentPost>(`${APIRoute.Comments}/${id}`, { comment, rating });
     // eslint-disable-next-line no-console
     console.log(data);
 
-    dispatch(getCommentsAction(adaptCommentsBackToFront(data)));
+    dispatch(postReviewAction({comment, rating}));
   };
 
 export const checkAuthAction = (): ThunkActionResult =>

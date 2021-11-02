@@ -9,7 +9,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { ThunkAppDispatch } from '../../types/action';
-import { fetchCommentssAction, fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
+import { fetchCommentsAction, fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
 import { useEffect, useState } from 'react';
 import { APIRoute, AppRoute } from '../../consts';
 import { api } from '../..';
@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
   loadOfferData(id:number) {
     dispatch(fetchSingleOfferAction(id));
     dispatch(fetchNearByOffersAction(id));
-    dispatch(fetchCommentssAction(id));
+    dispatch(fetchCommentsAction(id));
   },
 
 });

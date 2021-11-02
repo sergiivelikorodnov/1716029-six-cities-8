@@ -2,6 +2,7 @@ import { AppRoute, AuthorizationStatus } from '../consts';
 import { ActionType } from '../types/action';
 import { FrontAuthInfo } from '../types/auth-data';
 import { Comments } from '../types/comment-get';
+import { CommentPost } from '../types/comment-post';
 import { Offer, Offers } from '../types/offer';
 
 export const changeCityAction = (newCity: string) =>
@@ -67,4 +68,10 @@ export const getCommentsAction = (comments:Comments) =>
   ({
     type: ActionType.GetCommentsData,
     payload: comments,
+  } as const);
+
+export const postReviewAction = (comment:CommentPost) =>
+  ({
+    type: ActionType.PostCommentData,
+    payload: comment,
   } as const);
