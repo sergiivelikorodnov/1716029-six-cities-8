@@ -10,6 +10,7 @@ const initialState = {
   isDataLoaded: false,
   userAuthInfo: DEFAULT_USER_DATA,
   nearbyOffers: [],
+  favoritesOffers: [],
 };
 
 const reducer = (state: State = initialState, action: Actions): State => {
@@ -24,6 +25,9 @@ const reducer = (state: State = initialState, action: Actions): State => {
     }
     case ActionType.NearbyOffersData: {
       return { ...state, nearbyOffers: action.payload, isDataLoaded: true };
+    }
+    case ActionType.FavoritesOffersData: {
+      return { ...state, favoritesOffers: action.payload, isDataLoaded: true };
     }
     case ActionType.SelectCity:
       return { ...state, currentOffer: action.payload };

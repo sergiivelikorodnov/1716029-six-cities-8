@@ -5,7 +5,7 @@ import { ThunkActionResult } from '../types/action';
 import { AuthData, BackAuthInfo } from '../types/auth-data';
 import { Offer, Offers } from '../types/offer';
 import { adaptOffersBackToFront, adaptSingleOfferBackToFront, adaptUserBackToFront } from '../utils/utils';
-import { loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, redirectToRoute, requireAuthorization, requireLogout, setUserAuthInfo } from './action';
+import { favoriteOffersDataAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, redirectToRoute, requireAuthorization, requireLogout, setUserAuthInfo } from './action';
 
 export const fetchOffersAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -17,6 +17,12 @@ export const fetchSingleOfferAction = (id:number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const { data } = await api.get<Offer>(`${APIRoute.Offers}/${id}`);
     dispatch(loadSingleOfferAction(adaptSingleOfferBackToFront(data)));
+  };
+
+export const fetchFavoritesOffersAction = (): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    const { data } = await api.get<Offers>(APIRoute.Favorites);
+    dispatch(favoriteOffersDataAction(adaptOffersBackToFront(data)));
   };
 
 export const fetchNearByOffersAction = (id:number): ThunkActionResult =>

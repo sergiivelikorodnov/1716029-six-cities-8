@@ -55,3 +55,9 @@ export const nearbyOffersDataAction = (offers:Offers) =>
     type: ActionType.NearbyOffersData,
     payload: offers,
   } as const);
+
+export const favoriteOffersDataAction = (offers:Offers) =>
+  ({
+    type: ActionType.FavoritesOffersData,
+    payload: offers,
+  } as const);

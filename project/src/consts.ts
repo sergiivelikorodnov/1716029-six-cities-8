@@ -39,6 +39,7 @@ export enum APIRoute {
   Offers = '/hotels',
   Login = '/login',
   Logout = '/logout',
+  Favorites = '/favorite',
 }
 
 export const DEFAULT_SINGLE_OFFER:Offer = {

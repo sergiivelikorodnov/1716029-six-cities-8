@@ -1,6 +1,5 @@
 import { Comments } from '../../types/comment-get';
-import { Offers } from '../../types/offer';
-import { getDateTime, getHumanDate, isLogged } from '../../utils/utils';
+import { adaptSingleOfferBackToFront, getDateTime, getHumanDate, isLogged } from '../../utils/utils';
 import CartOffer from '../cart-offer/cart-offer';
 import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
@@ -11,10 +10,12 @@ import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { ThunkAppDispatch } from '../../types/action';
 import { fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { APIRoute } from '../../consts';
+import { api } from '../..';
+import { Offer } from '../../types/offer';
 
 type SingleProperty = {
-  offers: Offers;
   comments: Comments;
 };
 
@@ -38,7 +39,8 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & SingleProperty;
 
-function Property({ offers, comments, authorizationStatus, isDataLoaded, loadOfferData, nearbyOffers, currentOffer } : ConnectedComponentProps): JSX.Element {
+function Property({ comments, authorizationStatus, isDataLoaded=false, loadOfferData, nearbyOffers, currentOffer } : ConnectedComponentProps): JSX.Element {
+
   const { id: urlId } = useParams<{ id: string }>();
 
   const {
@@ -57,19 +59,36 @@ function Property({ offers, comments, authorizationStatus, isDataLoaded, loadOff
     city,
   } = currentOffer;
   const { name, avatarUrl, isPro } = host;
-
+  const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
   useEffect(() => {
     loadOfferData(Number(urlId));
-  }, [loadOfferData, urlId]);
+    // eslint-disable-next-line no-console
+    console.log(`isFavorite: ${isFavorite}`);
+    setIsFavoriteStatus(isFavorite);
+  }, [loadOfferData, urlId, isFavorite]);
 
 
-  if (currentOffer !== null && !isDataLoaded) {
-    loadOfferData(Number(urlId));
+  // eslint-disable-next-line no-console
+  console.log(`isFavoriteStatus: ${isFavoriteStatus}`);
+
+  if (!isDataLoaded) {
     return (
       <LoadingScreen />
     );
   }
+
+  const setFavoriteHandler = async (idOffer:number): Promise<void> => {
+    const favoriteStatus = Number(!isFavoriteStatus);
+    await api.post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .then(({ data }) => {
+        // eslint-disable-next-line no-console
+        console.log(adaptSingleOfferBackToFront(data).isFavorite);
+
+        setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
+      },
+      );
+  };
 
 
   return (
@@ -101,8 +120,9 @@ function Property({ offers, comments, authorizationStatus, isDataLoaded, loadOff
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
+                  onClick = {()=>setFavoriteHandler(id)}
                   className={`property__bookmark-button ${
-                    isFavorite ? 'property__bookmark-button--active' : ''
+                    isFavoriteStatus ? 'property__bookmark-button--active' : ''
                   } button`}
                   type="button"
                 >

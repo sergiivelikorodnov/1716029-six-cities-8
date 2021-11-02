@@ -53,12 +53,11 @@ function App(props: ConnectedComponentProps): JSX.Element {
         <PrivateRoute
           exact
           path={AppRoute.Favorites}
-          render={() => <Favorites favOffers={offersList} />}
+          render={() => <Favorites />}
         >
         </PrivateRoute>
         <Route exact path={`${AppRoute.Room}/:id`}>
           <Property
-            offers={offersList}
             comments={comments}
           />
         </Route>

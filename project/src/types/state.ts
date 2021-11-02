@@ -10,4 +10,5 @@ export type State = {
   isDataLoaded: boolean;
   userAuthInfo: FrontAuthInfo;
   nearbyOffers: Offers;
+  favoritesOffers: Offers;
 }
