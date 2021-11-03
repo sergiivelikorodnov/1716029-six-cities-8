@@ -3,7 +3,7 @@ import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import CartOffer from '../cart-offer/cart-offer';
 import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { State } from '../../types/state';
 import { connect, ConnectedProps } from 'react-redux';
 import Header from '../header/header';
@@ -11,9 +11,12 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import { ThunkAppDispatch } from '../../types/action';
 import { fetchCommentsAction, fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
 import { useEffect, useState } from 'react';
-import { APIRoute, AppRoute } from '../../consts';
+import { APIRoute } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
+import {toast} from 'react-toastify';
+
+const AUTH_MESSAGE = 'Вы должны залогиниться';
 
 const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer, nearbyOffers, comments}: State) => ({
   authorizationStatus,
@@ -37,7 +40,6 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function Property({ comments, authorizationStatus, isDataLoaded=false, loadOfferData, nearbyOffers, currentOffer } : PropsFromRedux): JSX.Element {
-  const history = useHistory();
 
   const { id: urlId } = useParams<{ id: string }>();
 
@@ -108,7 +110,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
+                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> toast.info(AUTH_MESSAGE)}
                   className={`property__bookmark-button ${
                     isFavoriteStatus ? 'property__bookmark-button--active' : ''
                   } button`}

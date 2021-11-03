@@ -23,7 +23,7 @@ export const сreateApi = (onUnauthorized: onUnauthorizedCallback): AxiosInstanc
       const {response} = error;
 
       if (response?.status === HttpCode.Unauthorized) {
-        return onUnauthorized();
+        onUnauthorized();
       }
       return error;
     },

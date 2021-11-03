@@ -1,6 +1,6 @@
 import { Dispatch, useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { api } from '../..';
 import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER } from '../../consts';
 import { selectCurrentCityAction } from '../../store/action';
@@ -9,6 +9,9 @@ import { Offer } from '../../types/offer';
 import { State } from '../../types/state';
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
+import {toast} from 'react-toastify';
+
+const AUTH_MESSAGE = 'Вы должны залогиниться';
 
 type SingleOffer = {
   offer: Offer;
@@ -29,7 +32,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & SingleOffer;
 
 function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedComponentProps): JSX.Element {
-  const history = useHistory();
   const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
@@ -87,7 +89,7 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
+            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> toast.info(AUTH_MESSAGE)}
             className={`place-card__bookmark-button ${
               isFavoriteStatus ? 'place-card__bookmark-button--active' : ''
             } button`}
