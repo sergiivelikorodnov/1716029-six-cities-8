@@ -1,10 +1,30 @@
 import { FormEvent, useState, ChangeEvent } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
+import { postCommentAction } from '../../store/api-actions';
+import { ThunkAppDispatch } from '../../types/action';
+import { CommentPost } from '../../types/comment-post';
+import { State } from '../../types/state';
 
-function ReviewsForm(): JSX.Element {
-  const [review, setReview] = useState<string>('');
-  const [rating, setRating] = useState<number>();
+const mapStateToProps = ({currentOffer}: State) => ({
+  currentOffer,
+});
+
+const mapDispatchToProps  = (dispatch: ThunkAppDispatch) => ({
+  onSubmit(id:number, commentData:CommentPost) {
+    dispatch(postCommentAction(id, commentData));
+  },
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
+  const [comment, setComment] = useState<string>('');
+  const [rating, setRating] = useState<number>(0);
+  const { id } = currentOffer;
   const isValidForm = Boolean(
-    review.length < 50 || rating === undefined || review.length > 300,
+    comment.length < 50 || rating === undefined || rating === 0 || comment.length > 300,
   );
 
   return (
@@ -14,6 +34,9 @@ function ReviewsForm(): JSX.Element {
       method="post"
       onSubmit={(evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
+
+        setComment('');
+        setRating(0);
       }}
     >
       <label className="reviews__label form__label" htmlFor="review">
@@ -26,6 +49,7 @@ function ReviewsForm(): JSX.Element {
           value="5"
           id="5-stars"
           type="radio"
+          readOnly checked = {rating === 5}
           onInput={() => setRating(5)}
         />
         <label
@@ -44,6 +68,7 @@ function ReviewsForm(): JSX.Element {
           value="4"
           id="4-stars"
           type="radio"
+          readOnly checked = {rating === 4}
           onInput={() => setRating(4)}
         />
         <label
@@ -62,6 +87,7 @@ function ReviewsForm(): JSX.Element {
           value="3"
           id="3-stars"
           type="radio"
+          readOnly checked = {rating === 3}
           onInput={() => setRating(3)}
         />
         <label
@@ -80,6 +106,7 @@ function ReviewsForm(): JSX.Element {
           value="2"
           id="2-stars"
           type="radio"
+          readOnly checked = {rating === 2}
           onInput={() => setRating(2)}
         />
         <label
@@ -98,6 +125,7 @@ function ReviewsForm(): JSX.Element {
           value="1"
           id="1-star"
           type="radio"
+          readOnly checked = {rating === 1}
           onInput={() => setRating(1)}
         />
         <label
@@ -115,9 +143,9 @@ function ReviewsForm(): JSX.Element {
         id="review"
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
-        value={review}
+        value={comment}
         onChange={(evt: ChangeEvent<HTMLTextAreaElement>) => {
-          setReview(evt.target.value);
+          setComment(evt.target.value);
         }}
       >
       </textarea>
@@ -128,6 +156,7 @@ function ReviewsForm(): JSX.Element {
           with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
         <button
+          onClick = {()=> onSubmit(id,{comment, rating})}
           className="reviews__submit form__submit button"
           type="submit"
           disabled={isValidForm}
@@ -139,4 +168,5 @@ function ReviewsForm(): JSX.Element {
   );
 }
 
-export default ReviewsForm;
+export {ReviewsForm};
+export default connector(ReviewsForm);

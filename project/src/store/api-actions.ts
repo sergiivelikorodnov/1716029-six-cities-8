@@ -19,6 +19,11 @@ export const fetchOffersAction = (): ThunkActionResult =>
 export const fetchSingleOfferAction = (id:number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     const { data } = await api.get<Offer>(`${APIRoute.Offers}/${id}`);
+    if (!data) {
+      dispatch(redirectToRoute(AppRoute.NotFoundOffer));
+      return;
+    }
+
     dispatch(loadSingleOfferAction(adaptSingleOfferBackToFront(data)));
   };
 
@@ -42,11 +47,9 @@ export const fetchCommentsAction = (id:number): ThunkActionResult =>
 
 export const postCommentAction = (id:number, {comment, rating}:CommentPost): ThunkActionResult =>
   async (dispatch, _getState, api) => {
-    const {data} = await api.post<CommentPost>(`${APIRoute.Comments}/${id}`, { comment, rating });
-    // eslint-disable-next-line no-console
-    console.log(data);
-
-    dispatch(postReviewAction({comment, rating}));
+    const {data} = await api.post<Comments>(`${APIRoute.Comments}/${id}`, { comment, rating });
+    dispatch(postReviewAction({ comment, rating }));
+    dispatch(getCommentsAction(adaptCommentsBackToFront(data)));
   };
 
 export const checkAuthAction = (): ThunkActionResult =>

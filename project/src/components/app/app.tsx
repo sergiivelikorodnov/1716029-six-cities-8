@@ -27,6 +27,9 @@ function App(): JSX.Element {
         <Route exact path={`${AppRoute.Room}/:id`}>
           <Property/>
         </Route>
+        <Route exact path={AppRoute.NotFoundOffer}>
+          <NotFound />
+        </Route>
         <Route>
           <NotFound />
         </Route>
