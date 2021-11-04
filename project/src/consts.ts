@@ -64,7 +64,7 @@ export const DEFAULT_SINGLE_OFFER:Offer = {
     isPro: false,
     name: '',
   },
-  id: 99999999999999,
+  id: -1,
   images: [''],
   isFavorite: false,
   isPremium: false,
@@ -84,7 +84,10 @@ export const DEFAULT_SINGLE_OFFER:Offer = {
 export const DEFAULT_USER_DATA:FrontAuthInfo = {
   avatarUrl: '../../public/img/avatar.svg',
   email: '',
-  id: 99999999999999999999999999,
+  id: -1,
   isPro: false,
   name: '',
 } as const;
+
+export const MIN_COMMENT_LENGTH = 50;
+export const MAX_COMMENT_LENGTH = 300;

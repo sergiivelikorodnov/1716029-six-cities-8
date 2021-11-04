@@ -1,5 +1,6 @@
 import { FormEvent, useState, ChangeEvent } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH } from '../../consts';
 import { postCommentAction } from '../../store/api-actions';
 import { ThunkAppDispatch } from '../../types/action';
 import { CommentPost } from '../../types/comment-post';
@@ -24,7 +25,7 @@ function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
   const [rating, setRating] = useState<number>(0);
   const { id } = currentOffer;
   const isValidForm = Boolean(
-    comment.length < 50 || rating === undefined || rating === 0 || comment.length > 300,
+    comment.length < MIN_COMMENT_LENGTH || !rating || rating === 0 || comment.length > MAX_COMMENT_LENGTH,
   );
 
   return (
