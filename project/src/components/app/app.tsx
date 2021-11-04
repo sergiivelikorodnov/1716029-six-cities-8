@@ -7,6 +7,7 @@ import Login from '../login/login';
 import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from '../../browser-history';
+import LoginRoute from '../login-route/login-route';
 
 function App(): JSX.Element {
   return (
@@ -15,9 +16,12 @@ function App(): JSX.Element {
         <Route exact path={AppRoute.Main}>
           <Main />
         </Route>
-        <Route exact path={AppRoute.Login}>
-          <Login />
-        </Route>
+        <LoginRoute
+          exact
+          path={AppRoute.Login}
+          render={() => <Login />}
+        >
+        </LoginRoute>
         <PrivateRoute
           exact
           path={AppRoute.Favorites}

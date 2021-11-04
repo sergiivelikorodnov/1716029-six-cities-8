@@ -13,7 +13,7 @@ const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-function Login({currentCity}:PropsFromRedux): JSX.Element {
+function Login({ currentCity }: PropsFromRedux): JSX.Element {
   return (
     <div className="page page--gray page--login">
       <header className="header">
