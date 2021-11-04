@@ -1,9 +1,9 @@
 import { Offers } from '../../types/offer';
-import ListOffers from '../list-offers/list-offers';
-import Map from '../map/map';
+//import ListOffers from '../list-offers/list-offers';
+//import Map from '../map/map';
 
 import MainLocationList from '../main-location-list/main-location-list';
-import MainSortingList from '../main-sorting-list/main-sorting-list';
+//import MainSortingList from '../main-sorting-list/main-sorting-list';
 import { CITIES, SortingType } from '../../consts';
 import {
   getOffersByCity,
@@ -17,6 +17,8 @@ import Header from '../header/header';
 import { connect, ConnectedProps } from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { State } from '../../types/state';
+import MainCityContainer from '../main-city-container/main-city-container';
+import MainEmpty from '../main-empty/main-empty';
 
 const mapStateToProps = ({ currentCity, offers, authorizationStatus, isDataLoaded }: State) => ({
   currentCity,
@@ -49,14 +51,6 @@ function Main({ currentCity, offers, authorizationStatus, isDataLoaded }: Connec
     getSortedOffers(sortType, offersList);
   };
 
-  const [{ city }] = offersList;
-  const [
-    {
-      city: { name },
-    },
-  ] = offersList;
-  const propertyNumber: number = offersList.length;
-
   const getSortedOffers = (sortType: string, allOffers: Offers): Offers => {
     switch (sortType) {
       case SortingType.PRICE_DOWN:
@@ -79,28 +73,10 @@ function Main({ currentCity, offers, authorizationStatus, isDataLoaded }: Connec
         <h1 className="visually-hidden">Cities</h1>
 
         <MainLocationList cities={CITIES} />
-
-        <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">
-                {propertyNumber} {`${propertyNumber < 2 ? 'place' : 'places'}`}{' '}
-                to stay in {name}
-              </b>
-              <MainSortingList
-                selectedSortTypeHandler={selectedSortTypeHandler}
-                selectedSortType={selectedSortType}
-              />
-              <ListOffers offers={sortedOffers} />
-            </section>
-            <div className="cities__right-section">
-              <section className="cities__map map">
-                <Map offersList={offersList} city={city} />
-              </section>
-            </div>
-          </div>
-        </div>
+        {offersList.length === 0 ?
+          <MainEmpty/>
+          :
+          <MainCityContainer offersList={offersList} selectedSortTypeHandler={selectedSortTypeHandler} selectedSortType={selectedSortType} sortedOffers={sortedOffers} />}
       </main>
     </div>
   );
