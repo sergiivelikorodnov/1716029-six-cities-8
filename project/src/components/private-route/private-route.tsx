@@ -1,6 +1,7 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { RouteProps, Route, Redirect } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../consts';
+import { getAuthStatus } from '../../services/auth-status';
 import { State } from '../../types/state';
 
 type PrivateRouteProps = RouteProps & {
@@ -21,12 +22,15 @@ function PrivateRoute({ exact, path, render, authorizationStatus }: ConnectedCom
   // eslint-disable-next-line no-console
   console.log(authorizationStatus);
 
+  // eslint-disable-next-line no-console
+  console.log(getAuthStatus());
+
   return (
     <Route
       exact={exact}
       path={path}
       render ={() => (
-        authorizationStatus===AuthorizationStatus.Auth ? render() : <Redirect to={AppRoute.Login} />
+        getAuthStatus()===AuthorizationStatus.Auth ? render() : <Redirect to={AppRoute.Login} />
       )}
     />
   );
