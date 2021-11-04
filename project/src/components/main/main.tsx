@@ -4,22 +4,45 @@ import Map from '../map/map';
 
 import MainLocationList from '../main-location-list/main-location-list';
 import MainSortingList from '../main-sorting-list/main-sorting-list';
-import { SortingType } from '../../consts';
+import { CITIES, SortingType } from '../../consts';
 import {
+  getOffersByCity,
   getSortedOffersPriceDown,
   getSortedOffersPriceUp,
-  getSortedOffersTopRated
+  getSortedOffersTopRated,
+  isCheckedAuth
 } from '../../utils/utils';
 import { useState } from 'react';
 import Header from '../header/header';
+import { connect, ConnectedProps } from 'react-redux';
+import LoadingScreen from '../loading-screen/loading-screen';
+import { State } from '../../types/state';
 
-type Property = {
-  cities: string[];
-  offersList: Offers;
-};
+const mapStateToProps = ({ currentCity, offers, authorizationStatus, isDataLoaded }: State) => ({
+  currentCity,
+  offers,
+  isDataLoaded,
+  authorizationStatus,
+});
 
-function Main({ cities, offersList }: Property): JSX.Element {
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux;
+
+
+function Main({ currentCity, offers, authorizationStatus, isDataLoaded }: ConnectedComponentProps): JSX.Element {
+
   const [selectedSortType, setSelectedSortType] = useState(SortingType.POPULAR);
+
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
+
+  const offersList = getOffersByCity(currentCity, offers);
 
   const selectedSortTypeHandler = (sortType: string) => {
     setSelectedSortType(sortType);
@@ -34,14 +57,14 @@ function Main({ cities, offersList }: Property): JSX.Element {
   ] = offersList;
   const propertyNumber: number = offersList.length;
 
-  const getSortedOffers = (sortType: string, offers: Offers): Offers => {
+  const getSortedOffers = (sortType: string, allOffers: Offers): Offers => {
     switch (sortType) {
       case SortingType.PRICE_DOWN:
-        return getSortedOffersPriceDown(offers);
+        return getSortedOffersPriceDown(allOffers);
       case SortingType.PRICE_UP:
-        return getSortedOffersPriceUp(offers);
+        return getSortedOffersPriceUp(allOffers);
       case SortingType.TOP_RATED:
-        return getSortedOffersTopRated(offers);
+        return getSortedOffersTopRated(allOffers);
       default:
         return offersList;
     }
@@ -55,7 +78,7 @@ function Main({ cities, offersList }: Property): JSX.Element {
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
 
-        <MainLocationList cities={cities} />
+        <MainLocationList cities={CITIES} />
 
         <div className="cities">
           <div className="cities__places-container container">
@@ -83,4 +106,5 @@ function Main({ cities, offersList }: Property): JSX.Element {
   );
 }
 
-export default Main;
+export {Main};
+export default connector(Main);

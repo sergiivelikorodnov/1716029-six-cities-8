@@ -1,12 +1,42 @@
+import { useState } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { api } from '../..';
+import { APIRoute } from '../../consts';
+import { fetchFavoritesOffersAction } from '../../store/api-actions';
+import { ThunkAppDispatch } from '../../types/action';
 import { Offer } from '../../types/offer';
+import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 
 type SingleOffer = {
   offer: Offer;
 };
 
-function CartOfferFavorite({ offer }: SingleOffer): JSX.Element {
+const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
+  loadOffersData() {
+    dispatch(fetchFavoritesOffersAction());
+  },
+});
+
+const connector = connect(null, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & SingleOffer;
+
+function CartOfferFavorite({ offer,loadOffersData }: ConnectedComponentProps): JSX.Element {
   const { id, type, price, rating, title, isFavorite, previewImage } = offer;
+
+  const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
+
+  const setFavoriteHandler = async (idOffer:number): Promise<void> => {
+    const favoriteStatus = Number(!isFavoriteStatus);
+    await api.post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .then(({ data }) => {
+        setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
+        loadOffersData();
+      },
+      );
+  };
 
   return (
     <article className="favorites__card place-card">
@@ -28,6 +58,7 @@ function CartOfferFavorite({ offer }: SingleOffer): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
+            onClick = {()=>setFavoriteHandler(id)}
             className={`place-card__bookmark-button ${
               isFavorite ? 'place-card__bookmark-button--active' : ''
             } button`}
@@ -54,4 +85,5 @@ function CartOfferFavorite({ offer }: SingleOffer): JSX.Element {
   );
 }
 
-export default CartOfferFavorite;
+export {CartOfferFavorite};
+export default connector(CartOfferFavorite);

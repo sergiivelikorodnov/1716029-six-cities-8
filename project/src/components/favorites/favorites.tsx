@@ -1,49 +1,84 @@
 import { Link } from 'react-router-dom';
-import { Offer, Offers } from '../../types/offer';
-import Logo from '../logo/logo';
+import { Offer } from '../../types/offer';
 import ListOffersFavorite from '../list-offers-favorite/list-offers-favorite';
 import { groupBy } from 'lodash';
 import { AppRoute } from '../../consts';
+import Header from '../header/header';
+import { State } from '../../types/state';
+import { fetchFavoritesOffersAction } from '../../store/api-actions';
+import { ThunkAppDispatch } from '../../types/action';
+import { connect, ConnectedProps } from 'react-redux';
+import { useEffect } from 'react';
+import LoadingScreen from '../loading-screen/loading-screen';
 
-type FavoriteOffers = {
-  favOffers: Offers;
-};
+const mapStateToProps = ({favoritesOffers, isDataLoaded}: State) => ({
+  favoritesOffers,
+  isDataLoaded,
+});
 
-function Favorites({ favOffers }: FavoriteOffers): JSX.Element {
-  const favoriteOffers = favOffers.slice().filter((offer) => offer.isFavorite);
+const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
+  loadOffersData() {
+    dispatch(fetchFavoritesOffersAction());
+  },
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function Favorites({ favoritesOffers, loadOffersData, isDataLoaded=false }: PropsFromRedux): JSX.Element {
+
+  useEffect(() => {
+    loadOffersData();
+  }, [loadOffersData]);
+
+
+  if (!isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
   const groupedOffers = groupBy(
-    favoriteOffers,
+    favoritesOffers,
     (offer: Offer) => offer.city.name,
   );
+
+  if (favoritesOffers.length === 0) {
+    return (
+      <div className="page">
+        <Header/>
+        <main className="page__main page__main--favorites page__main--favorites-empty">
+          <div className="page__favorites-container container">
+            <section className="favorites favorites--empty">
+              <h1 className="visually-hidden">Favorites (empty)</h1>
+              <div className="favorites__status-wrapper">
+                <b className="favorites__status">Nothing yet saved.</b>
+                <p className="favorites__status-description">
+                Save properties to narrow down search or plan your future trips.
+                </p>
+              </div>
+            </section>
+          </div>
+        </main>
+        <footer className="footer container">
+          <Link className="footer__logo-link" to={AppRoute.Main}>
+            <img
+              className="footer__logo"
+              src="img/logo.svg"
+              alt="6 cities logo"
+              width="64"
+              height="33"
+            />
+          </Link>
+        </footer>
+      </div>
+    );
+  }
+
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo />
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <Link
-                    className="header__nav-link header__nav-link--profile"
-                    to="/favorites"
-                  >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
-                    </span>
-                  </Link>
-                </li>
-                <li className="header__nav-item">
-                  <Link className="header__nav-link" to="/">
-                    <span className="header__signout">Sign out</span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header/>
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
@@ -76,4 +111,5 @@ function Favorites({ favOffers }: FavoriteOffers): JSX.Element {
   );
 }
 
-export default Favorites;
+export {Favorites};
+export default connector(Favorites);

@@ -1,6 +1,8 @@
 import { AppRoute, AuthorizationStatus } from '../consts';
 import { ActionType } from '../types/action';
 import { FrontAuthInfo } from '../types/auth-data';
+import { Comments } from '../types/comment-get';
+import { CommentPost } from '../types/comment-post';
 import { Offer, Offers } from '../types/offer';
 
 export const changeCityAction = (newCity: string) =>
@@ -9,7 +11,7 @@ export const changeCityAction = (newCity: string) =>
     payload: newCity,
   } as const);
 
-export const selectCurrentCityAction = (offer: Offer | null) =>
+export const selectCurrentCityAction = (offer: Offer) =>
   ({
     type: ActionType.SelectCity,
     payload: offer,
@@ -42,4 +44,34 @@ export const setUserAuthInfo = (userInfo:FrontAuthInfo) =>
   ({
     type: ActionType.SetUserAuthInfo,
     payload: userInfo,
+  } as const);
+
+export const loadSingleOfferAction = (offer:Offer) =>
+  ({
+    type: ActionType.LoadSingleOfferData,
+    payload: offer,
+  } as const);
+
+export const nearbyOffersDataAction = (offers:Offers) =>
+  ({
+    type: ActionType.NearbyOffersData,
+    payload: offers,
+  } as const);
+
+export const favoriteOffersDataAction = (offers:Offers) =>
+  ({
+    type: ActionType.FavoritesOffersData,
+    payload: offers,
+  } as const);
+
+export const getCommentsAction = (comments:Comments) =>
+  ({
+    type: ActionType.GetCommentsData,
+    payload: comments,
+  } as const);
+
+export const postReviewAction = (comment:CommentPost) =>
+  ({
+    type: ActionType.PostCommentData,
+    payload: comment,
   } as const);
