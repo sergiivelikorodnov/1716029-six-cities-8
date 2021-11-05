@@ -1,6 +1,6 @@
 import { Dispatch, useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { api } from '../..';
 import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER } from '../../consts';
 import { selectCurrentCityAction } from '../../store/action';
@@ -9,9 +9,6 @@ import { Offer } from '../../types/offer';
 import { State } from '../../types/state';
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
-import {toast} from 'react-toastify';
-
-const AUTH_MESSAGE = 'Вы должны залогиниться';
 
 type SingleOffer = {
   offer: Offer;
@@ -89,7 +86,7 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> toast.info(AUTH_MESSAGE)}
+            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> <Redirect to={AppRoute.Login} />}
             className={`place-card__bookmark-button ${
               isFavoriteStatus ? 'place-card__bookmark-button--active' : ''
             } button`}
@@ -103,7 +100,7 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${rating * 20}%` }}></span>
+            <span style={{ width: `${Math.round(rating) * 20}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

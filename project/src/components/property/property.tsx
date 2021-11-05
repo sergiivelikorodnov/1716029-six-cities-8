@@ -1,9 +1,9 @@
-import { getDateTime, getHumanDate, isLogged } from '../../utils/utils';
+import { getDateTime, getHumanDate, getSortedCommentsByDate, isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import CartOffer from '../cart-offer/cart-offer';
 import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import { State } from '../../types/state';
 import { connect, ConnectedProps } from 'react-redux';
 import Header from '../header/header';
@@ -11,12 +11,9 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import { ThunkAppDispatch } from '../../types/action';
 import { fetchCommentsAction, fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
 import { useEffect, useState } from 'react';
-import { APIRoute } from '../../consts';
+import { APIRoute, AppRoute } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
-import {toast} from 'react-toastify';
-
-const AUTH_MESSAGE = 'Вы должны залогиниться';
 
 const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer, nearbyOffers, comments}: State) => ({
   authorizationStatus,
@@ -58,6 +55,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
     isFavorite,
     city,
   } = currentOffer;
+
   const { name, avatarUrl, isPro } = host;
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
@@ -81,6 +79,10 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
       );
   };
 
+  if (comments.length > 10) {
+    comments = comments.slice(0, 10);
+  }
+
   return (
     <div className="page">
       <Header/>
@@ -88,7 +90,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {images.map((image) => {
+              {images.slice(0, 6).map((image) => {
                 const keyValue = `${id}-${image}`;
                 return (
                   <div key={keyValue} className="property__image-wrapper">
@@ -110,7 +112,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> toast.info(AUTH_MESSAGE)}
+                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> <Redirect to={AppRoute.Login} />}
                   className={`property__bookmark-button ${
                     isFavoriteStatus ? 'property__bookmark-button--active' : ''
                   } button`}
@@ -128,11 +130,11 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{ width: `${rating * 20}%` }}></span>
+                  <span style={{ width: `${Math.round(rating) * 20}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">
-                  {rating}
+                  {Math.round(rating)}
                 </span>
               </div>
               <ul className="property__features">
@@ -140,10 +142,10 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
                   Apartment
                 </li>
                 <li className="property__feature property__feature--bedrooms">
-                  {bedrooms} Bedrooms
+                  {bedrooms} {`${bedrooms>1}`? 'Bedrooms' : 'Bedroom'}Bedrooms
                 </li>
                 <li className="property__feature property__feature--adults">
-                  Max {maxAdults} adults
+                  Max {maxAdults} {`${maxAdults>1}`? 'adults' : 'adult'}
                 </li>
               </ul>
               <div className="property__price">
@@ -189,7 +191,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
                   <span className="reviews__amount">{comments.length}</span>
                 </h2>
                 <ul className="reviews__list">
-                  {comments.map((comment) => {
+                  {getSortedCommentsByDate(comments).map((comment) => {
                     const keyValue = `${comment.id}`;
                     return (
                       <li key={keyValue} className="reviews__item">
