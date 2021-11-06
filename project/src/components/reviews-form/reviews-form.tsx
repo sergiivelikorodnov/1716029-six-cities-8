@@ -1,6 +1,6 @@
 import { FormEvent, useState, ChangeEvent } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH } from '../../consts';
+import { MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH, ratingValues } from '../../consts';
 import { postCommentAction } from '../../store/api-actions';
 import { ThunkAppDispatch } from '../../types/action';
 import { CommentPost } from '../../types/comment-post';
@@ -44,7 +44,34 @@ function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
         Your review
       </label>
       <div className="reviews__rating-form form__rating">
-        <input
+        {
+          Object.entries(ratingValues).reverse().map(([numberStars, starValue] ) =>
+            (
+              <>
+                <input
+                  className="form__rating-input visually-hidden"
+                  name="rating"
+                  value={numberStars}
+                  id={`${numberStars}-stars`}
+                  type="radio"
+                  readOnly checked = {rating === Number(numberStars)}
+                  onInput={() => setRating(Number(numberStars))}
+                />
+                <label
+                  htmlFor={`${numberStars}-stars`}
+                  className="reviews__rating-label form__rating-label"
+                  title={starValue}
+                >
+                  <svg className="form__star-image" width="37" height="33">
+                    <use xlinkHref="#icon-star"></use>
+                  </svg>
+                </label>
+              </>
+            ),
+          )
+        }
+
+        {/*  <input
           className="form__rating-input visually-hidden"
           name="rating"
           value="5"
@@ -137,7 +164,7 @@ function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
           <svg className="form__star-image" width="37" height="33">
             <use xlinkHref="#icon-star"></use>
           </svg>
-        </label>
+        </label> */}
       </div>
       <textarea
         className="reviews__textarea form__textarea"

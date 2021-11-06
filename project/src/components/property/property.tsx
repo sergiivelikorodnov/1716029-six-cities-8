@@ -80,7 +80,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
   };
 
   if (comments.length > 10) {
-    comments = comments.slice(0, 10);
+    comments = comments.slice(comments.length-10, comments.length);
   }
 
   return (

@@ -1,9 +1,5 @@
 import { Offers } from '../../types/offer';
-//import ListOffers from '../list-offers/list-offers';
-//import Map from '../map/map';
-
 import MainLocationList from '../main-location-list/main-location-list';
-//import MainSortingList from '../main-sorting-list/main-sorting-list';
 import { CITIES, SortingType } from '../../consts';
 import {
   getOffersByCity,
