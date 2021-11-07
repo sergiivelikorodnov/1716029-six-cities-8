@@ -30,6 +30,10 @@ type ConnectedComponentProps = PropsFromRedux;
 
 
 function Main({ currentCity, offers, authorizationStatus, isDataLoaded }: ConnectedComponentProps): JSX.Element {
+  const [activeOffer, setActiveOffer] = useState(0);
+  const offerHandler = (id: number) => {
+    setActiveOffer(id);
+  };
 
   const [selectedSortType, setSelectedSortType] = useState(SortingType.POPULAR);
 
@@ -72,7 +76,14 @@ function Main({ currentCity, offers, authorizationStatus, isDataLoaded }: Connec
         {offersList.length === 0 ?
           <MainEmpty/>
           :
-          <MainCityContainer offersList={offersList} selectedSortTypeHandler={selectedSortTypeHandler} selectedSortType={selectedSortType} sortedOffers={sortedOffers} />}
+          <MainCityContainer
+            offersList={offersList}
+            selectedSortTypeHandler={selectedSortTypeHandler}
+            selectedSortType={selectedSortType}
+            sortedOffers={sortedOffers}
+            onHoverOfferHandler={offerHandler}
+            activeOffer = {activeOffer}
+          />}
       </main>
     </div>
   );

@@ -5,13 +5,14 @@ import { useEffect, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { URL_MARKER_ACTIVE, URL_MARKER_DEFAULT } from '../../consts';
 import useMap from '../../hooks/use-map';
-import { CityOffer, Offers } from '../../types/offer';
+import { CityOffer, Offer, Offers } from '../../types/offer';
 import { State } from '../../types/state';
 
 type AppComponentProps = {
-  activeOffer:number;
   offersList: Offers;
   city: CityOffer;
+  currentOffer: Offer;
+  activeOffer: number;
 };
 
 const defaultCustomIcon = new Icon({
@@ -26,8 +27,7 @@ const currentCustomIcon = new Icon({
   iconAnchor: [14, 39],
 });
 
-const mapStateToProps = ({ currentOffer, currentCity, offers }: State) => ({
-  currentOffer,
+const mapStateToProps = ({ currentCity, offers }: State) => ({
   currentCity,
   offers,
 });
@@ -37,7 +37,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & AppComponentProps;
 
-function Map({
+function MapNearestPlaces({
   currentOffer,
   offersList,
   city,
@@ -51,17 +51,6 @@ function Map({
   useEffect(() => {
     const markers: Marker[] = [];
     if (map) {
-      map.flyTo(
-        {
-          lat: latitude,
-          lng: longitude,
-        },
-        zoom,
-        {
-          animate: true,
-          duration: 2,
-        },
-      );
       offersList.forEach((offer) => {
         const { location } = offer;
 
@@ -80,6 +69,15 @@ function Map({
         markers.push(marker);
       });
 
+      const currentOfferMarker = new Marker({
+        lat: currentOffer.location.latitude,
+        lng: currentOffer.location.longitude,
+      });
+
+      currentOfferMarker
+        .setIcon(currentCustomIcon)
+        .addTo(map);
+
       return () => markers.forEach((marker) => marker.removeFrom(map));
     }
   }, [
@@ -95,5 +93,5 @@ function Map({
   return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }
 
-export { Map };
-export default connector(Map);
+export { MapNearestPlaces };
+export default connector(MapNearestPlaces);

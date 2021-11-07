@@ -1,13 +1,17 @@
-import { FormEvent, useState, ChangeEvent } from 'react';
+// import { AxiosResponse } from 'axios';
+import { FormEvent, useState, ChangeEvent, useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH, ratingValues } from '../../consts';
+// import { api } from '../..';
+import { /* APIRoute, */ MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH, ratingValues } from '../../consts';
+// import { postReviewAction } from '../../store/action';
 import { postCommentAction } from '../../store/api-actions';
 import { ThunkAppDispatch } from '../../types/action';
 import { CommentPost } from '../../types/comment-post';
 import { State } from '../../types/state';
 
-const mapStateToProps = ({currentOffer}: State) => ({
+const mapStateToProps = ({currentOffer, commentLoading}: State) => ({
   currentOffer,
+  commentLoading,
 });
 
 const mapDispatchToProps  = (dispatch: ThunkAppDispatch) => ({
@@ -20,13 +24,38 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
-  const [comment, setComment] = useState<string>('');
-  const [rating, setRating] = useState<number>(0);
+function ReviewsForm({onSubmit, currentOffer, commentLoading }:PropsFromRedux): JSX.Element {
+  const [userComment, setUserComment] = useState<string>('');
+  const [userRating, setUserRating] = useState<number>(0);
+  const [disabledForm, setDisabledForm] = useState<boolean>(commentLoading);
+
+  useEffect(() => {
+    if (userComment.length < MIN_COMMENT_LENGTH || !userRating || userRating === 0 || userComment.length > MAX_COMMENT_LENGTH) {
+      setDisabledForm(true);
+    } else {
+      setDisabledForm(false);
+    }
+  }, [userComment,userRating]);
   const { id } = currentOffer;
-  const isValidForm = Boolean(
-    comment.length < MIN_COMMENT_LENGTH || !rating || rating === 0 || comment.length > MAX_COMMENT_LENGTH,
+
+  /*   const postNewComment = async (offerId:number, {comment, rating}:CommentPost): Promise<AxiosResponse> => (
+    await api.post(`${ APIRoute.Comments }/${ offerId }`, comment)
   );
+
+  const handleFormSubmit=(evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
+    postNewComment(id, { comment: userComment, rating: userRating })
+      .then(({ data }) => {
+        dispatch(postReviewAction({ comment, rating }));
+        dispatch(getCommentsAction(adaptCommentsBackToFront(data)));
+        dispatch(postOfferCommentSuccess());
+
+        setUserComment('');
+        setUserRating(0);
+      });
+  }; */
+
 
   return (
     <form
@@ -36,8 +65,9 @@ function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
       onSubmit={(evt: FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
 
-        setComment('');
-        setRating(0);
+        setUserComment('');
+        setUserRating(0);
+
       }}
     >
       <label className="reviews__label form__label" htmlFor="review">
@@ -54,8 +84,8 @@ function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
                   value={numberStars}
                   id={`${numberStars}-stars`}
                   type="radio"
-                  readOnly checked = {rating === Number(numberStars)}
-                  onInput={() => setRating(Number(numberStars))}
+                  readOnly checked = {userRating === Number(numberStars)}
+                  onInput={() => setUserRating(Number(numberStars))}
                 />
                 <label
                   htmlFor={`${numberStars}-stars`}
@@ -71,109 +101,15 @@ function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
           )
         }
 
-        {/*  <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="5"
-          id="5-stars"
-          type="radio"
-          readOnly checked = {rating === 5}
-          onInput={() => setRating(5)}
-        />
-        <label
-          htmlFor="5-stars"
-          className="reviews__rating-label form__rating-label"
-          title="perfect"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="4"
-          id="4-stars"
-          type="radio"
-          readOnly checked = {rating === 4}
-          onInput={() => setRating(4)}
-        />
-        <label
-          htmlFor="4-stars"
-          className="reviews__rating-label form__rating-label"
-          title="good"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="3"
-          id="3-stars"
-          type="radio"
-          readOnly checked = {rating === 3}
-          onInput={() => setRating(3)}
-        />
-        <label
-          htmlFor="3-stars"
-          className="reviews__rating-label form__rating-label"
-          title="not bad"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="2"
-          id="2-stars"
-          type="radio"
-          readOnly checked = {rating === 2}
-          onInput={() => setRating(2)}
-        />
-        <label
-          htmlFor="2-stars"
-          className="reviews__rating-label form__rating-label"
-          title="badly"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input
-          className="form__rating-input visually-hidden"
-          name="rating"
-          value="1"
-          id="1-star"
-          type="radio"
-          readOnly checked = {rating === 1}
-          onInput={() => setRating(1)}
-        />
-        <label
-          htmlFor="1-star"
-          className="reviews__rating-label form__rating-label"
-          title="terribly"
-        >
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label> */}
       </div>
       <textarea
         className="reviews__textarea form__textarea"
         id="review"
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
-        value={comment}
+        value={userComment}
         onChange={(evt: ChangeEvent<HTMLTextAreaElement>) => {
-          setComment(evt.target.value);
+          setUserComment(evt.target.value);
         }}
       >
       </textarea>
@@ -184,10 +120,10 @@ function ReviewsForm({onSubmit, currentOffer}:PropsFromRedux): JSX.Element {
           with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
         <button
-          onClick = {()=> onSubmit(id,{comment, rating})}
+          onClick={() => { setDisabledForm(commentLoading); onSubmit(id,{comment: userComment, rating: userRating});}}
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={isValidForm}
+          disabled={disabledForm}
         >
           Submit
         </button>

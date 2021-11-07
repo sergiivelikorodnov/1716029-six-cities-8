@@ -1,7 +1,6 @@
 import { getDateTime, getHumanDate, getSortedCommentsByDate, isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import CartOffer from '../cart-offer/cart-offer';
-import Map from '../map/map';
 import ReviewsForm from '../reviews-form/reviews-form';
 import { Redirect, useParams } from 'react-router-dom';
 import { State } from '../../types/state';
@@ -14,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { APIRoute, AppRoute } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
+import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
 
 const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer, nearbyOffers, comments}: State) => ({
   authorizationStatus,
@@ -37,7 +37,6 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function Property({ comments, authorizationStatus, isDataLoaded=false, loadOfferData, nearbyOffers, currentOffer } : PropsFromRedux): JSX.Element {
-
   const { id: urlId } = useParams<{ id: string }>();
 
   const {
@@ -56,13 +55,19 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
     city,
   } = currentOffer;
 
-  const { name, avatarUrl, isPro } = host;
-  const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
-
   useEffect(() => {
     loadOfferData(Number(urlId));
     setIsFavoriteStatus(isFavorite);
-  }, [loadOfferData, urlId, isFavorite]);
+  }, [loadOfferData, urlId , isFavorite ]);
+
+  const [activeOffer, setActiveOffer] = useState(0);
+  const offerHandler = (idActive: number) => {
+    setActiveOffer(idActive);
+  };
+
+  const { name, avatarUrl, isPro } = host;
+  const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
+
 
   if (!isDataLoaded) {
     return (
@@ -236,7 +241,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
             </div>
           </div>
           <section className="property__map map">
-            <Map offersList={nearbyOffers} city={city} />
+            <MapNearestPlaces offersList={nearbyOffers} city={city} currentOffer={currentOffer} activeOffer={ activeOffer}/>
           </section>
         </section>
         <div className="container">
@@ -246,7 +251,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
             </h2>
             <div className="near-places__list places__list">
               {nearbyOffers.map((similarOffer) => (
-                <CartOffer key={similarOffer.id} offer={similarOffer} />
+                <CartOffer key={similarOffer.id} offer={similarOffer} onHoverOfferHandler={offerHandler}/>
               ))}
             </div>
           </section>

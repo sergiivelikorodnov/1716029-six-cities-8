@@ -68,7 +68,9 @@ export const postCommentAction = (id:number, {comment, rating}:CommentPost): Thu
         dispatch(postReviewAction({ comment, rating }));
         dispatch(getCommentsAction(adaptCommentsBackToFront(data)));
       })
-      .catch(() => toast.error(NotificationMessage.CommentsPostErr));
+      .catch(() => {
+        toast.error(NotificationMessage.CommentsPostErr);
+      });
   };
 
 export const checkAuthAction = (): ThunkActionResult =>

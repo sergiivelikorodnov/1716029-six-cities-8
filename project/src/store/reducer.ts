@@ -1,4 +1,9 @@
-import { AuthorizationStatus, DEFAULT_CITY, DEFAULT_SINGLE_OFFER, DEFAULT_USER_DATA } from '../consts';
+import {
+  AuthorizationStatus,
+  DEFAULT_CITY,
+  DEFAULT_SINGLE_OFFER,
+  DEFAULT_USER_DATA
+} from '../consts';
 import { ActionType, Actions } from '../types/action';
 import { State } from '../types/state';
 
@@ -11,7 +16,9 @@ const initialState = {
   userAuthInfo: DEFAULT_USER_DATA,
   nearbyOffers: [],
   favoritesOffers: [],
-  comments:[],
+  comments: [],
+  commentLoading: false,
+  commentPostSuccess: true,
 };
 
 const reducer = (state: State = initialState, action: Actions): State => {

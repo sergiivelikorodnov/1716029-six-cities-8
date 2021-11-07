@@ -2,7 +2,7 @@ import { Dispatch, useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { api } from '../..';
-import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER } from '../../consts';
+import { APIRoute, AppRoute } from '../../consts';
 import { selectCurrentCityAction } from '../../store/action';
 import { Actions } from '../../types/action';
 import { Offer } from '../../types/offer';
@@ -12,6 +12,7 @@ import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 
 type SingleOffer = {
   offer: Offer;
+  onHoverOfferHandler(id: number): void;
 };
 const mapStateToProps = ({authorizationStatus}: State) => ({
   authorizationStatus,
@@ -28,7 +29,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & SingleOffer;
 
-function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedComponentProps): JSX.Element {
+function CartOffer({ offer, onHoverOffer, authorizationStatus, onHoverOfferHandler }: ConnectedComponentProps): JSX.Element {
   const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
@@ -58,8 +59,8 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
   return (
     <article
       className="cities__place-card place-card"
-      onMouseOver={() => onHoverOffer && onHoverOffer(offer)}
-      onMouseOut={() => onHoverOffer && onHoverOffer(DEFAULT_SINGLE_OFFER)}
+      onMouseOver={() => onHoverOfferHandler && onHoverOfferHandler(id)}
+      onMouseOut={() => onHoverOfferHandler && onHoverOfferHandler(0)}
     >
       {isPremium ? (
         <div className="place-card__mark">

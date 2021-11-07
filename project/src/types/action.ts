@@ -16,7 +16,10 @@ export enum ActionType {
   NearbyOffersData = 'nearbyOfferData',
   FavoritesOffersData = 'favoritesOffersData',
   GetCommentsData = 'getCommentsData',
-  PostCommentData = 'postCommentData'
+  PostCommentData = 'postCommentData',
+  PostOfferCommentRequest = 'postOfferCommentRequest',
+  PostOfferCommentSuccess = 'postOfferCommentSuccess',
+  PostOfferCommentFailure = 'postOfferCommentFailure',
 }
 
 

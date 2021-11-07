@@ -13,4 +13,5 @@ export type State = {
   nearbyOffers: Offers;
   favoritesOffers: Offers;
   comments: Comments;
+  commentLoading: boolean;
 }
