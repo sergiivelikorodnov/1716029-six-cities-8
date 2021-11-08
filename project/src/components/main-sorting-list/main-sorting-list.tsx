@@ -1,3 +1,4 @@
+import React from 'react';
 import { useCallback, useState } from 'react';
 import { SortingType } from '../../consts';
 
@@ -35,4 +36,4 @@ function MainSortingList({selectedSortType, selectedSortTypeHandler}: Sorting): 
   );
 }
 
-export default MainSortingList;
+export default React.memo(MainSortingList);
