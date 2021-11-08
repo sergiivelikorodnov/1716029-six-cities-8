@@ -1,33 +1,25 @@
 // import { AxiosResponse } from 'axios';
+import React from 'react';
 import { FormEvent, useState, ChangeEvent, useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import { api } from '../..';
 import { /* APIRoute, */ MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH, ratingValues } from '../../consts';
 // import { postReviewAction } from '../../store/action';
 import { postCommentAction } from '../../store/api-actions';
-import { ThunkAppDispatch } from '../../types/action';
+import { getCurrentOffer } from '../../store/selectors';
 import { CommentPost } from '../../types/comment-post';
-import { State } from '../../types/state';
 
-const mapStateToProps = ({currentOffer, commentLoading}: State) => ({
-  currentOffer,
-  commentLoading,
-});
+function ReviewsForm(): JSX.Element {
+  const currentOffer = useSelector(getCurrentOffer);
+  const dispatch = useDispatch();
 
-const mapDispatchToProps  = (dispatch: ThunkAppDispatch) => ({
-  onSubmit(id:number, commentData:CommentPost) {
+  const onSubmit = (id:number, commentData:CommentPost) =>{
     dispatch(postCommentAction(id, commentData));
-  },
-});
+  };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function ReviewsForm({onSubmit, currentOffer, commentLoading }:PropsFromRedux): JSX.Element {
   const [userComment, setUserComment] = useState<string>('');
   const [userRating, setUserRating] = useState<number>(0);
-  const [disabledForm, setDisabledForm] = useState<boolean>(commentLoading);
+  const [disabledForm, setDisabledForm] = useState<boolean>(false);
 
   useEffect(() => {
     if (userComment.length < MIN_COMMENT_LENGTH || !userRating || userRating === 0 || userComment.length > MAX_COMMENT_LENGTH) {
@@ -77,7 +69,7 @@ function ReviewsForm({onSubmit, currentOffer, commentLoading }:PropsFromRedux): 
         {
           Object.entries(ratingValues).reverse().map(([numberStars, starValue] ) =>
             (
-              <>
+              <React.Fragment key={numberStars}>
                 <input
                   className="form__rating-input visually-hidden"
                   name="rating"
@@ -96,7 +88,7 @@ function ReviewsForm({onSubmit, currentOffer, commentLoading }:PropsFromRedux): 
                     <use xlinkHref="#icon-star"></use>
                   </svg>
                 </label>
-              </>
+              </React.Fragment>
             ),
           )
         }
@@ -120,7 +112,7 @@ function ReviewsForm({onSubmit, currentOffer, commentLoading }:PropsFromRedux): 
           with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
         <button
-          onClick={() => { setDisabledForm(commentLoading); onSubmit(id,{comment: userComment, rating: userRating});}}
+          onClick={() => { setDisabledForm(false); onSubmit(id,{comment: userComment, rating: userRating});}}
           className="reviews__submit form__submit button"
           type="submit"
           disabled={disabledForm}
@@ -132,5 +124,4 @@ function ReviewsForm({onSubmit, currentOffer, commentLoading }:PropsFromRedux): 
   );
 }
 
-export {ReviewsForm};
-export default connector(ReviewsForm);
+export default ReviewsForm;

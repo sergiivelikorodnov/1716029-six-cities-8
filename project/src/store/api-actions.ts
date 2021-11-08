@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { APIRoute, AppRoute, AuthorizationStatus, NotificationMessage } from '../consts';
+import { APIRoute, AppRoute, AuthorizationStatus/* , FetchStatus */, FetchStatus, NotificationMessage } from '../consts';
 import { dropAuthStatus, saveAuthStatus } from '../services/auth-status';
 import { dropEmail, saveEmail } from '../services/email';
 import { dropToken, saveToken } from '../services/token';
@@ -9,13 +9,16 @@ import { Comments } from '../types/comment-get';
 import { CommentPost } from '../types/comment-post';
 import { Offer, Offers } from '../types/offer';
 import { adaptCommentsBackToFront, adaptOffersBackToFront, adaptSingleOfferBackToFront, adaptUserBackToFront } from '../utils/adapters';
-import { favoriteOffersDataAction, getCommentsAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, postReviewAction, redirectToRoute, requireAuthorization, requireLogout, setUserAuthInfo } from './action';
+import { favoriteOffersDataAction, getCommentsAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, postReviewAction, redirectToRoute, requireAuthorization, requireLogout, setFetchStatusAction, setUserAuthInfo } from './action';
+
 
 export const fetchOffersAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
+    dispatch(setFetchStatusAction(FetchStatus.InProgress));
     await api.get<Offers>(APIRoute.Offers)
       .then(({ data }) => {
         dispatch(loadOffersAction(adaptOffersBackToFront(data)));
+        dispatch(setFetchStatusAction(FetchStatus.Success));
       })
       .catch(() => toast.error(NotificationMessage.OffersError));
   };
@@ -23,6 +26,7 @@ export const fetchOffersAction = (): ThunkActionResult =>
 
 export const fetchSingleOfferAction = (id:number): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
+    dispatch(setFetchStatusAction(FetchStatus.InProgress));
     await api.get<Offer>(`${APIRoute.Offers}/${id}`)
       .then(({ data }) => {
         if (!data) {
@@ -30,6 +34,7 @@ export const fetchSingleOfferAction = (id:number): ThunkActionResult =>
           return;
         }
         dispatch(loadSingleOfferAction(adaptSingleOfferBackToFront(data)));
+        dispatch(setFetchStatusAction(FetchStatus.Success));
       })
       .catch(() => toast.error(NotificationMessage.OfferError));
   };

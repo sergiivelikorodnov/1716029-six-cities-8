@@ -1,35 +1,21 @@
-import { Dispatch, useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { api } from '../..';
 import { APIRoute, AppRoute } from '../../consts';
-import { selectCurrentCityAction } from '../../store/action';
-import { Actions } from '../../types/action';
 import { Offer } from '../../types/offer';
-import { State } from '../../types/state';
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
+import { getAuthorizationStatus } from '../../store/selectors';
+import {useSelector} from 'react-redux';
 
 type SingleOffer = {
   offer: Offer;
   onHoverOfferHandler(id: number): void;
 };
-const mapStateToProps = ({authorizationStatus}: State) => ({
-  authorizationStatus,
-});
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onHoverOffer(offer: Offer) {
-    dispatch(selectCurrentCityAction(offer));
-  },
-});
+function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & SingleOffer;
-
-function CartOffer({ offer, onHoverOffer, authorizationStatus, onHoverOfferHandler }: ConnectedComponentProps): JSX.Element {
   const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
@@ -114,5 +100,4 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus, onHoverOfferHandl
   );
 }
 
-export { CartOffer };
-export default connector(CartOffer);
+export default CartOffer;

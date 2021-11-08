@@ -1,42 +1,29 @@
-import { getDateTime, getHumanDate, getSortedCommentsByDate, isLogged } from '../../utils/utils';
+import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import CartOffer from '../cart-offer/cart-offer';
 import ReviewsForm from '../reviews-form/reviews-form';
 import { Redirect, useParams } from 'react-router-dom';
-import { State } from '../../types/state';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { ThunkAppDispatch } from '../../types/action';
 import { fetchCommentsAction, fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
 import { useEffect, useState } from 'react';
-import { APIRoute, AppRoute } from '../../consts';
+import { APIRoute, AppRoute, FetchStatus } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
 import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
+import { getAuthorizationStatus, getComments, getCurrentOffer, getFetchStatus, getNearByOffers } from '../../store/selectors';
+import PropertyComments from '../property-comments/property-comments';
 
-const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer, nearbyOffers, comments}: State) => ({
-  authorizationStatus,
-  isDataLoaded,
-  currentOffer,
-  nearbyOffers,
-  comments,
-});
+function Property(): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const currentOffer = useSelector(getCurrentOffer);
+  const nearbyOffers = useSelector(getNearByOffers);
+  const comments = useSelector(getComments);
+  const fetchStatus = useSelector(getFetchStatus);
 
-const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
-  loadOfferData(id:number) {
-    dispatch(fetchSingleOfferAction(id));
-    dispatch(fetchNearByOffersAction(id));
-    dispatch(fetchCommentsAction(id));
-  },
+  const dispatch = useDispatch();
 
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Property({ comments, authorizationStatus, isDataLoaded=false, loadOfferData, nearbyOffers, currentOffer } : PropsFromRedux): JSX.Element {
   const { id: urlId } = useParams<{ id: string }>();
 
   const {
@@ -56,9 +43,14 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
   } = currentOffer;
 
   useEffect(() => {
+    const loadOfferData = (idOffer:number) => {
+      dispatch(fetchSingleOfferAction(idOffer));
+      dispatch(fetchNearByOffersAction(idOffer));
+      dispatch(fetchCommentsAction(idOffer));
+    };
     loadOfferData(Number(urlId));
     setIsFavoriteStatus(isFavorite);
-  }, [loadOfferData, urlId , isFavorite ]);
+  }, [urlId, isFavorite, dispatch]);
 
   const [activeOffer, setActiveOffer] = useState(0);
   const offerHandler = (idActive: number) => {
@@ -68,8 +60,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
   const { name, avatarUrl, isPro } = host;
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-
-  if (!isDataLoaded) {
+  if (fetchStatus=== FetchStatus.InProgress) {
     return (
       <LoadingScreen />
     );
@@ -83,10 +74,6 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
       },
       );
   };
-
-  if (comments.length > 10) {
-    comments = comments.slice(comments.length-10, comments.length);
-  }
 
   return (
     <div className="page">
@@ -196,45 +183,8 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
                   <span className="reviews__amount">{comments.length}</span>
                 </h2>
                 <ul className="reviews__list">
-                  {getSortedCommentsByDate(comments).map((comment) => {
-                    const keyValue = `${comment.id}`;
-                    return (
-                      <li key={keyValue} className="reviews__item">
-                        <div className="reviews__user user">
-                          <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                            <img
-                              className="reviews__avatar user__avatar"
-                              src={comment.user.avatarUrl}
-                              width="54"
-                              height="54"
-                              alt="Reviews avatar"
-                            />
-                          </div>
-                          <span className="reviews__user-name">
-                            {comment.user.name}
-                          </span>
-                        </div>
-                        <div className="reviews__info">
-                          <div className="reviews__rating rating">
-                            <div className="reviews__stars rating__stars">
-                              <span
-                                style={{ width: `${comment.rating * 20}%` }}
-                              >
-                              </span>
-                              <span className="visually-hidden">Rating</span>
-                            </div>
-                          </div>
-                          <p className="reviews__text">{comment.comment}</p>
-                          <time
-                            className="reviews__time"
-                            dateTime={getDateTime(comment.date)}
-                          >
-                            {getHumanDate(comment.date)}
-                          </time>
-                        </div>
-                      </li>
-                    );
-                  })}
+                  <PropertyComments comments={comments} />
+
                 </ul>
                 {isLogged(authorizationStatus) ? <ReviewsForm /> : ''}
               </section>
@@ -261,5 +211,4 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
   );
 }
 
-export {Property};
-export default connector(Property);
+export default Property;

@@ -4,33 +4,25 @@ import ListOffersFavorite from '../list-offers-favorite/list-offers-favorite';
 import { groupBy } from 'lodash';
 import { AppRoute } from '../../consts';
 import Header from '../header/header';
-import { State } from '../../types/state';
 import { fetchFavoritesOffersAction } from '../../store/api-actions';
-import { ThunkAppDispatch } from '../../types/action';
-import { connect, ConnectedProps } from 'react-redux';
 import { useEffect } from 'react';
 import LoadingScreen from '../loading-screen/loading-screen';
+import { getDataLoadStatus, getFavoriteOffers } from '../../store/selectors';
+import {useSelector, useDispatch} from 'react-redux';
 
-const mapStateToProps = ({favoritesOffers, isDataLoaded}: State) => ({
-  favoritesOffers,
-  isDataLoaded,
-});
+function Favorites(): JSX.Element {
+  const favoritesOffers = useSelector(getFavoriteOffers);
+  const isDataLoaded = useSelector(getDataLoadStatus);
 
-const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
-  loadOffersData() {
-    dispatch(fetchFavoritesOffersAction());
-  },
-});
+  const dispatch = useDispatch();
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Favorites({ favoritesOffers, loadOffersData, isDataLoaded=false }: PropsFromRedux): JSX.Element {
 
   useEffect(() => {
+    const loadOffersData = () => {
+      dispatch(fetchFavoritesOffersAction());
+    };
     loadOffersData();
-  }, [loadOffersData]);
+  }, [dispatch]);
 
 
   if (!isDataLoaded) {
@@ -111,5 +103,4 @@ function Favorites({ favoritesOffers, loadOffersData, isDataLoaded=false }: Prop
   );
 }
 
-export {Favorites};
-export default connector(Favorites);
+export default Favorites;

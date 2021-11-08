@@ -1,24 +1,16 @@
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RouteProps, Route, Redirect } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../consts';
 import { dropAuthStatus, getAuthStatus } from '../../services/auth-status';
-import { State } from '../../types/state';
+import { getAuthorizationStatus } from '../../store/selectors';
 
 type LoginRouteProps = RouteProps & {
   render: () => JSX.Element,
 }
 
+function LoginRoute({ exact, path, render }: LoginRouteProps): JSX.Element{
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
-const mapStateToProps = ({authorizationStatus}: State) => ({
-  authorizationStatus,
-});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & LoginRouteProps;
-
-function LoginRoute({ exact, path, render, authorizationStatus }: ConnectedComponentProps): JSX.Element{
   return (
     <Route
       exact={exact}
@@ -33,6 +25,4 @@ function LoginRoute({ exact, path, render, authorizationStatus }: ConnectedCompo
   );
 }
 
-
-export {LoginRoute};
-export default connector(LoginRoute);
+export default LoginRoute;

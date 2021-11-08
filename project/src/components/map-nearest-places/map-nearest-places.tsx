@@ -2,11 +2,9 @@ import 'leaflet';
 import { Icon, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import { URL_MARKER_ACTIVE, URL_MARKER_DEFAULT } from '../../consts';
 import useMap from '../../hooks/use-map';
 import { CityOffer, Offer, Offers } from '../../types/offer';
-import { State } from '../../types/state';
 
 type AppComponentProps = {
   offersList: Offers;
@@ -27,22 +25,13 @@ const currentCustomIcon = new Icon({
   iconAnchor: [14, 39],
 });
 
-const mapStateToProps = ({ currentCity, offers }: State) => ({
-  currentCity,
-  offers,
-});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & AppComponentProps;
-
 function MapNearestPlaces({
   currentOffer,
   offersList,
   city,
   activeOffer,
-}: ConnectedComponentProps): JSX.Element {
+}: AppComponentProps): JSX.Element {
+
   const { latitude, longitude, zoom } = city.location;
 
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -69,14 +58,17 @@ function MapNearestPlaces({
         markers.push(marker);
       });
 
-      const currentOfferMarker = new Marker({
-        lat: currentOffer.location.latitude,
-        lng: currentOffer.location.longitude,
-      });
+      if (currentOffer.id !== -1) {
+        const currentOfferMarker = new Marker({
+          lat: currentOffer.location.latitude,
+          lng: currentOffer.location.longitude,
+        });
 
-      currentOfferMarker
-        .setIcon(currentCustomIcon)
-        .addTo(map);
+        currentOfferMarker
+          .setIcon(currentCustomIcon)
+          .addTo(map);
+      }
+
 
       return () => markers.forEach((marker) => marker.removeFrom(map));
     }
@@ -89,9 +81,10 @@ function MapNearestPlaces({
     longitude,
     zoom,
     activeOffer,
+    currentOffer.location.latitude,
+    currentOffer.location.longitude,
   ]);
   return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }
 
-export { MapNearestPlaces };
-export default connector(MapNearestPlaces);
+export default MapNearestPlaces;

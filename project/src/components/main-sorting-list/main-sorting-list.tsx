@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { SortingType } from '../../consts';
 
 type Sorting = {
@@ -9,9 +9,9 @@ type Sorting = {
 function MainSortingList({selectedSortType, selectedSortTypeHandler}: Sorting): JSX.Element{
   const [isSortOpening, setIsSortOpening] = useState(false);
 
-  const sortOpenHandler = () => {
+  const sortOpenHandler = useCallback(() => {
     setIsSortOpening(!isSortOpening);
-  };
+  }, [isSortOpening]);
 
   const setSortTypeHandler = (sortType:string) => {
     setIsSortOpening(!isSortOpening);

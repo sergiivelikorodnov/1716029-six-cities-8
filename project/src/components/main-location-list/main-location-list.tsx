@@ -1,29 +1,20 @@
-import { Dispatch } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { changeCityAction } from '../../store/action';
-import { Actions } from '../../types/action';
-import { State } from '../../types/state';
+import { getCurrentCity } from '../../store/selectors';
 
 type AppProps = {
   cities: string[];
 }
 
-const mapStateToProps = ({ currentCity, offers }: State) => ({ currentCity, offers });
+function MainLocationList({cities}: AppProps): JSX.Element {
+  const currentCity = useSelector(getCurrentCity);
+  const dispatch = useDispatch();
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onChangeCity(city: string) {
+  const onChangeCity = (city: string) => {
     dispatch(changeCityAction(city));
-  },
-});
+  };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & AppProps;
-
-function MainLocationList(props: ConnectedComponentProps): JSX.Element {
-  const { cities, currentCity, onChangeCity } = props;
   return (
     <div className="tabs">
       <section className="locations container">
@@ -44,5 +35,4 @@ function MainLocationList(props: ConnectedComponentProps): JSX.Element {
   );
 }
 
-export { MainLocationList };
-export default connector(MainLocationList);
+export default MainLocationList;

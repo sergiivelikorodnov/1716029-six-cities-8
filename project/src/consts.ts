@@ -53,7 +53,7 @@ export const DEFAULT_SINGLE_OFFER:Offer = {
     location: {
       latitude: 0,
       longitude: 0,
-      zoom: 0,
+      zoom: 16,
     },
     name: '',
   },
@@ -110,4 +110,9 @@ export enum NotificationMessage{
   NearPlacesError = 'We can\'t get Recommended places. Check your connection please',
   CommentsGetErr = 'Ooops, we can\'t get comments. Check your connection',
   CommentsPostErr = 'Ooops, we can\'t post your comment. Check your connection',
+}
+
+export enum FetchStatus {
+  InProgress = 'IN_PROGRESS',
+  Success = 'SUCCESS',
 }

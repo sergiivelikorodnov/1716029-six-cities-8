@@ -1,6 +1,6 @@
 import { Offers } from '../../types/offer';
 import MainLocationList from '../main-location-list/main-location-list';
-import { CITIES, SortingType } from '../../consts';
+import { CITIES, FetchStatus, SortingType } from '../../consts';
 import {
   getOffersByCity,
   getSortedOffersPriceDown,
@@ -8,36 +8,28 @@ import {
   getSortedOffersTopRated,
   isCheckedAuth
 } from '../../utils/utils';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Header from '../header/header';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { State } from '../../types/state';
 import MainCityContainer from '../main-city-container/main-city-container';
 import MainEmpty from '../main-empty/main-empty';
+import { getAllOffers, getAuthorizationStatus, getCurrentCity, getFetchStatus } from '../../store/selectors';
 
-const mapStateToProps = ({ currentCity, offers, authorizationStatus, isDataLoaded }: State) => ({
-  currentCity,
-  offers,
-  isDataLoaded,
-  authorizationStatus,
-});
+function Main(): JSX.Element {
+  const currentCity = useSelector(getCurrentCity);
+  const offers = useSelector(getAllOffers);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const fetchStatus = useSelector(getFetchStatus);
 
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux;
-
-
-function Main({ currentCity, offers, authorizationStatus, isDataLoaded }: ConnectedComponentProps): JSX.Element {
   const [activeOffer, setActiveOffer] = useState(0);
-  const offerHandler = (id: number) => {
+  const offerHandler = useCallback((id: number) => {
     setActiveOffer(id);
-  };
+  },[]);
 
   const [selectedSortType, setSelectedSortType] = useState(SortingType.POPULAR);
 
-  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
+  if (isCheckedAuth(authorizationStatus) || fetchStatus=== FetchStatus.InProgress) {
     return (
       <LoadingScreen />
     );
@@ -90,4 +82,4 @@ function Main({ currentCity, offers, authorizationStatus, isDataLoaded }: Connec
 }
 
 export {Main};
-export default connector(Main);
+export default Main;

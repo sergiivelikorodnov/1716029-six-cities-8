@@ -1,77 +1,100 @@
-import { AppRoute, AuthorizationStatus } from '../consts';
+import { AppRoute, AuthorizationStatus, FetchStatus } from '../consts';
+import { createAction } from '@reduxjs/toolkit';
 import { ActionType } from '../types/action';
 import { FrontAuthInfo } from '../types/auth-data';
 import { Comments } from '../types/comment-get';
 import { CommentPost } from '../types/comment-post';
 import { Offer, Offers } from '../types/offer';
 
-export const changeCityAction = (newCity: string) =>
-  ({
+export const changeCityAction = createAction(
+  ActionType.ChangeCity,
+  (newCity: string) => ({
     type: ActionType.ChangeCity,
     payload: newCity,
-  } as const);
+  }),
+);
 
-export const selectCurrentCityAction = (offer: Offer) =>
-  ({
-    type: ActionType.SelectCity,
-    payload: offer,
-  } as const);
+export const loadOffersAction = createAction(
+  ActionType.LoadOfferData,
+  (offers: Offers) =>
+    ({
+      payload: offers,
+    }),
+);
 
-export const loadOffersAction = (offers: Offers) =>
-  ({
-    type: ActionType.LoadOfferData,
-    payload: offers,
-  } as const);
+export const requireAuthorization = createAction(
+  ActionType.RequireAuthorization,
+  (authStatus: AuthorizationStatus) =>
+    ({
+      payload: authStatus,
+    }),
+);
 
-export const requireAuthorization = (authStatus: AuthorizationStatus) =>
-  ({
-    type: ActionType.RequireAuthorization,
-    payload: authStatus,
-  } as const);
+export const requireLogout = createAction(
+  ActionType.RequireLogout,
+);
 
-export const requireLogout = () =>
-  ({
-    type: ActionType.RequireLogout,
-  } as const);
+export const redirectToRoute = createAction(
+  ActionType.RedirectToRoute,
+  (url: AppRoute) =>
+    ({
+      payload: url,
+    }),
+);
 
-export const redirectToRoute = (url:AppRoute) =>
-  ({
-    type: ActionType.RedirectToRoute,
-    payload: url,
-  } as const);
+export const setUserAuthInfo = createAction(
+  ActionType.SetUserAuthInfo,
+  (userInfo: FrontAuthInfo) =>
+    ({
+      payload: userInfo,
+    }),
+);
 
-export const setUserAuthInfo = (userInfo:FrontAuthInfo) =>
-  ({
-    type: ActionType.SetUserAuthInfo,
-    payload: userInfo,
-  } as const);
+export const loadSingleOfferAction = createAction(
+  ActionType.LoadSingleOfferData,
+  (offer: Offer) =>
+    ({
+      payload: offer,
+    }),
+);
 
-export const loadSingleOfferAction = (offer:Offer) =>
-  ({
-    type: ActionType.LoadSingleOfferData,
-    payload: offer,
-  } as const);
+export const nearbyOffersDataAction = createAction(
+  ActionType.NearbyOffersData,
+  (offers: Offers) =>
+    ({
+      payload: offers,
+    }),
+);
 
-export const nearbyOffersDataAction = (offers:Offers) =>
-  ({
-    type: ActionType.NearbyOffersData,
-    payload: offers,
-  } as const);
+export const favoriteOffersDataAction = createAction(
+  ActionType.FavoritesOffersData,
+  (offers: Offers) =>
+    ({
+      payload: offers,
+    }),
+);
 
-export const favoriteOffersDataAction = (offers:Offers) =>
-  ({
-    type: ActionType.FavoritesOffersData,
-    payload: offers,
-  } as const);
+export const getCommentsAction = createAction(
+  ActionType.GetCommentsData,
+  (comments: Comments) =>
+    ({
+      payload: comments,
+    }),
+);
 
-export const getCommentsAction = (comments:Comments) =>
-  ({
-    type: ActionType.GetCommentsData,
-    payload: comments,
-  } as const);
+export const postReviewAction = createAction(
+  ActionType.PostCommentData,
+  (comment: CommentPost) =>
+    ({
+      payload: comment,
+    }),
+);
 
-export const postReviewAction = (comment:CommentPost) =>
-  ({
-    type: ActionType.PostCommentData,
-    payload: comment,
-  } as const);
+
+export const setFetchStatusAction = createAction(
+  ActionType.SetFetchStatusData,
+  (fetchStatus: FetchStatus) =>
+    ({
+      payload: fetchStatus,
+    }),
+);

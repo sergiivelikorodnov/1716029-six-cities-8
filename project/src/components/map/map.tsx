@@ -2,11 +2,11 @@ import 'leaflet';
 import { Icon, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { URL_MARKER_ACTIVE, URL_MARKER_DEFAULT } from '../../consts';
 import useMap from '../../hooks/use-map';
+import { getCurrentOffer } from '../../store/selectors';
 import { CityOffer, Offers } from '../../types/offer';
-import { State } from '../../types/state';
 
 type AppComponentProps = {
   activeOffer:number;
@@ -26,23 +26,15 @@ const currentCustomIcon = new Icon({
   iconAnchor: [14, 39],
 });
 
-const mapStateToProps = ({ currentOffer, currentCity, offers }: State) => ({
-  currentOffer,
-  currentCity,
-  offers,
-});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & AppComponentProps;
 
 function Map({
-  currentOffer,
   offersList,
   city,
   activeOffer,
-}: ConnectedComponentProps): JSX.Element {
+}: AppComponentProps): JSX.Element {
+  const currentOffer = useSelector(getCurrentOffer);
+
+
   const { latitude, longitude, zoom } = city.location;
 
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -95,5 +87,4 @@ function Map({
   return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }
 
-export { Map };
-export default connector(Map);
+export default Map;
