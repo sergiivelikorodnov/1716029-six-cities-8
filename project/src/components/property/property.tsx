@@ -2,7 +2,7 @@ import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import CartOffer from '../cart-offer/cart-offer';
 import ReviewsForm from '../reviews-form/reviews-form';
-import { Redirect, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
@@ -42,6 +42,8 @@ function Property(): JSX.Element {
     city,
   } = currentOffer;
 
+  const history = useHistory();
+
   useEffect(() => {
     const loadOfferData = (idOffer:number) => {
       dispatch(fetchSingleOfferAction(idOffer));
@@ -60,7 +62,7 @@ function Property(): JSX.Element {
   const { name, avatarUrl, isPro } = host;
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-  if (fetchStatus=== FetchStatus.InProgress) {
+  if (fetchStatus=== FetchStatus.InProgress && currentOffer.id === -1) {
     return (
       <LoadingScreen />
     );
@@ -104,7 +106,7 @@ function Property(): JSX.Element {
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> <Redirect to={AppRoute.Login} />}
+                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
                   className={`property__bookmark-button ${
                     isFavoriteStatus ? 'property__bookmark-button--active' : ''
                   } button`}

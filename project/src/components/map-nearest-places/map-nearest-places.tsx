@@ -67,10 +67,16 @@ function MapNearestPlaces({
         currentOfferMarker
           .setIcon(currentCustomIcon)
           .addTo(map);
+        markers.push(currentOfferMarker);
       }
 
 
-      return () => markers.forEach((marker) => marker.removeFrom(map));
+      return () => {
+        // eslint-disable-next-line no-console
+        console.log(markers);
+
+        markers.forEach((marker) => marker.removeFrom(map));
+      };
     }
   }, [
     map,

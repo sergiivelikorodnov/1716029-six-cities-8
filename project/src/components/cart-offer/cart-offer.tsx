@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { api } from '../..';
 import { APIRoute, AppRoute } from '../../consts';
 import { Offer } from '../../types/offer';
@@ -28,6 +28,7 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
       );
   };
 
+  const history = useHistory();
 
   useEffect(() => {
     getFavoriteStatus(id);
@@ -73,7 +74,7 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> <Redirect to={AppRoute.Login} />}
+            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
             className={`place-card__bookmark-button ${
               isFavoriteStatus ? 'place-card__bookmark-button--active' : ''
             } button`}
