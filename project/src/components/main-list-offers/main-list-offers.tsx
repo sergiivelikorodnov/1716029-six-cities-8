@@ -1,5 +1,5 @@
 import { Offers } from '../../types/offer';
-import CartOffer from '../cart-offer/cart-offer';
+import CartOffer from '../main-cart-offer/main-cart-offer';
 
 type CardsOffers = {
   offers: Offers;

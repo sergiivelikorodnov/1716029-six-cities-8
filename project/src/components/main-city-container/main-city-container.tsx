@@ -1,6 +1,6 @@
 
-import ListOffers from '../list-offers/list-offers';
-import Map from '../map/map';
+import ListOffers from '../main-list-offers/main-list-offers';
+import MainMap from '../main-map/main-map';
 
 import MainSortingList from '../main-sorting-list/main-sorting-list';
 import { Offers } from '../../types/offer';
@@ -41,7 +41,7 @@ function MainCityContainer({ selectedSortType, selectedSortTypeHandler, sortedOf
         </section>
         <div className="cities__right-section">
           <section className="cities__map map">
-            <Map offersList={offersList} city={city} activeOffer={ activeOffer }/>
+            <MainMap offersList={offersList} city={city} activeOffer={ activeOffer }/>
           </section>
         </div>
       </div>

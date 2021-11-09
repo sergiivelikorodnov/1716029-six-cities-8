@@ -1,7 +1,7 @@
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
-import CartOffer from '../cart-offer/cart-offer';
-import ReviewsForm from '../reviews-form/reviews-form';
+import CartOffer from '../main-cart-offer/main-cart-offer';
+import PropertyReviewsForm from '../property-reviews-form/property-reviews-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../header/header';
@@ -191,7 +191,7 @@ function Property(): JSX.Element {
                   <PropertyComments comments={comments} />
 
                 </ul>
-                {isLogged(authorizationStatus) ? <ReviewsForm /> : ''}
+                {isLogged(authorizationStatus) ? <PropertyReviewsForm /> : ''}
               </section>
             </div>
           </div>

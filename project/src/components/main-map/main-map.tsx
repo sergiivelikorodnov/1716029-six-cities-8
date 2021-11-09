@@ -27,7 +27,7 @@ const currentCustomIcon = new Icon({
 });
 
 
-function Map({
+function MainMap({
   offersList,
   city,
   activeOffer,
@@ -87,4 +87,4 @@ function Map({
   return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }
 
-export default Map;
+export default MainMap;

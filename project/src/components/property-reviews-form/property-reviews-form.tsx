@@ -9,7 +9,7 @@ import { postCommentAction } from '../../store/api-actions';
 import { getCurrentOffer } from '../../store/selectors';
 import { CommentPost } from '../../types/comment-post';
 
-function ReviewsForm(): JSX.Element {
+function PropertyReviewsForm(): JSX.Element {
   const currentOffer = useSelector(getCurrentOffer);
   const dispatch = useDispatch();
 
@@ -124,4 +124,4 @@ function ReviewsForm(): JSX.Element {
   );
 }
 
-export default ReviewsForm;
+export default PropertyReviewsForm;

@@ -18,7 +18,7 @@ export type OffersDataType = {
 
 export type LocationDataType = {
   currentCity: string;
-  activeCity: CitiesType;
+ // activeCity: CitiesType;
   currentOffer: Offer;
 }
 

@@ -34,9 +34,6 @@ function MapNearestPlaces({
 
   const { latitude, longitude, zoom } = city.location;
 
-  // eslint-disable-next-line no-console
-  console.log(city);
-
   const mapRef = useRef<HTMLDivElement | null>(null);
   const map = useMap(mapRef, city);
 

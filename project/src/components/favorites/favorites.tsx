@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offer';
-import ListOffersFavorite from '../list-offers-favorite/list-offers-favorite';
+import ListOffersFavorite from '../favorite-list-offers/favorite-list-offers';
 import { groupBy } from 'lodash';
 import { AppRoute } from '../../consts';
 import Header from '../header/header';
