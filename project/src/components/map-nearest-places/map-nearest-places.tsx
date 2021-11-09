@@ -34,6 +34,9 @@ function MapNearestPlaces({
 
   const { latitude, longitude, zoom } = city.location;
 
+  // eslint-disable-next-line no-console
+  console.log(city);
+
   const mapRef = useRef<HTMLDivElement | null>(null);
   const map = useMap(mapRef, city);
 
@@ -72,9 +75,6 @@ function MapNearestPlaces({
 
 
       return () => {
-        // eslint-disable-next-line no-console
-        console.log(markers);
-
         markers.forEach((marker) => marker.removeFrom(map));
       };
     }
@@ -89,6 +89,7 @@ function MapNearestPlaces({
     activeOffer,
     currentOffer.location.latitude,
     currentOffer.location.longitude,
+    city.location,
   ]);
   return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }

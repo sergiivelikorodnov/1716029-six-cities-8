@@ -16,13 +16,14 @@ import { getAuthorizationStatus, getComments, getCurrentOffer, getFetchStatus, g
 import PropertyComments from '../property-comments/property-comments';
 
 function Property(): JSX.Element {
+  const dispatch = useDispatch();
+
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const currentOffer = useSelector(getCurrentOffer);
   const nearbyOffers = useSelector(getNearByOffers);
   const comments = useSelector(getComments);
   const fetchStatus = useSelector(getFetchStatus);
 
-  const dispatch = useDispatch();
 
   const { id: urlId } = useParams<{ id: string }>();
 
@@ -42,6 +43,8 @@ function Property(): JSX.Element {
     city,
   } = currentOffer;
 
+  const { name, avatarUrl, isPro } = host;
+
   const history = useHistory();
 
   useEffect(() => {
@@ -59,7 +62,7 @@ function Property(): JSX.Element {
     setActiveOffer(idActive);
   };
 
-  const { name, avatarUrl, isPro } = host;
+
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
   if (fetchStatus=== FetchStatus.InProgress && currentOffer.id === -1) {

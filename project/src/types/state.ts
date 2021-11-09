@@ -18,6 +18,7 @@ export type OffersDataType = {
 
 export type LocationDataType = {
   currentCity: string;
+  activeCity: CitiesType;
   currentOffer: Offer;
 }
 
@@ -28,6 +29,17 @@ export type CommentsDataType = {
 
 export type FetchStatusType = {
   fetchStatus: FetchStatus;
+}
+
+export type CitiesType = {
+  [name: string]: {
+    location: {
+      latitude: number,
+      longitude: number,
+      zoom: number,
+    },
+    name: string,
+  }
 }
 
 export type State = RootState;

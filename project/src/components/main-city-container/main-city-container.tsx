@@ -23,6 +23,7 @@ function MainCityContainer({ selectedSortType, selectedSortTypeHandler, sortedOf
       city: { name },
     },
   ] = sortedOffers;
+
   return (
     <div className="cities">
       <div className="cities__places-container container">
