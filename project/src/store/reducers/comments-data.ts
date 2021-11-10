@@ -10,6 +10,7 @@ const commentsDataReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(getCommentsAction, (state, action) => {
       state.comments = action.payload;
+      state.comments.reverse();
     });
 });
 
