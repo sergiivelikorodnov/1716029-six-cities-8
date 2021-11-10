@@ -29,22 +29,8 @@ function Property(): JSX.Element {
   const { id: urlId } = useParams<{ id: string }>();
 
   const {
-    id,
-    price,
-    rating,
-    bedrooms,
-    title,
-    description,
-    host,
-    images,
-    maxAdults,
-    goods,
-    isPremium,
     isFavorite,
-    city,
   } = currentOffer;
-
-  const { name, avatarUrl, isPro } = host;
 
   const history = useHistory();
 
@@ -60,6 +46,24 @@ function Property(): JSX.Element {
     loadOfferData(Number(urlId));
     setIsFavoriteStatus(isFavorite);
   }, [urlId, isFavorite, dispatch]);
+
+
+  const {
+    id,
+    price,
+    rating,
+    bedrooms,
+    title,
+    description,
+    host,
+    images,
+    maxAdults,
+    goods,
+    isPremium,
+    city,
+  } = currentOffer;
+
+  const { name, avatarUrl, isPro } = host;
 
   const [activeOffer, setActiveOffer] = useState(0);
   const offerHandler = (idActive: number) => {

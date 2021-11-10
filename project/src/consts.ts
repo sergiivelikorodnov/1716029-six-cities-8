@@ -1,7 +1,6 @@
 import { FrontAuthInfo } from './types/auth-data';
 import { RatingValues } from './types/consts';
 import { Offer } from './types/offer';
-import { CitiesType } from './types/state';
 
 export enum AppRoute {
   Main = '/',
@@ -25,57 +24,6 @@ export const CITIES: string[] = [
   'Hamburg',
   'Dusseldorf',
 ];
-
-export const Cities: CitiesType = {
-  'Paris': {
-    name: 'Paris',
-    location: {
-      latitude: 48.85661,
-      longitude: 2.351499,
-      zoom: 13,
-    },
-  },
-  'Cologne': {
-    name: 'Cologne',
-    location: {
-      latitude: 50.938361,
-      longitude: 6.959974,
-      zoom: 13,
-    },
-  },
-  'Brussels': {
-    name: 'Brussels',
-    location: {
-      latitude: 50.846557,
-      longitude: 4.351697,
-      zoom: 13,
-    },
-  },
-  'Amsterdam': {
-    name: 'Amsterdam',
-    location: {
-      latitude: 52.38310503,
-      longitude: 4.893703165,
-      zoom: 13,
-    },
-  },
-  'Hamburg': {
-    name: 'Hamburg',
-    location: {
-      latitude: 53.550341,
-      longitude: 10.000654,
-      zoom: 13,
-    },
-  },
-  'Dusseldorf': {
-    name: 'Dusseldorf',
-    location: {
-      latitude: 51.225402,
-      longitude: 6.776314,
-      zoom: 13,
-    },
-  },
-};
 
 export const SortingType = {
   POPULAR : 'Popular',

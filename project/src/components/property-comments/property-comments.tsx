@@ -10,6 +10,11 @@ function PropertyComments({ comments} : PropertyCommentsType): JSX.Element {
     comments = comments.slice(comments.length-10, comments.length);
   }
 
+  // eslint-disable-next-line no-debugger
+  //debugger;
+
+  // comments = getSortedCommentsByDate(comments);
+
   return (
     <>
       {comments.map((comment) => {
