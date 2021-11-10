@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { api } from '../..';
 import { APIRoute } from '../../consts';
 import { fetchFavoritesOffersAction } from '../../store/api-actions';
-import { ThunkAppDispatch } from '../../types/action';
 import { Offer } from '../../types/offer';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 
@@ -12,18 +11,12 @@ type SingleOffer = {
   offer: Offer;
 };
 
-const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
-  loadOffersData() {
+function CartOfferFavorite({ offer }: SingleOffer): JSX.Element {
+  const dispatch = useDispatch();
+  const loadOffersData = () => {
     dispatch(fetchFavoritesOffersAction());
-  },
-});
+  };
 
-const connector = connect(null, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & SingleOffer;
-
-function CartOfferFavorite({ offer,loadOffersData }: ConnectedComponentProps): JSX.Element {
   const { id, type, price, rating, title, isFavorite, previewImage } = offer;
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
@@ -72,7 +65,7 @@ function CartOfferFavorite({ offer,loadOffersData }: ConnectedComponentProps): J
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${rating * 20}%` }}></span>
+            <span style={{ width: `${Math.round(rating) * 20}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -85,5 +78,4 @@ function CartOfferFavorite({ offer,loadOffersData }: ConnectedComponentProps): J
   );
 }
 
-export {CartOfferFavorite};
-export default connector(CartOfferFavorite);
+export default CartOfferFavorite;

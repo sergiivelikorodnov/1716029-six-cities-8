@@ -1,4 +1,6 @@
 import axios, {AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import { toast } from 'react-toastify';
+import { NotificationMessage } from '../consts';
 import { getToken } from './token';
 
 const BACKEND_URL = 'https://8.react.pages.academy/six-cities';
@@ -24,6 +26,7 @@ export const сreateApi = (onUnauthorized: onUnauthorizedCallback): AxiosInstanc
 
       if (response?.status === HttpCode.Unauthorized) {
         onUnauthorized();
+        toast.info(NotificationMessage.CheckAuth);
       }
       return error;
     },

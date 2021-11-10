@@ -1,19 +1,13 @@
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../consts';
-import { State } from '../../types/state';
+import { getCurrentCity } from '../../store/selectors';
 import Logo from '../logo/logo';
 import LoginForm from './login-form';
 
-const mapStateToProps = ({ currentCity }: State) => ({
-  currentCity,
-});
+function Login(): JSX.Element {
+  const currentCity = useSelector(getCurrentCity);
 
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Login({currentCity}:PropsFromRedux): JSX.Element {
   return (
     <div className="page page--gray page--login">
       <header className="header">
@@ -43,5 +37,4 @@ function Login({currentCity}:PropsFromRedux): JSX.Element {
   );
 }
 
-export {Login};
-export default connector(Login);
+export default Login;

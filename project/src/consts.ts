@@ -1,4 +1,5 @@
 import { FrontAuthInfo } from './types/auth-data';
+import { RatingValues } from './types/consts';
 import { Offer } from './types/offer';
 
 export enum AppRoute {
@@ -52,7 +53,7 @@ export const DEFAULT_SINGLE_OFFER:Offer = {
     location: {
       latitude: 0,
       longitude: 0,
-      zoom: 0,
+      zoom: 16,
     },
     name: '',
   },
@@ -64,7 +65,7 @@ export const DEFAULT_SINGLE_OFFER:Offer = {
     isPro: false,
     name: '',
   },
-  id: 99999999999999,
+  id: -1,
   images: [''],
   isFavorite: false,
   isPremium: false,
@@ -84,7 +85,34 @@ export const DEFAULT_SINGLE_OFFER:Offer = {
 export const DEFAULT_USER_DATA:FrontAuthInfo = {
   avatarUrl: '../../public/img/avatar.svg',
   email: '',
-  id: 99999999999999999999999999,
+  id: -1,
   isPro: false,
   name: '',
 } as const;
+
+export const MIN_COMMENT_LENGTH = 50;
+export const MAX_COMMENT_LENGTH = 300;
+
+export const ratingValues:RatingValues = {
+  '5': 'perfect',
+  '4': 'good',
+  '3': 'not bad',
+  '2': 'badly',
+  '1': 'terribly',
+};
+
+export enum NotificationMessage{
+  AuthError = 'Something went wrong. Check your email and password',
+  CheckAuth = 'Login to see more functinality',
+  ConnecError = 'Check your connection please',
+  OffersError = 'We couldn\'t get Offers. Check your connection',
+  OfferError = 'Something went wrong. Check your connection',
+  NearPlacesError = 'We can\'t get Recommended places. Check your connection please',
+  CommentsGetErr = 'Ooops, we can\'t get comments. Check your connection',
+  CommentsPostErr = 'Ooops, we can\'t post your comment. Check your connection',
+}
+
+export enum FetchStatus {
+  InProgress = 'IN_PROGRESS',
+  Success = 'SUCCESS',
+}

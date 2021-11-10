@@ -1,47 +1,52 @@
-import { getDateTime, getHumanDate, isLogged } from '../../utils/utils';
+import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
-import CartOffer from '../cart-offer/cart-offer';
-import Map from '../map/map';
-import ReviewsForm from '../reviews-form/reviews-form';
-import { useParams } from 'react-router-dom';
-import { State } from '../../types/state';
-import { connect, ConnectedProps } from 'react-redux';
+import CartOffer from '../main-cart-offer/main-cart-offer';
+import PropertyReviewsForm from '../property-reviews-form/property-reviews-form';
+import { useHistory, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { ThunkAppDispatch } from '../../types/action';
 import { fetchCommentsAction, fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
 import { useEffect, useState } from 'react';
-import { APIRoute } from '../../consts';
+import { APIRoute, AppRoute, FetchStatus } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
-import {toast} from 'react-toastify';
+import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
+import { getAuthorizationStatus, getComments, getCurrentOffer, getFetchStatus, getNearByOffers } from '../../store/selectors';
+import PropertyComments from '../property-comments/property-comments';
+import { setFetchStatusAction } from '../../store/action';
 
-const AUTH_MESSAGE = 'Вы должны залогиниться';
+function Property(): JSX.Element {
+  const dispatch = useDispatch();
 
-const mapStateToProps = ({authorizationStatus, isDataLoaded, currentOffer, nearbyOffers, comments}: State) => ({
-  authorizationStatus,
-  isDataLoaded,
-  currentOffer,
-  nearbyOffers,
-  comments,
-});
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const currentOffer = useSelector(getCurrentOffer);
+  const nearbyOffers = useSelector(getNearByOffers);
+  const comments = useSelector(getComments);
+  const fetchStatus = useSelector(getFetchStatus);
 
-const mapDispatchToProps = (dispatch:ThunkAppDispatch) => ({
-  loadOfferData(id:number) {
-    dispatch(fetchSingleOfferAction(id));
-    dispatch(fetchNearByOffersAction(id));
-    dispatch(fetchCommentsAction(id));
-  },
-
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function Property({ comments, authorizationStatus, isDataLoaded=false, loadOfferData, nearbyOffers, currentOffer } : PropsFromRedux): JSX.Element {
 
   const { id: urlId } = useParams<{ id: string }>();
+
+  const {
+    isFavorite,
+  } = currentOffer;
+
+  const history = useHistory();
+
+  useEffect(() => {
+    const loadOfferData = (idOffer:number) => {
+      const firstLoading = dispatch(fetchSingleOfferAction(idOffer));
+      const secondLoading = dispatch(fetchNearByOffersAction(idOffer));
+      const thirdLoading = dispatch(fetchCommentsAction(idOffer));
+
+      Promise.all([firstLoading, secondLoading, thirdLoading])
+        .then(() =>dispatch(setFetchStatusAction(FetchStatus.Success)));
+    };
+    loadOfferData(Number(urlId));
+    setIsFavoriteStatus(isFavorite);
+  }, [urlId, isFavorite, dispatch]);
+
 
   const {
     id,
@@ -55,18 +60,20 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
     maxAdults,
     goods,
     isPremium,
-    isFavorite,
     city,
   } = currentOffer;
+
   const { name, avatarUrl, isPro } = host;
+
+  const [activeOffer, setActiveOffer] = useState(0);
+  const offerHandler = (idActive: number) => {
+    setActiveOffer(idActive);
+  };
+
+
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-  useEffect(() => {
-    loadOfferData(Number(urlId));
-    setIsFavoriteStatus(isFavorite);
-  }, [loadOfferData, urlId, isFavorite]);
-
-  if (!isDataLoaded) {
+  if (fetchStatus === FetchStatus.InProgress) {
     return (
       <LoadingScreen />
     );
@@ -88,7 +95,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {images.map((image) => {
+              {images.slice(0, 6).map((image) => {
                 const keyValue = `${id}-${image}`;
                 return (
                   <div key={keyValue} className="property__image-wrapper">
@@ -110,7 +117,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> toast.info(AUTH_MESSAGE)}
+                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
                   className={`property__bookmark-button ${
                     isFavoriteStatus ? 'property__bookmark-button--active' : ''
                   } button`}
@@ -128,11 +135,11 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{ width: `${rating * 20}%` }}></span>
+                  <span style={{ width: `${Math.round(rating) * 20}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">
-                  {rating}
+                  {Math.round(rating)}
                 </span>
               </div>
               <ul className="property__features">
@@ -140,10 +147,10 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
                   Apartment
                 </li>
                 <li className="property__feature property__feature--bedrooms">
-                  {bedrooms} Bedrooms
+                  {bedrooms} {`${bedrooms>1}`? 'Bedrooms' : 'Bedroom'}Bedrooms
                 </li>
                 <li className="property__feature property__feature--adults">
-                  Max {maxAdults} adults
+                  Max {maxAdults} {`${maxAdults>1}`? 'adults' : 'adult'}
                 </li>
               </ul>
               <div className="property__price">
@@ -189,52 +196,15 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
                   <span className="reviews__amount">{comments.length}</span>
                 </h2>
                 <ul className="reviews__list">
-                  {comments.map((comment) => {
-                    const keyValue = `${comment.id}`;
-                    return (
-                      <li key={keyValue} className="reviews__item">
-                        <div className="reviews__user user">
-                          <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                            <img
-                              className="reviews__avatar user__avatar"
-                              src={comment.user.avatarUrl}
-                              width="54"
-                              height="54"
-                              alt="Reviews avatar"
-                            />
-                          </div>
-                          <span className="reviews__user-name">
-                            {comment.user.name}
-                          </span>
-                        </div>
-                        <div className="reviews__info">
-                          <div className="reviews__rating rating">
-                            <div className="reviews__stars rating__stars">
-                              <span
-                                style={{ width: `${comment.rating * 20}%` }}
-                              >
-                              </span>
-                              <span className="visually-hidden">Rating</span>
-                            </div>
-                          </div>
-                          <p className="reviews__text">{comment.comment}</p>
-                          <time
-                            className="reviews__time"
-                            dateTime={getDateTime(comment.date)}
-                          >
-                            {getHumanDate(comment.date)}
-                          </time>
-                        </div>
-                      </li>
-                    );
-                  })}
+                  <PropertyComments comments={comments} />
+
                 </ul>
-                {isLogged(authorizationStatus) ? <ReviewsForm /> : ''}
+                {isLogged(authorizationStatus) ? <PropertyReviewsForm /> : ''}
               </section>
             </div>
           </div>
           <section className="property__map map">
-            <Map offersList={nearbyOffers} city={city} />
+            <MapNearestPlaces offersList={nearbyOffers} city={city} currentOffer={currentOffer} activeOffer={ activeOffer}/>
           </section>
         </section>
         <div className="container">
@@ -244,7 +214,7 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
             </h2>
             <div className="near-places__list places__list">
               {nearbyOffers.map((similarOffer) => (
-                <CartOffer key={similarOffer.id} offer={similarOffer} />
+                <CartOffer key={similarOffer.id} offer={similarOffer} onHoverOfferHandler={offerHandler}/>
               ))}
             </div>
           </section>
@@ -254,5 +224,4 @@ function Property({ comments, authorizationStatus, isDataLoaded=false, loadOffer
   );
 }
 
-export {Property};
-export default connector(Property);
+export default Property;

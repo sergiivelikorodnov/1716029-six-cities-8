@@ -1,5 +1,5 @@
 import { Offers } from '../../types/offer';
-import CartOfferFavorite from '../card-offer-favorite/card-offer-favorite';
+import CartOfferFavorite from '../favorite-card-offer/favorite-card-offer';
 
 type CityFavoriteOffers = {
   offers: Offers;

@@ -1,13 +1,13 @@
-import { changeCityAction, favoriteOffersDataAction, getCommentsAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, postReviewAction, redirectToRoute, requireAuthorization, requireLogout, selectCurrentCityAction, setUserAuthInfo } from '../store/action';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { State } from './state';
 import { AxiosInstance } from 'axios';
+import { Action } from 'redux';
 
 
 export enum ActionType {
   ChangeCity = 'changeCity',
   SelectCity = 'selectCity',
-  LoadOfferData = 'loadOfferData',
+  LoadOffersData = 'loadOffersData',
   LoadSingleOfferData = 'loadSingleOfferData',
   RequireAuthorization = 'requireAuthorization',
   RequireLogout = 'requireLogout',
@@ -16,23 +16,12 @@ export enum ActionType {
   NearbyOffersData = 'nearbyOfferData',
   FavoritesOffersData = 'favoritesOffersData',
   GetCommentsData = 'getCommentsData',
-  PostCommentData = 'postCommentData'
+  PostCommentData = 'postCommentData',
+  PostOfferCommentRequest = 'postOfferCommentRequest',
+  PostOfferCommentSuccess = 'postOfferCommentSuccess',
+  SetFetchStatusData = 'fetchStatus',
 }
 
 
-export type Actions =
-  | ReturnType<typeof changeCityAction>
-  | ReturnType<typeof loadOffersAction>
-  | ReturnType<typeof selectCurrentCityAction>
-  | ReturnType<typeof requireAuthorization>
-  | ReturnType<typeof requireLogout>
-  | ReturnType<typeof redirectToRoute>
-  | ReturnType<typeof setUserAuthInfo>
-  | ReturnType<typeof loadSingleOfferAction>
-  | ReturnType<typeof nearbyOffersDataAction>
-  | ReturnType<typeof favoriteOffersDataAction>
-  | ReturnType<typeof getCommentsAction>
-  | ReturnType<typeof postReviewAction>
-
-export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Actions>;
-export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>;
+export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;
+export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Action>;

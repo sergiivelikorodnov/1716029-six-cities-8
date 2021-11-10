@@ -1,37 +1,21 @@
-import { Dispatch, useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { api } from '../..';
-import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER } from '../../consts';
-import { selectCurrentCityAction } from '../../store/action';
-import { Actions } from '../../types/action';
+import { APIRoute, AppRoute } from '../../consts';
 import { Offer } from '../../types/offer';
-import { State } from '../../types/state';
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
-import {toast} from 'react-toastify';
-
-const AUTH_MESSAGE = 'Вы должны залогиниться';
+import { getAuthorizationStatus } from '../../store/selectors';
+import {useSelector} from 'react-redux';
 
 type SingleOffer = {
   offer: Offer;
+  onHoverOfferHandler(id: number): void;
 };
-const mapStateToProps = ({authorizationStatus}: State) => ({
-  authorizationStatus,
-});
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onHoverOffer(offer: Offer) {
-    dispatch(selectCurrentCityAction(offer));
-  },
-});
+function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & SingleOffer;
-
-function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedComponentProps): JSX.Element {
   const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
@@ -44,6 +28,7 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
       );
   };
 
+  const history = useHistory();
 
   useEffect(() => {
     getFavoriteStatus(id);
@@ -61,8 +46,8 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
   return (
     <article
       className="cities__place-card place-card"
-      onMouseOver={() => onHoverOffer && onHoverOffer(offer)}
-      onMouseOut={() => onHoverOffer && onHoverOffer(DEFAULT_SINGLE_OFFER)}
+      onMouseOver={() => onHoverOfferHandler && onHoverOfferHandler(id)}
+      onMouseOut={() => onHoverOfferHandler && onHoverOfferHandler(0)}
     >
       {isPremium ? (
         <div className="place-card__mark">
@@ -89,7 +74,7 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> toast.info(AUTH_MESSAGE)}
+            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
             className={`place-card__bookmark-button ${
               isFavoriteStatus ? 'place-card__bookmark-button--active' : ''
             } button`}
@@ -103,7 +88,7 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${rating * 20}%` }}></span>
+            <span style={{ width: `${Math.round(rating) * 20}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -116,5 +101,4 @@ function CartOffer({ offer, onHoverOffer, authorizationStatus }: ConnectedCompon
   );
 }
 
-export { CartOffer };
-export default connector(CartOffer);
+export default CartOffer;
