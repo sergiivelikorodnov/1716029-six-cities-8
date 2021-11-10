@@ -9,7 +9,7 @@ import { getCurrentOffer } from '../../store/selectors';
 import { CityOffer, Offers } from '../../types/offer';
 
 type AppComponentProps = {
-  activeOffer:number;
+  activeOffer: number;
   offersList: Offers;
   city: CityOffer;
 };
@@ -26,14 +26,12 @@ const currentCustomIcon = new Icon({
   iconAnchor: [14, 39],
 });
 
-
 function MainMap({
   offersList,
   city,
   activeOffer,
 }: AppComponentProps): JSX.Element {
   const currentOffer = useSelector(getCurrentOffer);
-
 
   const { latitude, longitude, zoom } = city.location;
 

@@ -11,8 +11,16 @@ export const offers: Offers = [
       },
       name: 'Amsterdam',
     },
-    description: 'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
-    goods: ['Heating', 'Kitchen', 'Cable TV', 'Washing machine', 'Coffee machine', 'Dishwasher'],
+    description:
+      'A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.',
+    goods: [
+      'Heating',
+      'Kitchen',
+      'Cable TV',
+      'Washing machine',
+      'Coffee machine',
+      'Dishwasher',
+    ],
     host: {
       avatarUrl: 'img/avatar-angelina.jpg',
       id: 1,
@@ -46,8 +54,15 @@ export const offers: Offers = [
       },
       name: 'Amsterdam',
     },
-    description: 'Picturesque that hides behind a a river by the unique lightness of Amsterdam.',
-    goods: ['Kitchen', 'Cable TV', 'Washing machine', 'Coffee machine', 'Dishwasher'],
+    description:
+      'Picturesque that hides behind a a river by the unique lightness of Amsterdam.',
+    goods: [
+      'Kitchen',
+      'Cable TV',
+      'Washing machine',
+      'Coffee machine',
+      'Dishwasher',
+    ],
     host: {
       avatarUrl: 'img/avatar-angelina.jpg',
       id: 2,
@@ -81,8 +96,15 @@ export const offers: Offers = [
       },
       name: 'Cologne',
     },
-    description: 'Cozy that hides behind a a river by the unique lightness of Amsterdam.',
-    goods: ['Parking', 'Cable TV', 'Washing machine', 'Coffee machine', 'Dishwasher'],
+    description:
+      'Cozy that hides behind a a river by the unique lightness of Amsterdam.',
+    goods: [
+      'Parking',
+      'Cable TV',
+      'Washing machine',
+      'Coffee machine',
+      'Dishwasher',
+    ],
     host: {
       avatarUrl: 'img/avatar-angelina.jpg',
       id: 3,
@@ -116,7 +138,8 @@ export const offers: Offers = [
       },
       name: 'Amsterdam',
     },
-    description: 'Warm that hides behind a a river by the unique lightness of Amsterdam.',
+    description:
+      'Warm that hides behind a a river by the unique lightness of Amsterdam.',
     goods: ['Cable TV', 'Washing machine', 'Coffee machine', 'Dishwasher'],
     host: {
       avatarUrl: 'img/avatar-angelina.jpg',

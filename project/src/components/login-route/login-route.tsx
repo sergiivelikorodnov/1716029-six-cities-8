@@ -5,10 +5,10 @@ import { dropAuthStatus, getAuthStatus } from '../../services/auth-status';
 import { getAuthorizationStatus } from '../../store/selectors';
 
 type LoginRouteProps = RouteProps & {
-  render: () => JSX.Element,
-}
+  render: () => JSX.Element;
+};
 
-function LoginRoute({ exact, path, render }: LoginRouteProps): JSX.Element{
+function LoginRoute({ exact, path, render }: LoginRouteProps): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
   return (
@@ -16,10 +16,15 @@ function LoginRoute({ exact, path, render }: LoginRouteProps): JSX.Element{
       exact={exact}
       path={path}
       render={() => {
-        if(authorizationStatus === AuthorizationStatus.NoAuth){
+        if (authorizationStatus === AuthorizationStatus.NoAuth) {
           dropAuthStatus();
         }
-        return (getAuthStatus()!==AuthorizationStatus.Auth && authorizationStatus !== AuthorizationStatus.Auth ? render() : <Redirect to={AppRoute.Main}/>);
+        return getAuthStatus() !== AuthorizationStatus.Auth &&
+          authorizationStatus !== AuthorizationStatus.Auth ? (
+            render()
+          ) : (
+            <Redirect to={AppRoute.Main} />
+          );
       }}
     />
   );

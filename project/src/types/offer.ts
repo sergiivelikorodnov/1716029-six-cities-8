@@ -2,12 +2,12 @@ export type LocationOffer = {
   latitude: number;
   longitude: number;
   zoom: number;
-}
+};
 
 export type CityOffer = {
   location: LocationOffer;
   name: string;
-}
+};
 
 export type HostOffer = {
   avatarUrl: string;
@@ -16,7 +16,7 @@ export type HostOffer = {
   isPro: boolean;
   ['is_pro']?: boolean;
   name: string;
-}
+};
 
 export type PropertyType = 'apartment' | 'room ' | 'house' | 'hotel';
 
@@ -30,8 +30,8 @@ export type Offer = {
   images: string[];
   isFavorite: boolean;
   ['is_favorite']?: boolean;
-  isPremium: boolean,
-  ['is_premium']?: boolean,
+  isPremium: boolean;
+  ['is_premium']?: boolean;
   location: LocationOffer;
   maxAdults: number;
   ['max_adults']?: number;
@@ -41,6 +41,6 @@ export type Offer = {
   rating: number;
   title: string;
   type: PropertyType;
-}
+};
 
-export type Offers = Offer[]
+export type Offers = Offer[];

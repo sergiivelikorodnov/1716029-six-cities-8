@@ -3,7 +3,6 @@ import { State } from './state';
 import { AxiosInstance } from 'axios';
 import { Action } from 'redux';
 
-
 export enum ActionType {
   ChangeCity = 'changeCity',
   SelectCity = 'selectCity',
@@ -16,12 +15,13 @@ export enum ActionType {
   NearbyOffersData = 'nearbyOfferData',
   FavoritesOffersData = 'favoritesOffersData',
   GetCommentsData = 'getCommentsData',
-  PostCommentData = 'postCommentData',
-  PostOfferCommentRequest = 'postOfferCommentRequest',
-  PostOfferCommentSuccess = 'postOfferCommentSuccess',
-  SetFetchStatusData = 'fetchStatus',
+  SetFetchStatusData = 'fetchStatus'
 }
 
-
-export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;
+export type ThunkActionResult<R = Promise<void>> = ThunkAction<
+  R,
+  State,
+  AxiosInstance,
+  Action
+>;
 export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Action>;

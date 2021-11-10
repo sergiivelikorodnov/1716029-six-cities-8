@@ -1,11 +1,11 @@
-import {createReducer} from '@reduxjs/toolkit';
-import {
-  AuthorizationStatus,
-  DEFAULT_USER_DATA
-} from '../../consts';
+import { createReducer } from '@reduxjs/toolkit';
+import { AuthorizationStatus, DEFAULT_USER_DATA } from '../../consts';
 import { AuthDataType } from '../../types/state';
-import { requireAuthorization, requireLogout, setUserAuthInfo } from '../action';
-
+import {
+  requireAuthorization,
+  requireLogout,
+  setUserAuthInfo
+} from '../action';
 
 const initialState: AuthDataType = {
   authorizationStatus: AuthorizationStatus.Unknown,

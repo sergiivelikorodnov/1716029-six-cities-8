@@ -1,11 +1,11 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import { authDataReducer } from './auth-data';
 import { commentsDataReducer } from './comments-data';
 import { setFetchStatusReducer } from './fetch-status';
 import { locationDataReducer } from './location-data';
 import { offersDataReducer } from './offers-data';
 
-export enum NameSpace{
+export enum NameSpace {
   offers = 'OFFERS',
   auth = 'AUTH',
   location = 'LOCATION',
@@ -21,4 +21,4 @@ export const rootReducer = combineReducers({
   [NameSpace.status]: setFetchStatusReducer,
 });
 
-export type RootState = ReturnType <typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>;

@@ -5,22 +5,25 @@ import { getAuthStatus } from '../../services/auth-status';
 import { getAuthorizationStatus } from '../../store/selectors';
 
 type PrivateRouteProps = RouteProps & {
-  render: () => JSX.Element,
-}
+  render: () => JSX.Element;
+};
 
-function PrivateRoute({ exact, path, render }: PrivateRouteProps): JSX.Element{
+function PrivateRoute({ exact, path, render }: PrivateRouteProps): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
   return (
     <Route
       exact={exact}
       path={path}
-      render ={() => (
-        getAuthStatus()===AuthorizationStatus.Auth && authorizationStatus === AuthorizationStatus.Auth ? render() : <Redirect to={AppRoute.Login} />
-      )}
+      render={() =>
+        getAuthStatus() === AuthorizationStatus.Auth &&
+        authorizationStatus === AuthorizationStatus.Auth ? (
+            render()
+          ) : (
+            <Redirect to={AppRoute.Login} />
+          )}
     />
   );
 }
 
 export default PrivateRoute;
-

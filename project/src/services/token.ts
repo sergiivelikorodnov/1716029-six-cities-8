@@ -7,7 +7,7 @@ export const getToken = (): Token => {
   return token || '';
 };
 
-export const saveToken = (token: Token):void => {
+export const saveToken = (token: Token): void => {
   localStorage.setItem(AUTH_TOKEN_KEY, token);
 };
 
