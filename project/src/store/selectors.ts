@@ -7,7 +7,6 @@ import { NameSpace } from './reducers/root';
 export const getAuthorizationStatus = (state: State): AuthorizationStatus => state[NameSpace.auth].authorizationStatus;
 
 export const getAllOffers = (state: State): Offers => state[NameSpace.offers].offers;
-export const getDataLoadStatus = (state: State): boolean => state[NameSpace.offers].isDataLoaded;
 export const getFavoriteOffers = (state: State): Offers => state[NameSpace.offers].favoritesOffers;
 export const getNearByOffers = (state: State): Offers => state[NameSpace.offers].nearbyOffers;
 

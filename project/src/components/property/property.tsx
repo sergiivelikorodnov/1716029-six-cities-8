@@ -14,6 +14,7 @@ import { Offer } from '../../types/offer';
 import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
 import { getAuthorizationStatus, getComments, getCurrentOffer, getFetchStatus, getNearByOffers } from '../../store/selectors';
 import PropertyComments from '../property-comments/property-comments';
+import { setFetchStatusAction } from '../../store/action';
 
 function Property(): JSX.Element {
   const dispatch = useDispatch();
@@ -49,9 +50,12 @@ function Property(): JSX.Element {
 
   useEffect(() => {
     const loadOfferData = (idOffer:number) => {
-      dispatch(fetchSingleOfferAction(idOffer));
-      dispatch(fetchNearByOffersAction(idOffer));
-      dispatch(fetchCommentsAction(idOffer));
+      const firstLoading = dispatch(fetchSingleOfferAction(idOffer));
+      const secondLoading = dispatch(fetchNearByOffersAction(idOffer));
+      const thirdLoading = dispatch(fetchCommentsAction(idOffer));
+
+      Promise.all([firstLoading, secondLoading, thirdLoading])
+        .then(() =>dispatch(setFetchStatusAction(FetchStatus.Success)));
     };
     loadOfferData(Number(urlId));
     setIsFavoriteStatus(isFavorite);
@@ -65,7 +69,7 @@ function Property(): JSX.Element {
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-  if (fetchStatus=== FetchStatus.InProgress && currentOffer.id === -1) {
+  if (fetchStatus === FetchStatus.InProgress) {
     return (
       <LoadingScreen />
     );

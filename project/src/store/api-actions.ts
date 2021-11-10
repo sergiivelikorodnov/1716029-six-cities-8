@@ -34,16 +34,18 @@ export const fetchSingleOfferAction = (id:number): ThunkActionResult =>
           return;
         }
         dispatch(loadSingleOfferAction(adaptSingleOfferBackToFront(data)));
-        dispatch(setFetchStatusAction(FetchStatus.Success));
+        //dispatch(setFetchStatusAction(FetchStatus.Success));
       })
       .catch(() => toast.error(NotificationMessage.OfferError));
   };
 
 export const fetchFavoritesOffersAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
+    dispatch(setFetchStatusAction(FetchStatus.InProgress));
     await api.get<Offers>(APIRoute.Favorites)
       .then(({ data }) => {
         dispatch(favoriteOffersDataAction(adaptOffersBackToFront(data)));
+        dispatch(setFetchStatusAction(FetchStatus.Success));
       })
       .catch(() => toast.error(NotificationMessage.ConnecError));
   };

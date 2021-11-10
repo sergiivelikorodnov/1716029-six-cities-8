@@ -15,7 +15,7 @@ export const changeCityAction = createAction(
 );
 
 export const loadOffersAction = createAction(
-  ActionType.LoadOfferData,
+  ActionType.LoadOffersData,
   (offers: Offers) =>
     ({
       payload: offers,

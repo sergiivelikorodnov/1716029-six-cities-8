@@ -13,7 +13,6 @@ export type OffersDataType = {
   offers: Offers;
   nearbyOffers: Offers;
   favoritesOffers: Offers;
-  isDataLoaded: boolean;
 }
 
 export type LocationDataType = {
@@ -24,7 +23,6 @@ export type LocationDataType = {
 
 export type CommentsDataType = {
   comments: Comments;
-  isDataLoaded: boolean;
 }
 
 export type FetchStatusType = {

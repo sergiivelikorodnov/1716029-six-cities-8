@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { AuthorizationStatus } from './consts';
 import { сreateApi } from './services/api';
 import { requireAuthorization } from './store/action';
-import { fetchOffersAction, checkAuthAction } from './store/api-actions';
+import { /* fetchOffersAction,  */checkAuthAction } from './store/api-actions';
 import { redirect } from './store/middlewares/redirect';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,8 +24,7 @@ const store = configureStore({
     }).concat(redirect),
 });
 
-
-(store.dispatch)(fetchOffersAction());
+//(store.dispatch)(fetchOffersAction());
 (store.dispatch)(checkAuthAction());
 
 ReactDOM.render(

@@ -7,7 +7,7 @@ import { Action } from 'redux';
 export enum ActionType {
   ChangeCity = 'changeCity',
   SelectCity = 'selectCity',
-  LoadOfferData = 'loadOfferData',
+  LoadOffersData = 'loadOffersData',
   LoadSingleOfferData = 'loadSingleOfferData',
   RequireAuthorization = 'requireAuthorization',
   RequireLogout = 'requireLogout',

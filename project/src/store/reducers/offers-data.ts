@@ -4,7 +4,6 @@ import { favoriteOffersDataAction, loadOffersAction, nearbyOffersDataAction } fr
 
 const initialState:OffersDataType = {
   offers: [],
-  isDataLoaded: false,
   nearbyOffers: [],
   favoritesOffers: [],
 };
@@ -14,14 +13,12 @@ const offersDataReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loadOffersAction, (state, action) => {
       state.offers = action.payload;
-      state.isDataLoaded = true;
     })
     .addCase(nearbyOffersDataAction, (state, action) => {
       state.nearbyOffers = action.payload;
     })
     .addCase(favoriteOffersDataAction, (state, action) => {
       state.favoritesOffers = action.payload;
-      state.isDataLoaded = true;
     });
 });
 

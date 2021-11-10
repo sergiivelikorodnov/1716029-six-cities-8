@@ -8,15 +8,17 @@ import {
   getSortedOffersTopRated,
   isCheckedAuth
 } from '../../utils/utils';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Header from '../header/header';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
 import MainCityContainer from '../main-city-container/main-city-container';
 import MainEmpty from '../main-empty/main-empty';
 import { getAllOffers, getAuthorizationStatus, getCurrentCity, getFetchStatus } from '../../store/selectors';
+import { fetchOffersAction } from '../../store/api-actions';
 
 function Main(): JSX.Element {
+  const dispatch = useDispatch();
   const currentCity = useSelector(getCurrentCity);
   const offers = useSelector(getAllOffers);
   const authorizationStatus = useSelector(getAuthorizationStatus);
@@ -25,7 +27,11 @@ function Main(): JSX.Element {
   const [activeOffer, setActiveOffer] = useState(0);
   const offerHandler = useCallback((id: number) => {
     setActiveOffer(id);
-  },[]);
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchOffersAction());
+  }, [dispatch]);
 
   const [selectedSortType, setSelectedSortType] = useState(SortingType.POPULAR);
 

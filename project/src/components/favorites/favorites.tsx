@@ -2,17 +2,17 @@ import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offer';
 import ListOffersFavorite from '../favorite-list-offers/favorite-list-offers';
 import { groupBy } from 'lodash';
-import { AppRoute } from '../../consts';
+import { AppRoute, FetchStatus } from '../../consts';
 import Header from '../header/header';
 import { fetchFavoritesOffersAction } from '../../store/api-actions';
 import { useEffect } from 'react';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { getDataLoadStatus, getFavoriteOffers } from '../../store/selectors';
+import { getFavoriteOffers, getFetchStatus } from '../../store/selectors';
 import {useSelector, useDispatch} from 'react-redux';
 
 function Favorites(): JSX.Element {
   const favoritesOffers = useSelector(getFavoriteOffers);
-  const isDataLoaded = useSelector(getDataLoadStatus);
+  const fetchStatus = useSelector(getFetchStatus);
 
   const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ function Favorites(): JSX.Element {
   }, [dispatch]);
 
 
-  if (!isDataLoaded) {
+  if (fetchStatus=== FetchStatus.InProgress) {
     return (
       <LoadingScreen />
     );
