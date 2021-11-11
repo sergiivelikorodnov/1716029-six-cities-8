@@ -9,13 +9,16 @@ export const getAuthorizationStatus = (state: State): AuthorizationStatus =>
 
 export const getAllOffers = (state: State): Offers =>
   state[NameSpace.offers].offers;
+
 export const getFavoriteOffers = (state: State): Offers =>
   state[NameSpace.offers].favoritesOffers;
+
 export const getNearByOffers = (state: State): Offers =>
   state[NameSpace.offers].nearbyOffers;
 
 export const getCurrentOffer = (state: State): Offer =>
   state[NameSpace.location].currentOffer;
+
 export const getCurrentCity = (state: State): string =>
   state[NameSpace.location].currentCity;
 

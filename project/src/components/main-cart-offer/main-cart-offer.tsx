@@ -14,7 +14,7 @@ type SingleOffer = {
   onHoverOfferHandler(id: number): void;
 };
 
-function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
+function MainCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
   const { id, price, rating, title, isPremium, isFavorite, previewImage } =
@@ -111,4 +111,4 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   );
 }
 
-export default CartOffer;
+export default MainCartOffer;

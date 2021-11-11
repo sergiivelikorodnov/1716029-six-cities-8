@@ -1,4 +1,4 @@
-import ListOffers from '../main-list-offers/main-list-offers';
+import MainListOffers from '../main-list-offers/main-list-offers';
 import MainMap from '../main-map/main-map';
 
 import MainSortingList from '../main-sorting-list/main-sorting-list';
@@ -42,7 +42,7 @@ function MainCityContainer({
             selectedSortTypeHandler={selectedSortTypeHandler}
             selectedSortType={selectedSortType}
           />
-          <ListOffers
+          <MainListOffers
             offers={sortedOffers}
             onHoverOfferHandler={onHoverOfferHandler}
           />

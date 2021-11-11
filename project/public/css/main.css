@@ -5,3 +5,10 @@
   top: 50%;
   left:50%;
 }
+
+.text-not-found-page{
+  color:#4481c3;
+  font-weight: 500;
+}
+
+.not-found-wrapper{width:420px;margin-top:16.7vh;margin-right:auto;margin-left:auto;padding-top:94px;text-align:center;background-image:url(../img/bug.png);background-size:70px 78px;background-position:center top;background-repeat:no-repeat}

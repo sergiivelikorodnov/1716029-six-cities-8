@@ -1,12 +1,18 @@
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../../consts';
-import { getCurrentCity } from '../../store/selectors';
+import { AppRoute, CITIES } from '../../consts';
+import { changeCityAction } from '../../store/action';
+import { getRandomCity } from '../../utils/utils';
 import Logo from '../logo/logo';
-import LoginForm from './login-form';
+import LoginForm from '../login-form/login-form';
 
 function Login(): JSX.Element {
-  const currentCity = useSelector(getCurrentCity);
+  const currentCity = getRandomCity(CITIES);
+  const dispatch = useDispatch();
+
+  const onChangeCity = (city: string) => {
+    dispatch(changeCityAction(currentCity));
+  };
 
   return (
     <div className="page page--gray page--login">
@@ -26,7 +32,11 @@ function Login(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to={AppRoute.Main}>
+              <Link
+                onClick={() => onChangeCity(currentCity)}
+                className="locations__item-link"
+                to={AppRoute.Main}
+              >
                 <span>{currentCity}</span>
               </Link>
             </div>

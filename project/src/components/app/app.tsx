@@ -1,5 +1,5 @@
-import { Switch, Route, Router as BrowserRouter } from 'react-router-dom';
-import { AppRoute } from '../../consts';
+import { Switch, Route, Router as BrowserRouter, Redirect } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../consts';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
 import NotFound from '../not-found/not-found';
@@ -7,21 +7,24 @@ import Login from '../login/login';
 import Property from '../property/property';
 import PrivateRoute from '../private-route/private-route';
 import browserHistory from '../../browser-history';
-import LoginRoute from '../login-route/login-route';
+import { useSelector } from 'react-redux';
+import { getAuthorizationStatus } from '../../store/selectors';
 
 function App(): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+
   return (
     <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.Main}>
           <Main />
         </Route>
-        <LoginRoute
+        <Route
           exact
           path={AppRoute.Login}
-          render={() => <Login />}
+          render={() => authorizationStatus === AuthorizationStatus.Auth ? <Redirect to={AppRoute.Main} /> : <Login />}
         >
-        </LoginRoute>
+        </Route>
         <PrivateRoute
           exact
           path={AppRoute.Favorites}

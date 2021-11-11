@@ -12,7 +12,7 @@ type SingleOffer = {
   offer: Offer;
 };
 
-function CartOfferFavorite({ offer }: SingleOffer): JSX.Element {
+function FavoriteCartOffer({ offer }: SingleOffer): JSX.Element {
   const dispatch = useDispatch();
   const loadOffersData = () => {
     dispatch(fetchFavoritesOffersAction());
@@ -81,4 +81,4 @@ function CartOfferFavorite({ offer }: SingleOffer): JSX.Element {
   );
 }
 
-export default CartOfferFavorite;
+export default FavoriteCartOffer;
