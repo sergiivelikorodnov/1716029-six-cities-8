@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { api } from '../..';
-import { APIRoute } from '../../consts';
+import { APIRoute, NotificationMessage } from '../../consts';
 import { fetchFavoritesOffersAction } from '../../store/api-actions';
 import { Offer } from '../../types/offer';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
@@ -21,14 +22,16 @@ function CartOfferFavorite({ offer }: SingleOffer): JSX.Element {
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-  const setFavoriteHandler = async (idOffer:number): Promise<void> => {
+  const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
-    await api.post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+    await api
+      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
         loadOffersData();
-      },
-      );
+        toast.success(NotificationMessage.FavoriteRemove);
+      })
+      .catch(()=> toast.success(NotificationMessage.ConnecError));
   };
 
   return (
@@ -51,7 +54,7 @@ function CartOfferFavorite({ offer }: SingleOffer): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            onClick = {()=>setFavoriteHandler(id)}
+            onClick={() => setFavoriteHandler(id)}
             className={`place-card__bookmark-button ${
               isFavorite ? 'place-card__bookmark-button--active' : ''
             } button`}

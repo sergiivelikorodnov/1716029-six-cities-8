@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { api } from '../..';
-import { APIRoute, AppRoute } from '../../consts';
+import { APIRoute, AppRoute, NotificationMessage } from '../../consts';
 import { Offer } from '../../types/offer';
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import { getAuthorizationStatus } from '../../store/selectors';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 type SingleOffer = {
   offer: Offer;
@@ -16,16 +17,15 @@ type SingleOffer = {
 function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
-  const { id, price, rating, title, isPremium, isFavorite, previewImage } = offer;
+  const { id, price, rating, title, isPremium, isFavorite, previewImage } =
+    offer;
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-  const getFavoriteStatus = async (idOffer:number): Promise<void> => {
-    await api.get<Offer>(`${APIRoute.Offers}/${idOffer}`)
-      .then(({ data }) => {
-        setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
-      },
-      );
+  const getFavoriteStatus = async (idOffer: number): Promise<void> => {
+    await api.get<Offer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
+      setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
+    });
   };
 
   const history = useHistory();
@@ -34,13 +34,19 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
     getFavoriteStatus(id);
   }, [id, isFavorite]);
 
-  const setFavoriteHandler = async (idOffer:number): Promise<void> => {
+  const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
-    await api.post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+    await api
+      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
-      },
-      );
+        if (isFavoriteStatus) {
+          toast.success(NotificationMessage.FavoriteRemove);
+        } else {
+          toast.success(NotificationMessage.FavoriteAdd);
+        }
+      })
+      .catch(()=> toast.success(NotificationMessage.ConnecError));
   };
 
   return (
@@ -74,7 +80,11 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button
-            onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
+            onClick={
+              isLogged(authorizationStatus)
+                ? () => setFavoriteHandler(id)
+                : () => history.push(AppRoute.Login)
+            }
             className={`place-card__bookmark-button ${
               isFavoriteStatus ? 'place-card__bookmark-button--active' : ''
             } button`}

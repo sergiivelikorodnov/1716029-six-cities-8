@@ -8,7 +8,7 @@ import { fetchFavoritesOffersAction } from '../../store/api-actions';
 import { useEffect } from 'react';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { getFavoriteOffers, getFetchStatus } from '../../store/selectors';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 function Favorites(): JSX.Element {
   const favoritesOffers = useSelector(getFavoriteOffers);
@@ -16,19 +16,12 @@ function Favorites(): JSX.Element {
 
   const dispatch = useDispatch();
 
-
   useEffect(() => {
-    const loadOffersData = () => {
-      dispatch(fetchFavoritesOffersAction());
-    };
-    loadOffersData();
-  }, [dispatch]);
+    dispatch(fetchFavoritesOffersAction());
+  }, []);
 
-
-  if (fetchStatus=== FetchStatus.InProgress) {
-    return (
-      <LoadingScreen />
-    );
+  if (fetchStatus === FetchStatus.InProgress) {
+    return <LoadingScreen />;
   }
 
   const groupedOffers = groupBy(
@@ -39,7 +32,7 @@ function Favorites(): JSX.Element {
   if (favoritesOffers.length === 0) {
     return (
       <div className="page">
-        <Header/>
+        <Header />
         <main className="page__main page__main--favorites page__main--favorites-empty">
           <div className="page__favorites-container container">
             <section className="favorites favorites--empty">
@@ -47,7 +40,8 @@ function Favorites(): JSX.Element {
               <div className="favorites__status-wrapper">
                 <b className="favorites__status">Nothing yet saved.</b>
                 <p className="favorites__status-description">
-                Save properties to narrow down search or plan your future trips.
+                  Save properties to narrow down search or plan your future
+                  trips.
                 </p>
               </div>
             </section>
@@ -70,7 +64,7 @@ function Favorites(): JSX.Element {
 
   return (
     <div className="page">
-      <Header/>
+      <Header />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">

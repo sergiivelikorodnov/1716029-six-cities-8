@@ -1,20 +1,11 @@
-import { getDateTime, getHumanDate/* , getSortedCommentsByDate */ } from '../../utils/utils';
+import { getDateTime, getHumanDate } from '../../utils/utils';
 import { Comments } from '../../types/comment-get';
 
-type PropertyCommentsType={
-  comments: Comments
-}
+type PropertyCommentsType = {
+  comments: Comments;
+};
 
-function PropertyComments({ comments} : PropertyCommentsType): JSX.Element {
-  if (comments.length > 10) {
-    comments = comments.slice(comments.length-10, comments.length);
-  }
-
-  // eslint-disable-next-line no-debugger
-  //debugger;
-
-  // comments = getSortedCommentsByDate(comments);
-
+function PropertyComments({ comments }: PropertyCommentsType): JSX.Element {
   return (
     <>
       {comments.map((comment) => {
@@ -31,17 +22,12 @@ function PropertyComments({ comments} : PropertyCommentsType): JSX.Element {
                   alt="Reviews avatar"
                 />
               </div>
-              <span className="reviews__user-name">
-                {comment.user.name}
-              </span>
+              <span className="reviews__user-name">{comment.user.name}</span>
             </div>
             <div className="reviews__info">
               <div className="reviews__rating rating">
                 <div className="reviews__stars rating__stars">
-                  <span
-                    style={{ width: `${comment.rating * 20}%` }}
-                  >
-                  </span>
+                  <span style={{ width: `${comment.rating * 20}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
               </div>
@@ -58,8 +44,6 @@ function PropertyComments({ comments} : PropertyCommentsType): JSX.Element {
       })}
     </>
   );
-
 }
 
 export default PropertyComments;
-

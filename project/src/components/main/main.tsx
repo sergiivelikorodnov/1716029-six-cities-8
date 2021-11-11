@@ -14,7 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
 import MainCityContainer from '../main-city-container/main-city-container';
 import MainEmpty from '../main-empty/main-empty';
-import { getAllOffers, getAuthorizationStatus, getCurrentCity, getFetchStatus } from '../../store/selectors';
+import {
+  getAllOffers,
+  getAuthorizationStatus,
+  getCurrentCity,
+  getFetchStatus
+} from '../../store/selectors';
 import { fetchOffersAction } from '../../store/api-actions';
 
 function Main(): JSX.Element {
@@ -31,16 +36,19 @@ function Main(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchOffersAction());
+    return () => {
+      setSelectedSortType('');
+    };
   }, [dispatch]);
 
   const [selectedSortType, setSelectedSortType] = useState(SortingType.POPULAR);
 
-  if (isCheckedAuth(authorizationStatus) || fetchStatus=== FetchStatus.InProgress) {
-    return (
-      <LoadingScreen />
-    );
+  if (
+    isCheckedAuth(authorizationStatus) ||
+    fetchStatus === FetchStatus.InProgress
+  ) {
+    return <LoadingScreen />;
   }
-
 
   const offersList = getOffersByCity(currentCity, offers);
 
@@ -66,26 +74,27 @@ function Main(): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header/>
+      <Header />
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
 
         <MainLocationList cities={CITIES} />
-        {offersList.length === 0 ?
-          <MainEmpty/>
-          :
+        {offersList.length === 0 ? (
+          <MainEmpty currentCity={currentCity} />
+        ) : (
           <MainCityContainer
             offersList={offersList}
             selectedSortTypeHandler={selectedSortTypeHandler}
             selectedSortType={selectedSortType}
             sortedOffers={sortedOffers}
             onHoverOfferHandler={offerHandler}
-            activeOffer = {activeOffer}
-          />}
+            activeOffer={activeOffer}
+          />
+        )}
       </main>
     </div>
   );
 }
 
-export {Main};
+export { Main };
 export default Main;

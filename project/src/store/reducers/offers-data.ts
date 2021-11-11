@@ -1,13 +1,16 @@
-import {createReducer} from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import { OffersDataType } from '../../types/state';
-import { favoriteOffersDataAction, loadOffersAction, nearbyOffersDataAction } from '../action';
+import {
+  favoriteOffersDataAction,
+  loadOffersAction,
+  nearbyOffersDataAction
+} from '../action';
 
-const initialState:OffersDataType = {
+const initialState: OffersDataType = {
   offers: [],
   nearbyOffers: [],
   favoritesOffers: [],
 };
-
 
 const offersDataReducer = createReducer(initialState, (builder) => {
   builder

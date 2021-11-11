@@ -6,15 +6,26 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../header/header';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { fetchCommentsAction, fetchNearByOffersAction, fetchSingleOfferAction } from '../../store/api-actions';
+import {
+  fetchCommentsAction,
+  fetchNearByOffersAction,
+  fetchSingleOfferAction
+} from '../../store/api-actions';
 import { useEffect, useState } from 'react';
-import { APIRoute, AppRoute, FetchStatus } from '../../consts';
+import { APIRoute, AppRoute, FetchStatus, NotificationMessage } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
 import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
-import { getAuthorizationStatus, getComments, getCurrentOffer, getFetchStatus, getNearByOffers } from '../../store/selectors';
+import {
+  getAuthorizationStatus,
+  getComments,
+  getCurrentOffer,
+  getFetchStatus,
+  getNearByOffers
+} from '../../store/selectors';
 import PropertyComments from '../property-comments/property-comments';
 import { setFetchStatusAction } from '../../store/action';
+import { toast } from 'react-toastify';
 
 function Property(): JSX.Element {
   const dispatch = useDispatch();
@@ -25,28 +36,23 @@ function Property(): JSX.Element {
   const comments = useSelector(getComments);
   const fetchStatus = useSelector(getFetchStatus);
 
-
   const { id: urlId } = useParams<{ id: string }>();
-
-  const {
-    isFavorite,
-  } = currentOffer;
 
   const history = useHistory();
 
   useEffect(() => {
-    const loadOfferData = (idOffer:number) => {
-      const firstLoading = dispatch(fetchSingleOfferAction(idOffer));
-      const secondLoading = dispatch(fetchNearByOffersAction(idOffer));
-      const thirdLoading = dispatch(fetchCommentsAction(idOffer));
+    dispatch(setFetchStatusAction(FetchStatus.InProgress));
+    dispatch(fetchSingleOfferAction(Number(urlId)));
+    dispatch(fetchNearByOffersAction(Number(urlId)));
+    dispatch(fetchCommentsAction(Number(urlId)));
+  }, [urlId]);
 
-      Promise.all([firstLoading, secondLoading, thirdLoading])
-        .then(() =>dispatch(setFetchStatusAction(FetchStatus.Success)));
-    };
-    loadOfferData(Number(urlId));
-    setIsFavoriteStatus(isFavorite);
-  }, [urlId, isFavorite, dispatch]);
-
+  useEffect(() => {
+    if (currentOffer.id === Number(urlId) && nearbyOffers) {
+      dispatch(setFetchStatusAction(FetchStatus.Success));
+      setIsFavoriteStatus(isFavorite);
+    }
+  }, [currentOffer, nearbyOffers, urlId]);
 
   const {
     id,
@@ -61,6 +67,7 @@ function Property(): JSX.Element {
     goods,
     isPremium,
     city,
+    isFavorite,
   } = currentOffer;
 
   const { name, avatarUrl, isPro } = host;
@@ -70,32 +77,37 @@ function Property(): JSX.Element {
     setActiveOffer(idActive);
   };
 
-
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
   if (fetchStatus === FetchStatus.InProgress) {
-    return (
-      <LoadingScreen />
-    );
+    return <LoadingScreen />;
   }
 
-  const setFavoriteHandler = async (idOffer:number): Promise<void> => {
+  const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
-    await api.post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+    await api
+      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
-      },
-      );
+        if (isFavoriteStatus) {
+          toast.success(NotificationMessage.FavoriteRemove);
+        } else {
+          toast.success(NotificationMessage.FavoriteAdd);
+        }
+      })
+      .catch(()=> toast.success(NotificationMessage.ConnecError));
   };
+
+  const MAX_GALLERY_IMAGES = 6;
 
   return (
     <div className="page">
-      <Header/>
+      <Header />
       <main className="page__main page__main--property">
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {images.slice(0, 6).map((image) => {
+              {images.slice(0, MAX_GALLERY_IMAGES).map((image) => {
                 const keyValue = `${id}-${image}`;
                 return (
                   <div key={keyValue} className="property__image-wrapper">
@@ -117,7 +129,11 @@ function Property(): JSX.Element {
               <div className="property__name-wrapper">
                 <h1 className="property__name">{title}</h1>
                 <button
-                  onClick = {isLogged(authorizationStatus) ? ()=>setFavoriteHandler(id): ()=> history.push(AppRoute.Login)}
+                  onClick={
+                    isLogged(authorizationStatus)
+                      ? () => setFavoriteHandler(id)
+                      : () => history.push(AppRoute.Login)
+                  }
                   className={`property__bookmark-button ${
                     isFavoriteStatus ? 'property__bookmark-button--active' : ''
                   } button`}
@@ -147,10 +163,11 @@ function Property(): JSX.Element {
                   Apartment
                 </li>
                 <li className="property__feature property__feature--bedrooms">
-                  {bedrooms} {`${bedrooms>1}`? 'Bedrooms' : 'Bedroom'}Bedrooms
+                  {bedrooms} {`${bedrooms > 1}` ? 'Bedrooms' : 'Bedroom'}
+                  Bedrooms
                 </li>
                 <li className="property__feature property__feature--adults">
-                  Max {maxAdults} {`${maxAdults>1}`? 'adults' : 'adult'}
+                  Max {maxAdults} {`${maxAdults > 1}` ? 'adults' : 'adult'}
                 </li>
               </ul>
               <div className="property__price">
@@ -197,14 +214,18 @@ function Property(): JSX.Element {
                 </h2>
                 <ul className="reviews__list">
                   <PropertyComments comments={comments} />
-
                 </ul>
                 {isLogged(authorizationStatus) ? <PropertyReviewsForm /> : ''}
               </section>
             </div>
           </div>
           <section className="property__map map">
-            <MapNearestPlaces offersList={nearbyOffers} city={city} currentOffer={currentOffer} activeOffer={ activeOffer}/>
+            <MapNearestPlaces
+              offersList={nearbyOffers}
+              city={city}
+              currentOffer={currentOffer}
+              activeOffer={activeOffer}
+            />
           </section>
         </section>
         <div className="container">
@@ -214,7 +235,11 @@ function Property(): JSX.Element {
             </h2>
             <div className="near-places__list places__list">
               {nearbyOffers.map((similarOffer) => (
-                <CartOffer key={similarOffer.id} offer={similarOffer} onHoverOfferHandler={offerHandler}/>
+                <CartOffer
+                  key={similarOffer.id}
+                  offer={similarOffer}
+                  onHoverOfferHandler={offerHandler}
+                />
               ))}
             </div>
           </section>

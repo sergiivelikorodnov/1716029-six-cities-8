@@ -7,13 +7,13 @@ export enum AppRoute {
   Login = '/login',
   Favorites = '/favorites',
   Room = '/offer',
-  NotFoundOffer = '/404',
+  NotFoundOffer = '/404'
 }
 
 export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN',
+  Unknown = 'UNKNOWN'
 }
 
 export const CITIES: string[] = [
@@ -26,10 +26,10 @@ export const CITIES: string[] = [
 ];
 
 export const SortingType = {
-  POPULAR : 'Popular',
-  PRICE_UP : 'Price: low to high',
-  PRICE_DOWN : 'Price: high to low',
-  TOP_RATED : 'Top rated first',
+  POPULAR: 'Popular',
+  PRICE_UP: 'Price: low to high',
+  PRICE_DOWN: 'Price: high to low',
+  TOP_RATED: 'Top rated first',
 };
 
 export const URL_MARKER_DEFAULT = 'img/pin.svg';
@@ -37,7 +37,7 @@ export const URL_MARKER_ACTIVE = 'img/pin-active.svg';
 
 export const ADD_FAVORITE_OFFER = 'Предложение было добавлено в избранное';
 
-export const DEFAULT_CITY = 'Amsterdam';
+export const DEFAULT_CITY = 'Paris';
 
 export enum APIRoute {
   Offers = '/hotels',
@@ -47,7 +47,7 @@ export enum APIRoute {
   Comments = '/comments'
 }
 
-export const DEFAULT_SINGLE_OFFER:Offer = {
+export const DEFAULT_SINGLE_OFFER: Offer = {
   bedrooms: 0,
   city: {
     location: {
@@ -82,7 +82,7 @@ export const DEFAULT_SINGLE_OFFER:Offer = {
   type: 'apartment',
 };
 
-export const DEFAULT_USER_DATA:FrontAuthInfo = {
+export const DEFAULT_USER_DATA: FrontAuthInfo = {
   avatarUrl: '../../public/img/avatar.svg',
   email: '',
   id: -1,
@@ -93,7 +93,7 @@ export const DEFAULT_USER_DATA:FrontAuthInfo = {
 export const MIN_COMMENT_LENGTH = 50;
 export const MAX_COMMENT_LENGTH = 300;
 
-export const ratingValues:RatingValues = {
+export const ratingValues: RatingValues = {
   '5': 'perfect',
   '4': 'good',
   '3': 'not bad',
@@ -101,7 +101,7 @@ export const ratingValues:RatingValues = {
   '1': 'terribly',
 };
 
-export enum NotificationMessage{
+export enum NotificationMessage {
   AuthError = 'Something went wrong. Check your email and password',
   CheckAuth = 'Login to see more functinality',
   ConnecError = 'Check your connection please',
@@ -110,9 +110,12 @@ export enum NotificationMessage{
   NearPlacesError = 'We can\'t get Recommended places. Check your connection please',
   CommentsGetErr = 'Ooops, we can\'t get comments. Check your connection',
   CommentsPostErr = 'Ooops, we can\'t post your comment. Check your connection',
+  CommentsPostSuccess = 'Your comments was added',
+  FavoriteAdd = 'Offer is added to Favorite list',
+  FavoriteRemove = 'Offer is removed from Favorite list'
 }
 
 export enum FetchStatus {
   InProgress = 'IN_PROGRESS',
-  Success = 'SUCCESS',
+  Success = 'SUCCESS'
 }

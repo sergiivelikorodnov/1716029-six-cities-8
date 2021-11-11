@@ -7,7 +7,7 @@ export const getEmail = (): Email => {
   return email || '';
 };
 
-export const saveEmail = (email: Email):void => {
+export const saveEmail = (email: Email): void => {
   localStorage.setItem(AUTH_TOKEN_KEY, email);
 };
 

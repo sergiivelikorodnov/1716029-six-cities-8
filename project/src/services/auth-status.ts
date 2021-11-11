@@ -9,7 +9,7 @@ export const getAuthStatus = (): AuthStatus => {
   return authStatus || AuthorizationStatus.NoAuth;
 };
 
-export const saveAuthStatus = (authStatus: AuthStatus):void => {
+export const saveAuthStatus = (authStatus: AuthStatus): void => {
   localStorage.setItem(AUTH_STATUS_KEY, authStatus);
 };
 

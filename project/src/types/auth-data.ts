@@ -1,7 +1,7 @@
 export type AuthData = {
   login: string;
   password: string;
-}
+};
 
 export type BackAuthInfo = {
   ['avatar_url']: string;
@@ -10,7 +10,7 @@ export type BackAuthInfo = {
   ['is_pro']: boolean;
   name: string;
   token: string;
-}
+};
 
 export type FrontAuthInfo = {
   avatarUrl: string;
@@ -18,4 +18,4 @@ export type FrontAuthInfo = {
   id: number;
   isPro: boolean;
   name: string;
-}
+};

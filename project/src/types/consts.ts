@@ -1,3 +1,3 @@
 export type RatingValues = {
-  [key:string ]: string,
-}
+  [key: string]: string;
+};

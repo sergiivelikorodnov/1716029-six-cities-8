@@ -31,7 +31,6 @@ function MapNearestPlaces({
   city,
   activeOffer,
 }: AppComponentProps): JSX.Element {
-
   const { latitude, longitude, zoom } = city.location;
 
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -64,12 +63,9 @@ function MapNearestPlaces({
           lng: currentOffer.location.longitude,
         });
 
-        currentOfferMarker
-          .setIcon(currentCustomIcon)
-          .addTo(map);
+        currentOfferMarker.setIcon(currentCustomIcon).addTo(map);
         markers.push(currentOfferMarker);
       }
-
 
       return () => {
         markers.forEach((marker) => marker.removeFrom(map));
