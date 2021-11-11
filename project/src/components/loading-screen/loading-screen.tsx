@@ -1,8 +1,9 @@
 import Loader from 'react-loader-spinner';
+import stylesComponent from './loading.module.css';
 
 function LoadingScreen(): JSX.Element {
   return (
-    <div className="loader__wrapper">
+    <div className={stylesComponent.loading}>
       <Loader
         type="TailSpin"
         color="#4481c3"

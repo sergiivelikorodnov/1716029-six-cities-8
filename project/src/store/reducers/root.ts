@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { authDataReducer } from './auth-data';
 import { commentsDataReducer } from './comments-data';
-import { setFetchStatusReducer } from './fetch-status';
+import { fetchStatusReducer } from './fetch-status';
 import { locationDataReducer } from './location-data';
 import { offersDataReducer } from './offers-data';
 
@@ -18,7 +18,7 @@ export const rootReducer = combineReducers({
   [NameSpace.auth]: authDataReducer,
   [NameSpace.location]: locationDataReducer,
   [NameSpace.comments]: commentsDataReducer,
-  [NameSpace.status]: setFetchStatusReducer,
+  [NameSpace.status]: fetchStatusReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

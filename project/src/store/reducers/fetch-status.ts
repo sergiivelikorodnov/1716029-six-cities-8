@@ -7,10 +7,10 @@ const initialState: FetchStatusType = {
   fetchStatus: FetchStatus.InProgress,
 };
 
-const setFetchStatusReducer = createReducer(initialState, (builder) => {
+const fetchStatusReducer = createReducer(initialState, (builder) => {
   builder.addCase(setFetchStatusAction, (state, action) => {
     state.fetchStatus = action.payload;
   });
 });
 
-export { setFetchStatusReducer };
+export { fetchStatusReducer };
