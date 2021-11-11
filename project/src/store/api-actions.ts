@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import {
   APIRoute,
   AppRoute,
-  AuthorizationStatus /* , FetchStatus */,
+  AuthorizationStatus,
   FetchStatus,
   NotificationMessage
 } from '../consts';

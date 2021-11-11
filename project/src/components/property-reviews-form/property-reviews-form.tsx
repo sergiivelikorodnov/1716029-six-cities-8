@@ -11,8 +11,6 @@ import {
   ratingValues
 } from '../../consts';
 import { getCommentsAction } from '../../store/action';
-// import { postReviewAction } from '../../store/action';
-// import { postCommentAction } from '../../store/api-actions';
 import { getCurrentOffer } from '../../store/selectors';
 import { CommentPost } from '../../types/comment-post';
 import { adaptCommentsBackToFront } from '../../utils/adapters';
@@ -20,11 +18,6 @@ import { adaptCommentsBackToFront } from '../../utils/adapters';
 function PropertyReviewsForm(): JSX.Element {
   const currentOffer = useSelector(getCurrentOffer);
   const dispatch = useDispatch();
-
-  /* const onSubmit = (id: number, commentData: CommentPost) => {
-    dispatch(postCommentAction(id, commentData));
-  }; */
-
   const [userComment, setUserComment] = useState<string>('');
   const [userRating, setUserRating] = useState<number>(0);
   const [disabledForm, setDisabledForm] = useState<boolean>(false);

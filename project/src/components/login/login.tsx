@@ -1,4 +1,3 @@
-//import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AppRoute, CITIES } from '../../consts';
@@ -14,7 +13,6 @@ function Login(): JSX.Element {
   const onChangeCity = (city: string) => {
     dispatch(changeCityAction(currentCity));
   };
-  //const currentCity = useSelector(getCurrentCity);
 
   return (
     <div className="page page--gray page--login">

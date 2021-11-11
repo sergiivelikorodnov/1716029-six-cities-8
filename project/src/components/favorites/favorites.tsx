@@ -5,7 +5,7 @@ import { groupBy } from 'lodash';
 import { AppRoute, FetchStatus } from '../../consts';
 import Header from '../header/header';
 import { fetchFavoritesOffersAction } from '../../store/api-actions';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { getFavoriteOffers, getFetchStatus } from '../../store/selectors';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,9 +16,13 @@ function Favorites(): JSX.Element {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const initFetch = useCallback(() => {
     dispatch(fetchFavoritesOffersAction());
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    initFetch();
+  }, [initFetch]);
 
   if (fetchStatus === FetchStatus.InProgress) {
     return <LoadingScreen />;

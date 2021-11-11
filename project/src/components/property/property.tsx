@@ -11,7 +11,7 @@ import {
   fetchNearByOffersAction,
   fetchSingleOfferAction
 } from '../../store/api-actions';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { APIRoute, AppRoute, FetchStatus, NotificationMessage } from '../../consts';
 import { api } from '../..';
 import { Offer } from '../../types/offer';
@@ -40,19 +40,26 @@ function Property(): JSX.Element {
 
   const history = useHistory();
 
-  useEffect(() => {
+  const initFetch = useCallback(() => {
     dispatch(setFetchStatusAction(FetchStatus.InProgress));
     dispatch(fetchSingleOfferAction(Number(urlId)));
     dispatch(fetchNearByOffersAction(Number(urlId)));
     dispatch(fetchCommentsAction(Number(urlId)));
-  }, [urlId]);
+  }, [dispatch, urlId]);
+
+  useEffect(() => {
+    initFetch();
+  }, [urlId, initFetch]);
+
+  const initFetchStatus = useCallback(() => {
+    dispatch(setFetchStatusAction(FetchStatus.Success));
+  }, [dispatch]);
 
   useEffect(() => {
     if (currentOffer.id === Number(urlId) && nearbyOffers) {
-      dispatch(setFetchStatusAction(FetchStatus.Success));
-      setIsFavoriteStatus(isFavorite);
+      initFetchStatus();
     }
-  }, [currentOffer, nearbyOffers, urlId]);
+  }, [currentOffer, initFetchStatus, nearbyOffers, urlId]);
 
   const {
     id,
@@ -69,6 +76,10 @@ function Property(): JSX.Element {
     city,
     isFavorite,
   } = currentOffer;
+
+  useEffect(() => {
+    setIsFavoriteStatus(isFavorite);
+  }, [currentOffer, isFavorite]);
 
   const { name, avatarUrl, isPro } = host;
 
