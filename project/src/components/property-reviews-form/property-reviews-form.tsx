@@ -124,7 +124,6 @@ function PropertyReviewsForm(): JSX.Element {
           with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
         <button
-
           className="reviews__submit form__submit button"
           type="submit"
           disabled={disabledForm}
