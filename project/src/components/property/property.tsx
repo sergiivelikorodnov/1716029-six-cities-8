@@ -1,6 +1,6 @@
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
-import CartOffer from '../main-cart-offer/main-cart-offer';
+import MainCartOffer from '../main-cart-offer/main-cart-offer';
 import PropertyReviewsForm from '../property-reviews-form/property-reviews-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -246,7 +246,7 @@ function Property(): JSX.Element {
             </h2>
             <div className="near-places__list places__list">
               {nearbyOffers.map((similarOffer) => (
-                <CartOffer
+                <MainCartOffer
                   key={similarOffer.id}
                   offer={similarOffer}
                   onHoverOfferHandler={offerHandler}

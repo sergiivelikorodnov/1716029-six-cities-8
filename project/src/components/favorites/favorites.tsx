@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offer';
-import ListOffersFavorite from '../favorite-list-offers/favorite-list-offers';
+import FavoriteListOffers from '../favorite-list-offers/favorite-list-offers';
 import { groupBy } from 'lodash';
 import { AppRoute, FetchStatus } from '../../consts';
 import Header from '../header/header';
@@ -76,7 +76,7 @@ function Favorites(): JSX.Element {
             <h1 className="favorites__title">Saved listing</h1>
             <ul className="favorites__list">
               {Object.entries(groupedOffers).map(([city, offersList]) => (
-                <ListOffersFavorite
+                <FavoriteListOffers
                   key={offersList[0].id}
                   offers={offersList}
                   city={city}

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { AppRoute } from '../../consts';
 import { changeCityAction } from '../../store/action';
 import { Offers } from '../../types/offer';
-import CartOfferFavorite from '../favorite-card-offer/favorite-card-offer';
+import FavoriteCartOffer from '../favorite-card-offer/favorite-card-offer';
 
 type CityFavoriteOffers = {
   offers: Offers;
@@ -13,7 +13,7 @@ type CityFavoriteOffers = {
 };
 
 
-function ListOffersFavorite({ offers, city }: CityFavoriteOffers): JSX.Element {
+function FavoriteListOffers({ offers, city }: CityFavoriteOffers): JSX.Element {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -39,11 +39,11 @@ function ListOffersFavorite({ offers, city }: CityFavoriteOffers): JSX.Element {
       </div>
       <div className="favorites__places">
         {offers.map((offer) => (
-          <CartOfferFavorite key={offer.id} offer={offer} />
+          <FavoriteCartOffer key={offer.id} offer={offer} />
         ))}
       </div>
     </li>
   );
 }
 
-export default ListOffersFavorite;
+export default FavoriteListOffers;

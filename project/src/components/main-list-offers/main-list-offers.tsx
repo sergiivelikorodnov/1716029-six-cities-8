@@ -1,16 +1,16 @@
 import { Offers } from '../../types/offer';
-import CartOffer from '../main-cart-offer/main-cart-offer';
+import MainCartOffer from '../main-cart-offer/main-cart-offer';
 
 type CardsOffers = {
   offers: Offers;
   onHoverOfferHandler(id: number): void;
 };
 
-function ListOffers({ offers, onHoverOfferHandler }: CardsOffers): JSX.Element {
+function MainListOffers({ offers, onHoverOfferHandler }: CardsOffers): JSX.Element {
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (
-        <CartOffer
+        <MainCartOffer
           key={offer.id}
           offer={offer}
           onHoverOfferHandler={onHoverOfferHandler}
@@ -20,4 +20,4 @@ function ListOffers({ offers, onHoverOfferHandler }: CardsOffers): JSX.Element {
   );
 }
 
-export default ListOffers;
+export default MainListOffers;
