@@ -79,6 +79,9 @@ function Property(): JSX.Element {
 
   useEffect(() => {
     setIsFavoriteStatus(isFavorite);
+    return (() => {
+      setIsFavoriteStatus(!isFavorite);
+    });
   }, [currentOffer, isFavorite]);
 
   const { name, avatarUrl, isPro } = host;

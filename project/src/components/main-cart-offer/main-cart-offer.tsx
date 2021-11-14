@@ -14,7 +14,7 @@ type SingleOffer = {
   onHoverOfferHandler(id: number): void;
 };
 
-function MainCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
+function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
   const { id, price, rating, title, isPremium, isFavorite, previewImage } =
@@ -46,7 +46,7 @@ function MainCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element
           toast.success(NotificationMessage.FavoriteAdd);
         }
       })
-      .catch(()=> toast.success(NotificationMessage.ConnecError));
+      .catch(() => toast.success(NotificationMessage.ConnecError));
   };
 
   return (
@@ -111,4 +111,4 @@ function MainCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element
   );
 }
 
-export default MainCartOffer;
+export default CartOffer;

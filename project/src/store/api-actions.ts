@@ -105,7 +105,11 @@ export const checkAuthAction =
           dispatch(requireAuthorization(AuthorizationStatus.Auth)) &&
           saveAuthStatus(AuthorizationStatus.Auth);
       })
-      .catch(() => toast.error(NotificationMessage.ConnecError));
+      .catch(() => {
+        toast.error(NotificationMessage.ConnecError);
+        dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+        saveAuthStatus(AuthorizationStatus.NoAuth);
+      });
   };
 
 export const loginAction =

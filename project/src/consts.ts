@@ -88,7 +88,7 @@ export const DEFAULT_USER_DATA: FrontAuthInfo = {
   id: -1,
   isPro: false,
   name: '',
-} as const;
+};
 
 export const MIN_COMMENT_LENGTH = 50;
 export const MAX_COMMENT_LENGTH = 300;

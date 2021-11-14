@@ -4,7 +4,7 @@ import { AppRoute, CITIES } from '../../consts';
 import { changeCityAction } from '../../store/action';
 import { getRandomCity } from '../../utils/utils';
 import Logo from '../logo/logo';
-import LoginForm from '../login-form/login-form';
+import LoginForm from './login-form';
 
 function Login(): JSX.Element {
   const currentCity = getRandomCity(CITIES);

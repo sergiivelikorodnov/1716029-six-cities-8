@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { api } from '../..';
 import {
-  APIRoute, MAX_COMMENT_LENGTH,
+  APIRoute,
+  MAX_COMMENT_LENGTH,
   MIN_COMMENT_LENGTH,
   NotificationMessage,
   ratingValues
@@ -36,14 +37,15 @@ function PropertyReviewsForm(): JSX.Element {
   }, [userComment, userRating]);
   const { id } = currentOffer;
 
-  const postNewComment = async (offerId: number, customerComment: CommentPost): Promise<AxiosResponse> => (
+  const postNewComment = async (
+    offerId: number,
+    customerComment: CommentPost,
+  ): Promise<AxiosResponse> =>
+    await api.post(`${APIRoute.Comments}/${offerId}`, customerComment);
 
-    await api.post(`${APIRoute.Comments}/${offerId}`, customerComment)
-  );
-
-  const handleFormSubmit=(evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const customerReview:CommentPost = {
+    const customerReview: CommentPost = {
       comment: userComment,
       rating: userRating,
     };

@@ -17,7 +17,7 @@ enum HttpCode {
 
 type onUnauthorizedCallback = () => void;
 
-export const сreateApi = (
+export const createApi = (
   onUnauthorized: onUnauthorizedCallback,
 ): AxiosInstance => {
   const api = axios.create({
