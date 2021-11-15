@@ -34,6 +34,7 @@ function LoginForm(): JSX.Element {
           type="email"
           name="email"
           placeholder="Email"
+          data-testid="email"
           required
         />
       </div>
@@ -45,6 +46,7 @@ function LoginForm(): JSX.Element {
           type="password"
           name="password"
           placeholder="Password"
+          data-testid="password"
           required
         />
       </div>

@@ -34,5 +34,3 @@ export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean
 export const isLogged = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Auth;
 
 export const getRandomCity = (cities: typeof CITIES): string => cities[Math.floor(Math.random() * cities.length)];
-
-export const emailValid = (value:string):boolean => /^[a-z0-9][a-z0-9-_\\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/.test(value);
