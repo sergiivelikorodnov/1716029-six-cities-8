@@ -4,23 +4,17 @@ import thunk, { ThunkDispatch } from 'redux-thunk';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { State } from '../types/state';
 import { Action } from 'redux';
-import { APIRoute, AppRoute, AuthorizationStatus  } from '../consts';
+import { APIRoute, AppRoute, AuthorizationStatus, FetchStatus  } from '../consts';
 
-import { checkAuthAction, loginAction } from './api-actions';
-import { redirectToRoute, requireAuthorization, setUserAuthInfo } from './action';
+import { checkAuthAction, fetchCommentsAction, fetchFavoritesOffersAction, fetchNearByOffersAction, fetchOffersAction, fetchSingleOfferAction, loginAction, logoutAction } from './api-actions';
+import { favoriteOffersDataAction, getCommentsAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, redirectToRoute, requireAuthorization, requireLogout, setFetchStatusAction, setUserAuthInfo } from './action';
 import { AuthData } from '../types/auth-data';
 import { userBackend, userFrontend } from '../mocks/mock-userData';
+import { fakeFrontComments } from '../mocks/mock-comments';
+import { adaptCommentsBackToFront, adaptOffersBackToFront, adaptSingleOfferBackToFront } from '../utils/adapters';
+import { fakeOffers } from '../mocks/mock-offers';
 
 describe('Async Api Actions', () => {
-  const fakeHistory = {
-    location: {
-      pathname: '',
-    },
-    push: (path: string): void => {
-      fakeHistory.location.pathname = path;
-    },
-  };
-
   const onFakeUnauthorized = jest.fn();
   const api = createApi(onFakeUnauthorized());
   const mockAPI = new MockAdapter(api);
@@ -83,6 +77,107 @@ describe('Async Api Actions', () => {
     expect(Storage.prototype.setItem).toBeCalledWith('cix-cities-auth', 'AUTH');
     expect(Storage.prototype.setItem).toBeCalledWith('cix-cities', 'secret');
     expect(Storage.prototype.setItem).toBeCalledWith('cix-cities-email', 'fakeEmail');
+  });
+
+  it('should get Comments when server returns 200', async() => {
+    const fakeId = 1;
+
+    mockAPI
+      .onGet(`${APIRoute.Comments}/${fakeId}`)
+      .reply(200, fakeFrontComments );
+
+    const store = mockStore();
+    await store.dispatch(fetchCommentsAction(fakeId));
+
+    expect(store.getActions())
+      .toEqual([getCommentsAction(adaptCommentsBackToFront(fakeFrontComments)),
+      ]);
+  });
+
+  it('should get All Offers when server returns 200', async() => {
+
+    mockAPI
+      .onGet(APIRoute.Offers)
+      .reply(200, fakeOffers );
+
+    const store = mockStore();
+    await store.dispatch(fetchOffersAction());
+
+    expect(store.getActions())
+      .toEqual([
+        setFetchStatusAction(FetchStatus.InProgress),
+        loadOffersAction(adaptOffersBackToFront(fakeOffers)),
+        setFetchStatusAction(FetchStatus.Success),
+      ]);
+  });
+
+  it('should get Single Offer when server returns 200', async() => {
+    const fakeId = 1;
+
+    mockAPI
+      .onGet(`${APIRoute.Offers}/${fakeId}`)
+      .reply(200, fakeOffers[fakeId] );
+
+    const store = mockStore();
+    await store.dispatch(fetchSingleOfferAction(fakeId));
+
+    expect(store.getActions())
+      .toEqual([loadSingleOfferAction(adaptSingleOfferBackToFront(fakeOffers[fakeId])),
+      ]);
+  });
+
+  it('should get favorites Offers when server returns 200', async() => {
+    mockAPI
+      .onGet(APIRoute.Favorites)
+      .reply(200, fakeOffers);
+
+    const store = mockStore();
+    await store.dispatch(fetchFavoritesOffersAction());
+
+    expect(store.getActions())
+      .toEqual([
+        setFetchStatusAction(FetchStatus.InProgress),
+        favoriteOffersDataAction(adaptOffersBackToFront(fakeOffers)),
+        setFetchStatusAction(FetchStatus.Success),
+      ]);
+  });
+
+  it('should get Near By Offers when server returns 200', async() => {
+    const fakeId = 2;
+
+    mockAPI
+      .onGet(`${APIRoute.Offers}/${fakeId}/nearby`)
+      .reply(200, fakeOffers );
+
+    const store = mockStore();
+    await store.dispatch(fetchNearByOffersAction(fakeId));
+
+    expect(store.getActions())
+      .toEqual([nearbyOffersDataAction(adaptOffersBackToFront(fakeOffers)),
+      ]);
+  });
+
+  it('should Logout when server returns 200', async() => {
+
+    mockAPI
+      .onGet(APIRoute.Logout)
+      .reply(204);
+
+    const store = mockStore();
+    Storage.prototype.removeItem = jest.fn();
+
+    await store.dispatch(logoutAction());
+
+    expect(store.getActions())
+      .toEqual([
+        requireLogout(),
+        redirectToRoute(AppRoute.Login),
+      ]);
+
+    expect(Storage.prototype.removeItem).toBeCalledTimes(3);
+    expect(Storage.prototype.removeItem).toBeCalledWith('cix-cities-auth');
+    expect(Storage.prototype.removeItem).toBeCalledWith('cix-cities');
+    expect(Storage.prototype.removeItem).toBeCalledWith('cix-cities-email');
   });
 
 });

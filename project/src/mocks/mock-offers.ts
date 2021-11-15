@@ -1,6 +1,6 @@
 import { Offers } from '../types/offer';
 
-export const offers: Offers = [
+export const fakeOffers: Offers = [
   {
     bedrooms: 3,
     city: {
