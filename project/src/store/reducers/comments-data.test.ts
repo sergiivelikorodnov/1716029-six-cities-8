@@ -1,4 +1,4 @@
-import { fakeFrontComments } from '../../mocks/mock-comments';
+import { fakeFrontendComments } from '../../mocks/mock-comments';
 import { ActionType } from '../../types/action';
 import { CommentsDataType } from '../../types/state';
 import { commentsDataReducer } from './comments-data';
@@ -11,12 +11,12 @@ describe('Reducer Get Comments', () => {
 
     const getCommentsAction = {
       type: ActionType.GetCommentsData,
-      payload: fakeFrontComments,
+      payload: fakeFrontendComments,
     };
 
     expect(commentsDataReducer(state, getCommentsAction))
       .toEqual({
-        comments: fakeFrontComments,
+        comments: fakeFrontendComments,
       });
   });
 
@@ -27,7 +27,7 @@ describe('Reducer Get Comments', () => {
 
     const getCommentsAction = {
       type: ActionType.Unknown,
-      payload: fakeFrontComments,
+      payload: fakeFrontendComments,
     };
 
     expect(commentsDataReducer(state, getCommentsAction))

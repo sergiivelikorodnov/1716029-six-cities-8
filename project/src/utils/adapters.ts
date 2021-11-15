@@ -1,8 +1,9 @@
 import { BackAuthInfo, FrontAuthInfo } from '../types/auth-data';
-import { CommentGet, Comments } from '../types/comment-get';
+import { BackOffer, BackOffers } from '../types/backdata-offer';
+import { CommentBackendGet, CommentGet, Comments, CommentsBackend } from '../types/comment-get';
 import { Offer, Offers } from '../types/offer';
 
-export const adaptOffersBackToFront = (backData: Offers): Offers => {
+export const adaptOffersBackToFront = (backData: BackOffers): Offers => {
   const adaptedData = backData.map((item): Offer => (
     Object.assign(
       {},
@@ -35,7 +36,7 @@ export const adaptOffersBackToFront = (backData: Offers): Offers => {
   return adaptedData;
 };
 
-export const adaptSingleOfferBackToFront = (backData: Offer): Offer => {
+export const adaptSingleOfferBackToFront = (backData: BackOffer): Offer => {
   const adaptedData =
     Object.assign(
       {},
@@ -54,7 +55,7 @@ export const adaptSingleOfferBackToFront = (backData: Offer): Offer => {
           name: backData.host.name,
         },
       },
-    );
+    ) as Offer;
 
 
   delete adaptedData.is_favorite;
@@ -79,8 +80,8 @@ export const adaptUserBackToFront = (backendUserData: BackAuthInfo): FrontAuthIn
 };
 
 
-export const adaptCommentsBackToFront = (backData: Comments): Comments => {
-  const adaptedData = backData.map((item): CommentGet => (
+export const adaptCommentsBackToFront = (backData: CommentsBackend): Comments => {
+  const adaptedData = backData.map((item: CommentBackendGet): CommentGet => (
     Object.assign(
       {},
       item,
@@ -90,7 +91,7 @@ export const adaptCommentsBackToFront = (backData: Comments): Comments => {
           isPro: item.user.is_pro,
         },
       },
-    )
+    ) as CommentGet
   ));
 
   adaptedData.forEach((item) => {

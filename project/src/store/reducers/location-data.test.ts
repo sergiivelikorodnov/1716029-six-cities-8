@@ -1,5 +1,5 @@
 import { DEFAULT_CITY, DEFAULT_SINGLE_OFFER } from '../../consts';
-import { fakeOffers } from '../../mocks/mock-offers';
+import { fakeFrontendOffers } from '../../mocks/mock-offers';
 import { ActionType } from '../../types/action';
 import {  LocationDataType } from '../../types/state';
 import { locationDataReducer } from './location-data';
@@ -31,7 +31,7 @@ describe('Location Data Reducer', () => {
 
     const changeCityAction = {
       type: ActionType.Unknown,
-      payload: fakeOffers[1],
+      payload: fakeFrontendOffers[1],
     };
 
     expect(locationDataReducer(state, changeCityAction))
@@ -67,13 +67,13 @@ describe('Location Data Reducer', () => {
 
     const changeCurrentOfferAction = {
       type: ActionType.LoadSingleOfferData,
-      payload: fakeOffers[2],
+      payload: fakeFrontendOffers[2],
     };
 
     expect(locationDataReducer(state, changeCurrentOfferAction))
       .toEqual({
         currentCity: DEFAULT_CITY,
-        currentOffer: fakeOffers[2],
+        currentOffer: fakeFrontendOffers[2],
       });
   });
 
@@ -85,13 +85,13 @@ describe('Location Data Reducer', () => {
 
     const changeCurrentOfferAction = {
       type: ActionType.LoadSingleOfferData,
-      payload: fakeOffers[2],
+      payload: fakeFrontendOffers[2],
     };
 
     expect(locationDataReducer(state, changeCurrentOfferAction))
       .not.toEqual({
         currentCity: DEFAULT_CITY,
-        currentOffer: fakeOffers[1],
+        currentOffer: fakeFrontendOffers[1],
       });
   });
 

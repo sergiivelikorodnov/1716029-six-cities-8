@@ -1,4 +1,4 @@
-import { fakeOffers } from '../../mocks/mock-offers';
+import { fakeFrontendOffers } from '../../mocks/mock-offers';
 import { ActionType } from '../../types/action';
 import {  OffersDataType } from '../../types/state';
 import { offersDataReducer } from './offers-data';
@@ -16,11 +16,11 @@ describe('Offers Data Reducer', () => {
       initialState,
       {
         type: ActionType.LoadOffersData,
-        payload: fakeOffers,
+        payload: fakeFrontendOffers,
       },
     ))
       .toEqual({
-        offers: fakeOffers,
+        offers: fakeFrontendOffers,
         nearbyOffers: [],
         favoritesOffers: [],
       });
@@ -31,13 +31,13 @@ describe('Offers Data Reducer', () => {
       initialState,
       {
         type: ActionType.NearbyOffersData,
-        payload: fakeOffers.slice(0,3),
+        payload: fakeFrontendOffers.slice(0,3),
       },
     ))
       .toEqual(
         {
           offers: [],
-          nearbyOffers: fakeOffers.slice(0,3),
+          nearbyOffers: fakeFrontendOffers.slice(0,3),
           favoritesOffers: [],
         },
       );
@@ -48,14 +48,14 @@ describe('Offers Data Reducer', () => {
       initialState,
       {
         type: ActionType.FavoritesOffersData,
-        payload: fakeOffers.slice(0,3),
+        payload: fakeFrontendOffers.slice(0,3),
       },
     ))
       .toEqual(
         {
           offers: [],
           nearbyOffers: [],
-          favoritesOffers: fakeOffers.slice(0,3),
+          favoritesOffers: fakeFrontendOffers.slice(0,3),
         },
       );
   });
@@ -65,7 +65,7 @@ describe('Offers Data Reducer', () => {
       initialState,
       {
         type: ActionType.Unknown,
-        payload: fakeOffers,
+        payload: fakeFrontendOffers,
       },
     ))
       .toEqual(

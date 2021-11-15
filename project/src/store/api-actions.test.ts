@@ -10,9 +10,9 @@ import { checkAuthAction, fetchCommentsAction, fetchFavoritesOffersAction, fetch
 import { favoriteOffersDataAction, getCommentsAction, loadOffersAction, loadSingleOfferAction, nearbyOffersDataAction, redirectToRoute, requireAuthorization, requireLogout, setFetchStatusAction, setUserAuthInfo } from './action';
 import { AuthData } from '../types/auth-data';
 import { userBackend, userFrontend } from '../mocks/mock-userData';
-import { fakeFrontComments } from '../mocks/mock-comments';
+import { fakeFrontendComments } from '../mocks/mock-comments';
 import { adaptCommentsBackToFront, adaptOffersBackToFront, adaptSingleOfferBackToFront } from '../utils/adapters';
-import { fakeOffers } from '../mocks/mock-offers';
+import { fakeFrontendOffers } from '../mocks/mock-offers';
 
 describe('Async Api Actions', () => {
   const onFakeUnauthorized = jest.fn();
@@ -84,13 +84,13 @@ describe('Async Api Actions', () => {
 
     mockAPI
       .onGet(`${APIRoute.Comments}/${fakeId}`)
-      .reply(200, fakeFrontComments );
+      .reply(200, fakeFrontendComments );
 
     const store = mockStore();
     await store.dispatch(fetchCommentsAction(fakeId));
 
     expect(store.getActions())
-      .toEqual([getCommentsAction(adaptCommentsBackToFront(fakeFrontComments)),
+      .toEqual([getCommentsAction(adaptCommentsBackToFront(fakeFrontendComments)),
       ]);
   });
 
@@ -98,7 +98,7 @@ describe('Async Api Actions', () => {
 
     mockAPI
       .onGet(APIRoute.Offers)
-      .reply(200, fakeOffers );
+      .reply(200, fakeFrontendOffers );
 
     const store = mockStore();
     await store.dispatch(fetchOffersAction());
@@ -106,7 +106,7 @@ describe('Async Api Actions', () => {
     expect(store.getActions())
       .toEqual([
         setFetchStatusAction(FetchStatus.InProgress),
-        loadOffersAction(adaptOffersBackToFront(fakeOffers)),
+        loadOffersAction(adaptOffersBackToFront(fakeFrontendOffers)),
         setFetchStatusAction(FetchStatus.Success),
       ]);
   });
@@ -116,20 +116,20 @@ describe('Async Api Actions', () => {
 
     mockAPI
       .onGet(`${APIRoute.Offers}/${fakeId}`)
-      .reply(200, fakeOffers[fakeId] );
+      .reply(200, fakeFrontendOffers[fakeId] );
 
     const store = mockStore();
     await store.dispatch(fetchSingleOfferAction(fakeId));
 
     expect(store.getActions())
-      .toEqual([loadSingleOfferAction(adaptSingleOfferBackToFront(fakeOffers[fakeId])),
+      .toEqual([loadSingleOfferAction(adaptSingleOfferBackToFront(fakeFrontendOffers[fakeId])),
       ]);
   });
 
   it('should get favorites Offers when server returns 200', async() => {
     mockAPI
       .onGet(APIRoute.Favorites)
-      .reply(200, fakeOffers);
+      .reply(200, fakeFrontendOffers);
 
     const store = mockStore();
     await store.dispatch(fetchFavoritesOffersAction());
@@ -137,7 +137,7 @@ describe('Async Api Actions', () => {
     expect(store.getActions())
       .toEqual([
         setFetchStatusAction(FetchStatus.InProgress),
-        favoriteOffersDataAction(adaptOffersBackToFront(fakeOffers)),
+        favoriteOffersDataAction(adaptOffersBackToFront(fakeFrontendOffers)),
         setFetchStatusAction(FetchStatus.Success),
       ]);
   });
@@ -147,13 +147,13 @@ describe('Async Api Actions', () => {
 
     mockAPI
       .onGet(`${APIRoute.Offers}/${fakeId}/nearby`)
-      .reply(200, fakeOffers );
+      .reply(200, fakeFrontendOffers );
 
     const store = mockStore();
     await store.dispatch(fetchNearByOffersAction(fakeId));
 
     expect(store.getActions())
-      .toEqual([nearbyOffersDataAction(adaptOffersBackToFront(fakeOffers)),
+      .toEqual([nearbyOffersDataAction(adaptOffersBackToFront(fakeFrontendOffers)),
       ]);
   });
 
