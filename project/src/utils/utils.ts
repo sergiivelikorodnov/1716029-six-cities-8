@@ -24,7 +24,7 @@ export function getSortedOffersPriceDown(offers: Offers): Offers {
 }
 
 export function getSortedOffersTopRated(offers: Offers): Offers {
-  return offers.slice().sort((offerA, offerB) => offerA.rating - offerB.rating);
+  return offers.slice().sort((offerA, offerB) => offerB.rating - offerA.rating);
 }
 
 export function getSortedCommentsByDate(comments: Comments): Comments {
