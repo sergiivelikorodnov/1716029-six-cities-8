@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { api } from '../..';
-import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER, NotificationMessage } from '../../consts';
+import { APIRoute, AppRoute, NotificationMessage } from '../../consts';
 import { Offer } from '../../types/offer';
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import { getAuthorizationStatus } from '../../store/selectors';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { BackOffer } from '../../types/backdata-offer';
-import { fetchSingleOfferAction } from '../../store/api-actions';
-import { loadSingleOfferAction } from '../../store/action';
 
 type SingleOffer = {
   offer: Offer;
+  onHoverOfferHandler(id: number): void;
 };
 
-function CartOffer({ offer }: SingleOffer): JSX.Element {
+function PropertyCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
   const { id, price, rating, title, isPremium, isFavorite, previewImage } =
@@ -31,7 +30,6 @@ function CartOffer({ offer }: SingleOffer): JSX.Element {
   };
 
   const history = useHistory();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     getFavoriteStatus(id);
@@ -55,8 +53,8 @@ function CartOffer({ offer }: SingleOffer): JSX.Element {
   return (
     <article
       className="cities__place-card place-card"
-      onMouseOver={() => dispatch(fetchSingleOfferAction(id))}
-      onMouseOut={() => dispatch(loadSingleOfferAction(DEFAULT_SINGLE_OFFER))}
+      onMouseOver={() => onHoverOfferHandler && onHoverOfferHandler(id)}
+      onMouseOut={() => onHoverOfferHandler && onHoverOfferHandler(0)}
     >
       {isPremium ? (
         <div className="place-card__mark">
@@ -114,4 +112,4 @@ function CartOffer({ offer }: SingleOffer): JSX.Element {
   );
 }
 
-export default CartOffer;
+export default PropertyCartOffer;

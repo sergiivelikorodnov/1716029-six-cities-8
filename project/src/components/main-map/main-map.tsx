@@ -9,7 +9,6 @@ import { getCurrentOffer } from '../../store/selectors';
 import { CityOffer, Offers } from '../../types/offer';
 
 type AppComponentProps = {
-  activeOffer: number;
   offersList: Offers;
   city: CityOffer;
 };
@@ -29,7 +28,6 @@ const currentCustomIcon = new Icon({
 function MainMap({
   offersList,
   city,
-  activeOffer,
 }: AppComponentProps): JSX.Element {
   const currentOffer = useSelector(getCurrentOffer);
 
@@ -62,7 +60,7 @@ function MainMap({
 
         marker
           .setIcon(
-            currentOffer !== undefined && offer.id === activeOffer
+            currentOffer.id === offer.id
               ? currentCustomIcon
               : defaultCustomIcon,
           )
@@ -80,7 +78,6 @@ function MainMap({
     latitude,
     longitude,
     zoom,
-    activeOffer,
   ]);
   return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }

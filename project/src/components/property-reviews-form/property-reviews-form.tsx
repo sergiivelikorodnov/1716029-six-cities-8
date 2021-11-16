@@ -21,7 +21,7 @@ function PropertyReviewsForm(): JSX.Element {
   const dispatch = useDispatch();
   const [userComment, setUserComment] = useState<string>('');
   const [userRating, setUserRating] = useState<number>(0);
-  const [disabledForm, setDisabledForm] = useState<boolean>(false);
+  const [disabledForm, setDisabledForm] = useState<boolean>(true);
 
   useEffect(() => {
     if (
@@ -34,7 +34,7 @@ function PropertyReviewsForm(): JSX.Element {
     } else {
       setDisabledForm(false);
     }
-  }, [userComment, userRating]);
+  }, [userComment, userRating, disabledForm]);
   const { id } = currentOffer;
 
   const postNewComment = async (
@@ -87,7 +87,7 @@ function PropertyReviewsForm(): JSX.Element {
                 type="radio"
                 readOnly
                 checked={userRating === Number(numberStars)}
-                onInput={() => setUserRating(Number(numberStars))}
+                onChange={() => setUserRating(Number(numberStars))}
               />
               <label
                 htmlFor={`${numberStars}-stars`}

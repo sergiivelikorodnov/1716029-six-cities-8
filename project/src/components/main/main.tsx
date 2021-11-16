@@ -8,7 +8,7 @@ import {
   getSortedOffersTopRated,
   isCheckedAuth
 } from '../../utils/utils';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../header/header';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen';
@@ -28,11 +28,6 @@ function Main(): JSX.Element {
   const offers = useSelector(getAllOffers);
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const fetchStatus = useSelector(getFetchStatus);
-
-  const [activeOffer, setActiveOffer] = useState(0);
-  const offerHandler = useCallback((id: number) => {
-    setActiveOffer(id);
-  }, []);
 
   useEffect(() => {
     dispatch(fetchOffersAction());
@@ -87,8 +82,6 @@ function Main(): JSX.Element {
             selectedSortTypeHandler={selectedSortTypeHandler}
             selectedSortType={selectedSortType}
             sortedOffers={sortedOffers}
-            onHoverOfferHandler={offerHandler}
-            activeOffer={activeOffer}
           />
         )}
       </main>

@@ -1,6 +1,5 @@
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
-import MainCartOffer from '../main-cart-offer/main-cart-offer';
 import PropertyReviewsForm from '../property-reviews-form/property-reviews-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +13,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { APIRoute, AppRoute, FetchStatus, NotificationMessage } from '../../consts';
 import { api } from '../..';
+
 import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
 import {
   getAuthorizationStatus,
@@ -26,6 +26,7 @@ import PropertyComments from '../property-comments/property-comments';
 import { setFetchStatusAction } from '../../store/action';
 import { toast } from 'react-toastify';
 import { BackOffer } from '../../types/backdata-offer';
+import PropertyCartOffer from '../property-cart-offer/property-cart-offer';
 
 function Property(): JSX.Element {
   const dispatch = useDispatch();
@@ -249,7 +250,7 @@ function Property(): JSX.Element {
             </h2>
             <div className="near-places__list places__list">
               {nearbyOffers.map((similarOffer) => (
-                <MainCartOffer
+                <PropertyCartOffer
                   key={similarOffer.id}
                   offer={similarOffer}
                   onHoverOfferHandler={offerHandler}
