@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { api } from '../..';
 import { APIRoute, NotificationMessage } from '../../consts';
 import { fetchFavoritesOffersAction } from '../../store/api-actions';
+import { BackOffer } from '../../types/backdata-offer';
 import { Offer } from '../../types/offer';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 
@@ -25,7 +26,7 @@ function FavoriteCartOffer({ offer }: SingleOffer): JSX.Element {
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
     await api
-      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
         loadOffersData();

@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import { AuthorizationStatus, CITIES } from '../consts';
-import { Comments } from '../types/comment-get';
 import {  Offers } from '../types/offer';
 
 export function getHumanDate(date: string): string {
@@ -27,9 +26,6 @@ export function getSortedOffersTopRated(offers: Offers): Offers {
   return offers.slice().sort((offerA, offerB) => offerB.rating - offerA.rating);
 }
 
-export function getSortedCommentsByDate(comments: Comments): Comments {
-  return comments.sort((offerA, offerB) => dayjs(offerB.date).diff(dayjs(offerA.date)));
-}
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Unknown;
 export const isLogged = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Auth;
 

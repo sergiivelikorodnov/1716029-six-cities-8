@@ -8,6 +8,7 @@ import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import { getAuthorizationStatus } from '../../store/selectors';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { BackOffer } from '../../types/backdata-offer';
 
 type SingleOffer = {
   offer: Offer;
@@ -23,7 +24,7 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
   const getFavoriteStatus = async (idOffer: number): Promise<void> => {
-    await api.get<Offer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
+    await api.get<BackOffer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
       setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
     });
   };
@@ -37,7 +38,7 @@ function CartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
     await api
-      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
         if (isFavoriteStatus) {

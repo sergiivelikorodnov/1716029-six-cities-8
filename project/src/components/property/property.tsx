@@ -14,7 +14,6 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { APIRoute, AppRoute, FetchStatus, NotificationMessage } from '../../consts';
 import { api } from '../..';
-import { Offer } from '../../types/offer';
 import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
 import {
   getAuthorizationStatus,
@@ -26,6 +25,7 @@ import {
 import PropertyComments from '../property-comments/property-comments';
 import { setFetchStatusAction } from '../../store/action';
 import { toast } from 'react-toastify';
+import { BackOffer } from '../../types/backdata-offer';
 
 function Property(): JSX.Element {
   const dispatch = useDispatch();
@@ -100,7 +100,7 @@ function Property(): JSX.Element {
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
     await api
-      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
         if (isFavoriteStatus) {
