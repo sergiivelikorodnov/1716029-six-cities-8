@@ -14,7 +14,7 @@ function NotFound(): JSX.Element {
             <div className="not-found-wrapper">
               <b className="favorites__status">Oh no, you’ve found junior developer’s homepage!</b>
               <p>
-               Go to<Link className="text-not-found-page" to ={AppRoute.Main}> Main Page</Link>.
+               Go to<Link className="text-not-found-page" to={AppRoute.Main}> Main Page</Link>.
               </p>
             </div>
           </section>

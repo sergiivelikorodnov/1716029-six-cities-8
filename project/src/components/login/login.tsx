@@ -11,7 +11,7 @@ function Login(): JSX.Element {
   const dispatch = useDispatch();
 
   const onChangeCity = (city: string) => {
-    dispatch(changeCityAction(currentCity));
+    dispatch(changeCityAction(city));
   };
 
   return (
@@ -37,7 +37,7 @@ function Login(): JSX.Element {
                 className="locations__item-link"
                 to={AppRoute.Main}
               >
-                <span>{currentCity}</span>
+                <span data-testid="city">{currentCity}</span>
               </Link>
             </div>
           </section>
