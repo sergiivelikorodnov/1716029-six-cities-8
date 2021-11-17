@@ -28,7 +28,7 @@ export const fakeStateNoAuth:State = {
 
 export const fakeStateAuth:State = {
   AUTH: {
-    authorizationStatus: AuthorizationStatus.NoAuth,
+    authorizationStatus: AuthorizationStatus.Auth,
     userAuthInfo: userFrontend,
   },
   OFFERS: {
