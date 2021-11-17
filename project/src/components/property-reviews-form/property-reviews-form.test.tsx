@@ -1,8 +1,8 @@
-/* import { configureMockStore } from '@jedmao/redux-mock-store';
+import { configureMockStore } from '@jedmao/redux-mock-store';
 import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
+import { Router } from 'react-router-dom';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import { fakeStateNoAuth } from '../../mocks/mock-store';
 import { createApi } from '../../services/api';
@@ -34,14 +34,14 @@ describe('check property reviews form', () => {
       </Provider>,
     );
 
-    expect(screen.getByText(/Submit/i)).toBeInTheDocument();
+    expect(screen.getByRole('button').textContent).toBe('Submit');
 
   });
 
 });
- */
 
-import {configureMockStore} from '@jedmao/redux-mock-store';
+
+/* import {configureMockStore} from '@jedmao/redux-mock-store';
 import {screen, render} from '@testing-library/react';
 import {createMemoryHistory} from 'history';
 import {Provider} from 'react-redux';
@@ -66,4 +66,5 @@ describe('Component: UserCommentForm', () => {
 
     expect(screen.getByRole('button').textContent).toBe('Submit');
   });
-});
+}); */
+
