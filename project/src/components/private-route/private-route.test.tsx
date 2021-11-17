@@ -2,7 +2,6 @@ import { createMemoryHistory } from 'history';
 import { render, screen } from '@testing-library/react';
 import { Route, Router, Switch} from 'react-router';
 import { configureMockStore } from '@jedmao/redux-mock-store';
-import { AppRoute } from '../../consts';
 import { Provider } from 'react-redux';
 import PrivateRoute from './private-route';
 import { createApi } from '../../services/api';
