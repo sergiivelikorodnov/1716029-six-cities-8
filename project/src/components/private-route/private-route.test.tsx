@@ -24,15 +24,13 @@ const mockStore = configureMockStore <
     ThunkDispatch< State, typeof api, Action >
   >(middlewares);
 
-const store = mockStore(fakeStateNoAuth);
-
 describe('Checking "Private Route"', () => {
   beforeEach(() => {
     history.push('/private');
   });
 
   it('should render component for public route, when user not authorized', () => {
-    history.push(AppRoute.Login);
+    const store = mockStore(fakeStateNoAuth);
 
     render(
       <Provider store={store}>
@@ -44,7 +42,7 @@ describe('Checking "Private Route"', () => {
             <PrivateRoute
               exact
               path="/private"
-              render = {()=>(<h1>Public Route</h1>)}
+              render = {()=>(<h1>Private Route</h1>)}
             />
           </Router>
         </Switch>
