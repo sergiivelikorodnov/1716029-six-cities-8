@@ -1,6 +1,6 @@
 import { createMemoryHistory } from 'history';
 import { render, screen } from '@testing-library/react';
-import { Route, Router, Switch} from 'react-router';
+import { Route, Router, Switch} from 'react-router-dom';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
 import PrivateRoute from './private-route';
