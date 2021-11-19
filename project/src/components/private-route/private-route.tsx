@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RouteProps, Route, Redirect } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../consts';
-import { getAuthStatus } from '../../services/auth-status';
+
 import { getAuthorizationStatus } from '../../store/selectors';
 
 type PrivateRouteProps = RouteProps & {
@@ -16,12 +16,11 @@ function PrivateRoute({ exact, path, render }: PrivateRouteProps): JSX.Element {
       exact={exact}
       path={path}
       render={() =>
-        getAuthStatus() === AuthorizationStatus.Auth &&
         authorizationStatus === AuthorizationStatus.Auth ? (
-            render()
-          ) : (
-            <Redirect to={AppRoute.Login} />
-          )}
+          render()
+        ) : (
+          <Redirect to={AppRoute.Login} />
+        )}
     />
   );
 }

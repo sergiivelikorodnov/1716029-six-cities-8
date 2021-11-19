@@ -1,6 +1,15 @@
+// import { configureMockStore } from '@jedmao/redux-mock-store';
 import dayjs from 'dayjs';
+// import { JSXElementConstructor, Provider } from 'react';
+// import thunk, { ThunkDispatch } from 'redux-thunk';
 import { AuthorizationStatus, CITIES } from '../consts';
+// import { fakeState } from '../mocks/mock-store';
+// import { createApi } from '../services/api';
 import {  Offers } from '../types/offer';
+// import { State } from '../types/state';
+// import { Action } from 'redux';
+// import { createMemoryHistory } from 'history';
+// import { Router } from 'react-router-dom';
 
 export function getHumanDate(date: string): string {
   return dayjs(date).format('MMMM YYYY');
@@ -30,3 +39,32 @@ export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean
 export const isLogged = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Auth;
 
 export const getRandomCity = (cities: typeof CITIES): string => cities[Math.floor(Math.random() * cities.length)];
+
+/* export const wrapProvider = (
+  TestComponent: JSXElementConstructor<any>,
+  fakeStore: fakeState,
+  fakeHistory: ReturnType<typeof createMemoryHistory>,
+):JSX.Element => {
+
+  const onFakeUnauthorized = jest.fn();
+  const api = createApi(onFakeUnauthorized());
+  const middlewares = [thunk.withExtraArgument(api)];
+
+  const mockStore = configureMockStore <
+    State,
+    Action,
+    ThunkDispatch< State, typeof api, Action >
+    >(middlewares);
+
+  const store = mockStore(fakeStore);
+
+  return (
+    <Provider store ={store}>
+       <Router history={fakeHistory}>
+         <TestComponent />
+      </Router>
+  </Provider>
+  );
+}; */
+
+

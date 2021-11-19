@@ -1,10 +1,34 @@
 import { AuthorizationStatus, DEFAULT_CITY, FetchStatus } from '../consts';
-import { State } from '../types/state';
+import { FrontAuthInfo } from '../types/auth-data';
+import { Comments } from '../types/comment-get';
+import { Offer, Offers } from '../types/offer';
 import { fakeFrontendComments } from './mock-comments';
 import { fakeFrontendOffers, firstFrontendOffer } from './mock-offers';
 import { userFrontend } from './mock-userData';
 
-export const fakeStateNoAuth:State = {
+export type fakeState = {
+  AUTH: {
+    authorizationStatus: AuthorizationStatus,
+    userAuthInfo: FrontAuthInfo,
+  },
+  OFFERS: {
+    offers: Offers,
+    nearbyOffers: Offers,
+    favoritesOffers: Offers,
+  },
+  LOCATION: {
+    currentCity: string,
+    currentOffer: Offer,
+  },
+  COMMENTS: {
+    comments: Comments,
+  },
+  FETCH_STATUS: {
+    fetchStatus: FetchStatus,
+  },
+};
+
+export const fakeStateNoAuth:fakeState = {
   AUTH: {
     authorizationStatus: AuthorizationStatus.NoAuth,
     userAuthInfo: userFrontend,
@@ -26,7 +50,7 @@ export const fakeStateNoAuth:State = {
   },
 };
 
-export const fakeStateAuth:State = {
+export const fakeStateAuth:fakeState = {
   AUTH: {
     authorizationStatus: AuthorizationStatus.Auth,
     userAuthInfo: userFrontend,

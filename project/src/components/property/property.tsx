@@ -12,7 +12,6 @@ import {
 } from '../../store/api-actions';
 import { useCallback, useEffect, useState } from 'react';
 import { APIRoute, AppRoute, FetchStatus, NotificationMessage } from '../../consts';
-import { api } from '../..';
 
 import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
 import {
@@ -27,6 +26,7 @@ import { setFetchStatusAction } from '../../store/action';
 import { toast } from 'react-toastify';
 import { BackOffer } from '../../types/backdata-offer';
 import PropertyCartOffer from '../property-cart-offer/property-cart-offer';
+import { createApiWithoutCallback } from '../../services/api';
 
 function Property(): JSX.Element {
   const dispatch = useDispatch();
@@ -97,6 +97,8 @@ function Property(): JSX.Element {
   if (fetchStatus === FetchStatus.InProgress) {
     return <LoadingScreen />;
   }
+
+  const api = createApiWithoutCallback();
 
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { api } from '../..';
 import { APIRoute, AppRoute, NotificationMessage } from '../../consts';
 import { Offer } from '../../types/offer';
 import { isLogged } from '../../utils/utils';
@@ -9,6 +8,7 @@ import { getAuthorizationStatus } from '../../store/selectors';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { BackOffer } from '../../types/backdata-offer';
+import { createApiWithoutCallback } from '../../services/api';
 
 type SingleOffer = {
   offer: Offer;
@@ -23,17 +23,19 @@ function PropertyCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Ele
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-  const getFavoriteStatus = async (idOffer: number): Promise<void> => {
-    await api.get<BackOffer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
-      setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
-    });
-  };
 
   const history = useHistory();
+  const api = createApiWithoutCallback();
 
   useEffect(() => {
+    const getFavoriteStatus = async (idOffer: number): Promise<void> => {
+      await api.get<BackOffer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
+        setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
+      });
+    };
+
     getFavoriteStatus(id);
-  }, [id, isFavorite]);
+  }, [api, id, isFavorite]);
 
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);

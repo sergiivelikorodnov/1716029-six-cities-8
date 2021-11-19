@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { api } from '../..';
 import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER, NotificationMessage } from '../../consts';
 import { Offer } from '../../types/offer';
 import { isLogged } from '../../utils/utils';
@@ -11,6 +10,7 @@ import { toast } from 'react-toastify';
 import { BackOffer } from '../../types/backdata-offer';
 import { fetchSingleOfferAction } from '../../store/api-actions';
 import { loadSingleOfferAction } from '../../store/action';
+import { createApiWithoutCallback } from '../../services/api';
 
 type SingleOffer = {
   offer: Offer;
@@ -24,18 +24,20 @@ function CartOffer({ offer }: SingleOffer): JSX.Element {
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-  const getFavoriteStatus = async (idOffer: number): Promise<void> => {
-    await api.get<BackOffer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
-      setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
-    });
-  };
+  const api = createApiWithoutCallback();
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const getFavoriteStatus = async (idOffer: number): Promise<void> => {
+      await api.get<BackOffer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
+        setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
+      });
+    };
     getFavoriteStatus(id);
-  }, [id, isFavorite]);
+  }, [api, id, isFavorite]);
+
 
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);

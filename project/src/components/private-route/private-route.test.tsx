@@ -8,7 +8,7 @@ import { createApi } from '../../services/api';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 import { State } from '../../types/state';
 import { Action } from 'redux';
-import { fakeStateNoAuth } from '../../mocks/mock-store';
+import { fakeStateAuth, fakeStateNoAuth } from '../../mocks/mock-store';
 
 
 const history = createMemoryHistory();
@@ -28,13 +28,14 @@ describe('Checking "Private Route"', () => {
     history.push('/private');
   });
 
-  it('should render component for public route, when user not authorized', () => {
-    const store = mockStore(fakeStateNoAuth);
+
+  it('should render component for "PRIVATE" route, when user authorized', () => {
+    const store = mockStore(fakeStateAuth);
 
     render(
       <Provider store={store}>
-        <Switch>
-          <Router history={history}>
+        <Router history={history}>
+          <Switch>
             <Route exact path="/login">
               <h1>Public Route</h1>
             </Route>
@@ -43,8 +44,31 @@ describe('Checking "Private Route"', () => {
               path="/private"
               render = {()=>(<h1>Private Route</h1>)}
             />
-          </Router>
-        </Switch>
+          </Switch>
+        </Router>
+      </Provider>,
+    );
+
+    expect(screen.getByText(/Private Route/i)).toBeInTheDocument();
+  });
+
+  it('should render component for "PUBLIC" route, when user not authorized', () => {
+    const store = mockStore(fakeStateNoAuth);
+
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <Switch>
+            <Route exact path="/login">
+              <h1>Public Route</h1>
+            </Route>
+            <PrivateRoute
+              exact
+              path="/private"
+              render = {()=>(<h1>Private Route</h1>)}
+            />
+          </Switch>
+        </Router>
       </Provider>,
     );
 

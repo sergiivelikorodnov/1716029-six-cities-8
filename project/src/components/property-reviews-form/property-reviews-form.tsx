@@ -3,7 +3,6 @@ import React from 'react';
 import { FormEvent, useState, ChangeEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { api } from '../..';
 import {
   APIRoute,
   MAX_COMMENT_LENGTH,
@@ -11,6 +10,7 @@ import {
   NotificationMessage,
   ratingValues
 } from '../../consts';
+import { createApiWithoutCallback } from '../../services/api';
 import { getCommentsAction } from '../../store/action';
 import { getCurrentOffer } from '../../store/selectors';
 import { CommentPost } from '../../types/comment-post';
@@ -22,6 +22,7 @@ function PropertyReviewsForm(): JSX.Element {
   const [userComment, setUserComment] = useState<string>('');
   const [userRating, setUserRating] = useState<number>(0);
   const [disabledForm, setDisabledForm] = useState<boolean>(true);
+  const api = createApiWithoutCallback();
 
   useEffect(() => {
     if (
@@ -107,6 +108,7 @@ function PropertyReviewsForm(): JSX.Element {
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={userComment}
+        data-testid = "review_form"
         onChange={(evt: ChangeEvent<HTMLTextAreaElement>) => {
           setUserComment(evt.target.value);
         }}
