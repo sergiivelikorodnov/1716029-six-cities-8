@@ -5,8 +5,7 @@ import {
   getOffersByCity,
   getSortedOffersPriceDown,
   getSortedOffersPriceUp,
-  getSortedOffersTopRated,
-  isCheckedAuth
+  getSortedOffersTopRated
 } from '../../utils/utils';
 import { useEffect, useState } from 'react';
 import Header from '../header/header';
@@ -16,7 +15,6 @@ import MainCityContainer from '../main-city-container/main-city-container';
 import MainEmpty from '../main-empty/main-empty';
 import {
   getAllOffers,
-  getAuthorizationStatus,
   getCurrentCity,
   getFetchStatus
 } from '../../store/selectors';
@@ -26,8 +24,7 @@ function Main(): JSX.Element {
   const dispatch = useDispatch();
   const currentCity = useSelector(getCurrentCity);
   const offers = useSelector(getAllOffers);
-  const authorizationStatus = useSelector(getAuthorizationStatus);
-  const fetchStatus = useSelector(getFetchStatus);
+  const fetchStatus:FetchStatus = useSelector(getFetchStatus);
 
   useEffect(() => {
     dispatch(fetchOffersAction());
@@ -37,13 +34,6 @@ function Main(): JSX.Element {
   }, [dispatch]);
 
   const [selectedSortType, setSelectedSortType] = useState(SortingType.POPULAR);
-
-  if (
-    isCheckedAuth(authorizationStatus) ||
-    fetchStatus === FetchStatus.InProgress
-  ) {
-    return <LoadingScreen />;
-  }
 
   const offersList = getOffersByCity(currentCity, offers);
 
@@ -69,22 +59,25 @@ function Main(): JSX.Element {
 
   return (
     <div className="page page--gray page--main">
-      <Header />
-      <main className="page__main page__main--index">
-        <h1 className="visually-hidden">Cities</h1>
+      {fetchStatus === FetchStatus.InProgress ? <LoadingScreen /> :
+        <>
+          <Header />
+          <main className="page__main page__main--index" data-testid="main-page">
+            <h1 className="visually-hidden">Cities</h1>
 
-        <MainLocationList cities={CITIES} />
-        {offersList.length === 0 ? (
-          <MainEmpty currentCity={currentCity} />
-        ) : (
-          <MainCityContainer
-            offersList={offersList}
-            selectedSortTypeHandler={selectedSortTypeHandler}
-            selectedSortType={selectedSortType}
-            sortedOffers={sortedOffers}
-          />
-        )}
-      </main>
+            <MainLocationList cities={CITIES} />
+            {offersList.length === 0 ? (
+              <MainEmpty currentCity={currentCity} />
+            ) : (
+              <MainCityContainer
+                offersList={offersList}
+                selectedSortTypeHandler={selectedSortTypeHandler}
+                selectedSortType={selectedSortType}
+                sortedOffers={sortedOffers}
+              />
+            )}
+          </main>
+        </>}
     </div>
   );
 }

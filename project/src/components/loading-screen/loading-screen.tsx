@@ -5,7 +5,7 @@ function LoadingScreen(): JSX.Element {
   const LOADING_HEIGHT = 50;
   const LOADING_WIDTH = 50;
   return (
-    <div className={stylesComponent.loading}>
+    <div className={stylesComponent.loading} data-testid="loading">
       <Loader
         type="TailSpin"
         color="#4481c3"

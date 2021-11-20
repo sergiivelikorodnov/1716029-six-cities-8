@@ -31,8 +31,7 @@ function MainCityContainer({
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
           <b className="places__found">
-            {propertyNumber} {`${propertyNumber < 2 ? 'place' : 'places'}`} to
-            stay in {name}
+            {propertyNumber} {`${propertyNumber < 2 ? 'place' : 'places'}`} to stay in {name}
           </b>
           <MainSortingList
             selectedSortTypeHandler={selectedSortTypeHandler}

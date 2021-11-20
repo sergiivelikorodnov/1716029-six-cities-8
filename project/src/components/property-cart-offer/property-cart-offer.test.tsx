@@ -8,8 +8,8 @@ import { fakeStateAuth } from '../../mocks/mock-store';
 import { createApi } from '../../services/api';
 import { State } from '../../types/state';
 import { Action } from 'redux';
-import CartOffer from './main-cart-offer';
 import { firstFrontendOffer } from '../../mocks/mock-offers';
+import PropertyCartOffer from './property-cart-offer';
 
 const history = createMemoryHistory();
 
@@ -24,13 +24,14 @@ const mockStore = configureMockStore <
   >(middlewares);
 
 const store = mockStore(fakeStateAuth);
-describe('check Main Cart Offer', () => {
+describe('check Single Property Cart Offer', () => {
+  const fakeHandlerState = jest.fn();
 
-  it('should show Main Cart Offer correctly', () => {
+  it('should show Single Property correctly', () => {
     render(
       <Provider store ={store}>
         <Router history={history}>
-          <CartOffer offer={firstFrontendOffer}/>
+          <PropertyCartOffer offer={firstFrontendOffer} onHoverOfferHandler={fakeHandlerState}/>
         </Router>
       </Provider>,
     );

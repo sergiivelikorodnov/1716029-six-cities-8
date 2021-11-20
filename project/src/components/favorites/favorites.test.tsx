@@ -4,12 +4,11 @@ import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import { fakeStateAuth } from '../../mocks/mock-store';
+import { fakeStateAuth, fakeStateAuthInProgress } from '../../mocks/mock-store';
 import { createApi } from '../../services/api';
 import { State } from '../../types/state';
 import { Action } from 'redux';
-import CartOffer from './main-cart-offer';
-import { firstFrontendOffer } from '../../mocks/mock-offers';
+import Favorites from './favorites';
 
 const history = createMemoryHistory();
 
@@ -23,21 +22,33 @@ const mockStore = configureMockStore <
     ThunkDispatch< State, typeof api, Action >
   >(middlewares);
 
-const store = mockStore(fakeStateAuth);
-describe('check Main Cart Offer', () => {
 
-  it('should show Main Cart Offer correctly', () => {
+describe('check Favorites List', () => {
+
+  it('should show Favorites List correctly', () => {
+    const store = mockStore(fakeStateAuth);
+
     render(
       <Provider store ={store}>
         <Router history={history}>
-          <CartOffer offer={firstFrontendOffer}/>
+          <Favorites/>
         </Router>
       </Provider>,
     );
-    const { title, price } = firstFrontendOffer;
-    expect(screen.getByAltText(`${title}`)).toBeInTheDocument();
-    expect(screen.getByText(`€${price}`)).toBeInTheDocument();
-    expect(screen.getByText(`${title}`)).toBeInTheDocument();
+    expect(screen.getByText(/Saved listing/i)).toBeInTheDocument();
   });
 
+  it('should show Loader correctly', () => {
+
+    const store = mockStore(fakeStateAuthInProgress);
+
+    render(
+      <Provider store ={store}>
+        <Router history={history}>
+          <Favorites/>
+        </Router>
+      </Provider>,
+    );
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
+  });
 });
