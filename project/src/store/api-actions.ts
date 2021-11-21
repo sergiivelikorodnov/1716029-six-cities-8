@@ -11,8 +11,8 @@ import { dropEmail, saveEmail } from '../services/email';
 import { dropToken, saveToken } from '../services/token';
 import { ThunkActionResult } from '../types/action';
 import { AuthData, BackAuthInfo } from '../types/auth-data';
-import { Comments } from '../types/comment-get';
-import { Offer, Offers } from '../types/offer';
+import { BackOffer, BackOffers } from '../types/backdata-offer';
+import { CommentsBackend } from '../types/comment-get';
 import {
   adaptCommentsBackToFront,
   adaptOffersBackToFront,
@@ -37,7 +37,7 @@ export const fetchOffersAction =
     async (dispatch, _getState, api): Promise<void> => {
       dispatch(setFetchStatusAction(FetchStatus.InProgress));
       await api
-        .get<Offers>(APIRoute.Offers)
+        .get<BackOffers>(APIRoute.Offers)
         .then(({ data }) => {
           dispatch(loadOffersAction(adaptOffersBackToFront(data)));
           dispatch(setFetchStatusAction(FetchStatus.Success));
@@ -49,7 +49,7 @@ export const fetchSingleOfferAction =
   (id: number): ThunkActionResult =>
     async (dispatch, _getState, api): Promise<void> => {
       await api
-        .get<Offer>(`${APIRoute.Offers}/${id}`)
+        .get<BackOffer>(`${APIRoute.Offers}/${id}`)
         .then(({ data }) => {
           if (!data) {
             dispatch(redirectToRoute(AppRoute.NotFoundOffer));
@@ -65,7 +65,7 @@ export const fetchFavoritesOffersAction =
     async (dispatch, _getState, api): Promise<void> => {
       dispatch(setFetchStatusAction(FetchStatus.InProgress));
       await api
-        .get<Offers>(APIRoute.Favorites)
+        .get<BackOffers>(APIRoute.Favorites)
         .then(({ data }) => {
           dispatch(favoriteOffersDataAction(adaptOffersBackToFront(data)));
           dispatch(setFetchStatusAction(FetchStatus.Success));
@@ -77,7 +77,7 @@ export const fetchNearByOffersAction =
   (id: number): ThunkActionResult =>
     async (dispatch, _getState, api): Promise<void> => {
       await api
-        .get<Offers>(`${APIRoute.Offers}/${id}/nearby`)
+        .get<BackOffers>(`${APIRoute.Offers}/${id}/nearby`)
         .then(({ data }) => {
           dispatch(nearbyOffersDataAction(adaptOffersBackToFront(data)));
         })
@@ -88,7 +88,7 @@ export const fetchCommentsAction =
   (id: number): ThunkActionResult =>
     async (dispatch, _getState, api): Promise<void> => {
       await api
-        .get<Comments>(`${APIRoute.Comments}/${id}`)
+        .get<CommentsBackend>(`${APIRoute.Comments}/${id}`)
         .then(({ data }) => {
           dispatch(getCommentsAction(adaptCommentsBackToFront(data)));
         })
@@ -105,7 +105,11 @@ export const checkAuthAction =
           dispatch(requireAuthorization(AuthorizationStatus.Auth)) &&
           saveAuthStatus(AuthorizationStatus.Auth);
       })
-      .catch(() => toast.error(NotificationMessage.ConnecError));
+      .catch(() => {
+        toast.error(NotificationMessage.ConnecError);
+        dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
+        saveAuthStatus(AuthorizationStatus.NoAuth);
+      });
   };
 
 export const loginAction =

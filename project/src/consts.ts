@@ -38,6 +38,7 @@ export const URL_MARKER_ACTIVE = 'img/pin-active.svg';
 export const ADD_FAVORITE_OFFER = 'Предложение было добавлено в избранное';
 
 export const DEFAULT_CITY = 'Paris';
+export const TEST_CITY = 'Amsterdam';
 
 export enum APIRoute {
   Offers = '/hotels',
@@ -88,7 +89,7 @@ export const DEFAULT_USER_DATA: FrontAuthInfo = {
   id: -1,
   isPro: false,
   name: '',
-} as const;
+};
 
 export const MIN_COMMENT_LENGTH = 50;
 export const MAX_COMMENT_LENGTH = 300;

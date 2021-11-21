@@ -3,13 +3,14 @@ import React from 'react';
 import { FormEvent, useState, ChangeEvent, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { api } from '../..';
 import {
-  APIRoute, MAX_COMMENT_LENGTH,
+  APIRoute,
+  MAX_COMMENT_LENGTH,
   MIN_COMMENT_LENGTH,
   NotificationMessage,
   ratingValues
 } from '../../consts';
+import { createApiWithoutCallback } from '../../services/api';
 import { getCommentsAction } from '../../store/action';
 import { getCurrentOffer } from '../../store/selectors';
 import { CommentPost } from '../../types/comment-post';
@@ -20,7 +21,8 @@ function PropertyReviewsForm(): JSX.Element {
   const dispatch = useDispatch();
   const [userComment, setUserComment] = useState<string>('');
   const [userRating, setUserRating] = useState<number>(0);
-  const [disabledForm, setDisabledForm] = useState<boolean>(false);
+  const [disabledForm, setDisabledForm] = useState<boolean>(true);
+  const api = createApiWithoutCallback();
 
   useEffect(() => {
     if (
@@ -33,17 +35,18 @@ function PropertyReviewsForm(): JSX.Element {
     } else {
       setDisabledForm(false);
     }
-  }, [userComment, userRating]);
+  }, [userComment, userRating, disabledForm]);
   const { id } = currentOffer;
 
-  const postNewComment = async (offerId: number, customerComment: CommentPost): Promise<AxiosResponse> => (
+  const postNewComment = async (
+    offerId: number,
+    customerComment: CommentPost,
+  ): Promise<AxiosResponse> =>
+    await api.post(`${APIRoute.Comments}/${offerId}`, customerComment);
 
-    await api.post(`${APIRoute.Comments}/${offerId}`, customerComment)
-  );
-
-  const handleFormSubmit=(evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const customerReview:CommentPost = {
+    const customerReview: CommentPost = {
       comment: userComment,
       rating: userRating,
     };
@@ -85,7 +88,7 @@ function PropertyReviewsForm(): JSX.Element {
                 type="radio"
                 readOnly
                 checked={userRating === Number(numberStars)}
-                onInput={() => setUserRating(Number(numberStars))}
+                onChange={() => setUserRating(Number(numberStars))}
               />
               <label
                 htmlFor={`${numberStars}-stars`}
@@ -105,6 +108,7 @@ function PropertyReviewsForm(): JSX.Element {
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={userComment}
+        data-testid = "review_form"
         onChange={(evt: ChangeEvent<HTMLTextAreaElement>) => {
           setUserComment(evt.target.value);
         }}

@@ -5,12 +5,10 @@ import MainSortingList from '../main-sorting-list/main-sorting-list';
 import { Offers } from '../../types/offer';
 
 type CityContainer = {
-  onHoverOfferHandler(id: number): void;
   offersList: Offers;
   sortedOffers: Offers;
   selectedSortTypeHandler: (sortType: string) => void;
   selectedSortType: string;
-  activeOffer: number;
 };
 
 function MainCityContainer({
@@ -18,8 +16,6 @@ function MainCityContainer({
   selectedSortTypeHandler,
   sortedOffers,
   offersList,
-  onHoverOfferHandler,
-  activeOffer,
 }: CityContainer): JSX.Element {
   const propertyNumber: number = sortedOffers.length;
   const [{ city }] = sortedOffers;
@@ -35,8 +31,7 @@ function MainCityContainer({
         <section className="cities__places places">
           <h2 className="visually-hidden">Places</h2>
           <b className="places__found">
-            {propertyNumber} {`${propertyNumber < 2 ? 'place' : 'places'}`} to
-            stay in {name}
+            {propertyNumber} {`${propertyNumber < 2 ? 'place' : 'places'}`} to stay in {name}
           </b>
           <MainSortingList
             selectedSortTypeHandler={selectedSortTypeHandler}
@@ -44,7 +39,6 @@ function MainCityContainer({
           />
           <MainListOffers
             offers={sortedOffers}
-            onHoverOfferHandler={onHoverOfferHandler}
           />
         </section>
         <div className="cities__right-section">
@@ -52,7 +46,6 @@ function MainCityContainer({
             <MainMap
               offersList={offersList}
               city={city}
-              activeOffer={activeOffer}
             />
           </section>
         </div>

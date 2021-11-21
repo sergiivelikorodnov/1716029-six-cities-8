@@ -12,12 +12,11 @@ type CityFavoriteOffers = {
   city: string;
 };
 
-
 function FavoriteListOffers({ offers, city }: CityFavoriteOffers): JSX.Element {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleCityButton = (evt: MouseEvent, selectedCity:string) => {
+  const handleCityButton = (evt: MouseEvent, selectedCity: string) => {
     evt.preventDefault();
 
     dispatch(changeCityAction(selectedCity));
@@ -30,8 +29,8 @@ function FavoriteListOffers({ offers, city }: CityFavoriteOffers): JSX.Element {
         <div className="locations__item">
           <Link
             className="locations__item-link"
-            onClick={(evt)=>handleCityButton(evt, city)}
-            to=""
+            onClick={(evt) => handleCityButton(evt, city)}
+            to="/"
           >
             <span>{city}</span>
           </Link>

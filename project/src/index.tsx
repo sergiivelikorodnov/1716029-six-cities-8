@@ -1,18 +1,19 @@
+
 import React from 'react';
 import { configureStore } from '@reduxjs/toolkit';
-import ReactDOM from 'react-dom';
 import App from './components/app/app';
 import { Provider } from 'react-redux';
 import { AuthorizationStatus } from './consts';
-import { сreateApi } from './services/api';
+import { createApi } from './services/api';
 import { requireAuthorization } from './store/action';
 import { checkAuthAction } from './store/api-actions';
 import { redirect } from './store/middlewares/redirect';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { rootReducer } from './store/reducers/root';
+import ReactDOM from 'react-dom';
 
-export const api = сreateApi(() =>
+export const api = createApi(() =>
   store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth)),
 );
 

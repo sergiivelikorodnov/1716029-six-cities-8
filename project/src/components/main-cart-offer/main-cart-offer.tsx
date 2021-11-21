@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { api } from '../..';
-import { APIRoute, AppRoute, NotificationMessage } from '../../consts';
+import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER, NotificationMessage } from '../../consts';
 import { Offer } from '../../types/offer';
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import { getAuthorizationStatus } from '../../store/selectors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { BackOffer } from '../../types/backdata-offer';
+import { fetchSingleOfferAction } from '../../store/api-actions';
+import { loadSingleOfferAction } from '../../store/action';
+import { createApiWithoutCallback } from '../../services/api';
 
 type SingleOffer = {
   offer: Offer;
-  onHoverOfferHandler(id: number): void;
 };
 
-function MainCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element {
+function CartOffer({ offer }: SingleOffer): JSX.Element {
   const authorizationStatus = useSelector(getAuthorizationStatus);
 
   const { id, price, rating, title, isPremium, isFavorite, previewImage } =
@@ -22,22 +24,25 @@ function MainCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
 
-  const getFavoriteStatus = async (idOffer: number): Promise<void> => {
-    await api.get<Offer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
-      setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
-    });
-  };
+  const api = createApiWithoutCallback();
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    const getFavoriteStatus = async (idOffer: number): Promise<void> => {
+      await api.get<BackOffer>(`${APIRoute.Offers}/${idOffer}`).then(({ data }) => {
+        setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
+      });
+    };
     getFavoriteStatus(id);
-  }, [id, isFavorite]);
+  }, [api, id, isFavorite]);
+
 
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
     await api
-      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
         if (isFavoriteStatus) {
@@ -46,14 +51,14 @@ function MainCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element
           toast.success(NotificationMessage.FavoriteAdd);
         }
       })
-      .catch(()=> toast.success(NotificationMessage.ConnecError));
+      .catch(() => toast.success(NotificationMessage.ConnecError));
   };
 
   return (
     <article
       className="cities__place-card place-card"
-      onMouseOver={() => onHoverOfferHandler && onHoverOfferHandler(id)}
-      onMouseOut={() => onHoverOfferHandler && onHoverOfferHandler(0)}
+      onMouseOver={() => dispatch(fetchSingleOfferAction(id))}
+      onMouseOut={() => dispatch(loadSingleOfferAction(DEFAULT_SINGLE_OFFER))}
     >
       {isPremium ? (
         <div className="place-card__mark">
@@ -111,4 +116,4 @@ function MainCartOffer({ offer, onHoverOfferHandler }: SingleOffer): JSX.Element
   );
 }
 
-export default MainCartOffer;
+export default CartOffer;

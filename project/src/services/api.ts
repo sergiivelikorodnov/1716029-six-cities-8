@@ -17,7 +17,7 @@ enum HttpCode {
 
 type onUnauthorizedCallback = () => void;
 
-export const сreateApi = (
+export const createApi = (
   onUnauthorized: onUnauthorizedCallback,
 ): AxiosInstance => {
   const api = axios.create({
@@ -49,3 +49,23 @@ export const сreateApi = (
   });
   return api;
 };
+
+
+export const createApiWithoutCallback = (): AxiosInstance => {
+  const api = axios.create({
+    baseURL: BACKEND_URL,
+    timeout: REQUEST_TIMEOUT,
+  });
+
+  api.interceptors.request.use((config: AxiosRequestConfig) => {
+    const token = getToken();
+
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers['x-token'] = token;
+    }
+    return config;
+  });
+  return api;
+};
+

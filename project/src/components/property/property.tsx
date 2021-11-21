@@ -1,6 +1,5 @@
 import { isLogged } from '../../utils/utils';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
-import MainCartOffer from '../main-cart-offer/main-cart-offer';
 import PropertyReviewsForm from '../property-reviews-form/property-reviews-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,8 +12,7 @@ import {
 } from '../../store/api-actions';
 import { useCallback, useEffect, useState } from 'react';
 import { APIRoute, AppRoute, FetchStatus, NotificationMessage } from '../../consts';
-import { api } from '../..';
-import { Offer } from '../../types/offer';
+
 import MapNearestPlaces from '../map-nearest-places/map-nearest-places';
 import {
   getAuthorizationStatus,
@@ -26,6 +24,9 @@ import {
 import PropertyComments from '../property-comments/property-comments';
 import { setFetchStatusAction } from '../../store/action';
 import { toast } from 'react-toastify';
+import { BackOffer } from '../../types/backdata-offer';
+import PropertyCartOffer from '../property-cart-offer/property-cart-offer';
+import { createApiWithoutCallback } from '../../services/api';
 
 function Property(): JSX.Element {
   const dispatch = useDispatch();
@@ -79,6 +80,9 @@ function Property(): JSX.Element {
 
   useEffect(() => {
     setIsFavoriteStatus(isFavorite);
+    return (() => {
+      setIsFavoriteStatus(!isFavorite);
+    });
   }, [currentOffer, isFavorite]);
 
   const { name, avatarUrl, isPro } = host;
@@ -94,10 +98,12 @@ function Property(): JSX.Element {
     return <LoadingScreen />;
   }
 
+  const api = createApiWithoutCallback();
+
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
     await api
-      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
         if (isFavoriteStatus) {
@@ -219,13 +225,7 @@ function Property(): JSX.Element {
                 </div>
               </div>
               <section className="property__reviews reviews">
-                <h2 className="reviews__title">
-                  Reviews &middot;{' '}
-                  <span className="reviews__amount">{comments.length}</span>
-                </h2>
-                <ul className="reviews__list">
-                  <PropertyComments comments={comments} />
-                </ul>
+                <PropertyComments comments={comments} />
                 {isLogged(authorizationStatus) ? <PropertyReviewsForm /> : ''}
               </section>
             </div>
@@ -246,7 +246,7 @@ function Property(): JSX.Element {
             </h2>
             <div className="near-places__list places__list">
               {nearbyOffers.map((similarOffer) => (
-                <MainCartOffer
+                <PropertyCartOffer
                   key={similarOffer.id}
                   offer={similarOffer}
                   onHoverOfferHandler={offerHandler}

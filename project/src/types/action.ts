@@ -4,6 +4,7 @@ import { AxiosInstance } from 'axios';
 import { Action } from 'redux';
 
 export enum ActionType {
+  Unknown = 'testing/unknown',
   ChangeCity = 'changeCity',
   SelectCity = 'selectCity',
   LoadOffersData = 'loadOffersData',

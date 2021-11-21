@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { api } from '../..';
 import { APIRoute, NotificationMessage } from '../../consts';
+import { createApiWithoutCallback } from '../../services/api';
 import { fetchFavoritesOffersAction } from '../../store/api-actions';
+import { BackOffer } from '../../types/backdata-offer';
 import { Offer } from '../../types/offer';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 
@@ -21,11 +22,12 @@ function FavoriteCartOffer({ offer }: SingleOffer): JSX.Element {
   const { id, type, price, rating, title, isFavorite, previewImage } = offer;
 
   const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
+  const api = createApiWithoutCallback();
 
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
     const favoriteStatus = Number(!isFavoriteStatus);
     await api
-      .post<Offer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
         loadOffersData();

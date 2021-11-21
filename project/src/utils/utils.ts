@@ -1,7 +1,15 @@
+// import { configureMockStore } from '@jedmao/redux-mock-store';
 import dayjs from 'dayjs';
+// import { JSXElementConstructor, Provider } from 'react';
+// import thunk, { ThunkDispatch } from 'redux-thunk';
 import { AuthorizationStatus, CITIES } from '../consts';
-import { Comments } from '../types/comment-get';
+// import { fakeState } from '../mocks/mock-store';
+// import { createApi } from '../services/api';
 import {  Offers } from '../types/offer';
+// import { State } from '../types/state';
+// import { Action } from 'redux';
+// import { createMemoryHistory } from 'history';
+// import { Router } from 'react-router-dom';
 
 export function getHumanDate(date: string): string {
   return dayjs(date).format('MMMM YYYY');
@@ -24,15 +32,39 @@ export function getSortedOffersPriceDown(offers: Offers): Offers {
 }
 
 export function getSortedOffersTopRated(offers: Offers): Offers {
-  return offers.slice().sort((offerA, offerB) => offerA.rating - offerB.rating);
+  return offers.slice().sort((offerA, offerB) => offerB.rating - offerA.rating);
 }
 
-export function getSortedCommentsByDate(comments: Comments): Comments {
-  return comments.sort((offerA, offerB) => dayjs(offerB.date).diff(dayjs(offerA.date)));
-}
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Unknown;
 export const isLogged = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Auth;
 
 export const getRandomCity = (cities: typeof CITIES): string => cities[Math.floor(Math.random() * cities.length)];
 
-export const emailValid = (value:string):boolean => /^[a-z0-9][a-z0-9-_\\.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/.test(value);
+/* export const wrapProvider = (
+  TestComponent: JSXElementConstructor<any>,
+  fakeStore: fakeState,
+  fakeHistory: ReturnType<typeof createMemoryHistory>,
+):JSX.Element => {
+
+  const onFakeUnauthorized = jest.fn();
+  const api = createApi(onFakeUnauthorized());
+  const middlewares = [thunk.withExtraArgument(api)];
+
+  const mockStore = configureMockStore <
+    State,
+    Action,
+    ThunkDispatch< State, typeof api, Action >
+    >(middlewares);
+
+  const store = mockStore(fakeStore);
+
+  return (
+    <Provider store ={store}>
+       <Router history={fakeHistory}>
+         <TestComponent />
+      </Router>
+  </Provider>
+  );
+}; */
+
+
