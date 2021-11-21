@@ -30,9 +30,8 @@ function CartOffer({ offer }: SingleOffer): JSX.Element {
   const dispatch = useDispatch();
 
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
-    const favoriteStatus = Number(!isFavorite);
     await api
-      .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
+      .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${Number(!isFavoriteStatus)}`)
       .then(({ data }) => {
         setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
         if (isFavorite) {

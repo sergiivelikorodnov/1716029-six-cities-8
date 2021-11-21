@@ -46,7 +46,7 @@ export const fakeStateNoAuth:fakeState = {
     comments: fakeFrontendComments,
   },
   FETCH_STATUS: {
-    fetchStatus: FetchStatus.InProgress,
+    fetchStatus: FetchStatus.Success,
   },
 };
 
