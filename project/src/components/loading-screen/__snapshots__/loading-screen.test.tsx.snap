@@ -4,6 +4,7 @@ exports[`Render main Empty Component should render correctly 1`] = `
 <div>
   <div
     class="loading"
+    data-testid="loading"
   >
     <div
       aria-busy="true"

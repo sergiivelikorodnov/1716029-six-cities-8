@@ -84,7 +84,7 @@ function MapNearestPlaces({
     currentOffer.location.longitude,
     city.location,
   ]);
-  return <div style={{ height: '100%' }} ref={mapRef}></div>;
+  return <div style={{ height: '100%' }} ref={mapRef} data-testid = 'nearest-places-map'></div>;
 }
 
 export default MapNearestPlaces;

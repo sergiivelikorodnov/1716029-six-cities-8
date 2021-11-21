@@ -79,7 +79,7 @@ function MainMap({
     longitude,
     zoom,
   ]);
-  return <div style={{ height: '100%' }} ref={mapRef}></div>;
+  return <div style={{ height: '100%' }} ref={mapRef} data-testid = 'main-map'></div>;
 }
 
 export default MainMap;
