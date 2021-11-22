@@ -1,4 +1,3 @@
-
 import dayjs from 'dayjs';
 import { AuthorizationStatus, CITIES } from '../consts';
 import { Offers } from '../types/offer';
