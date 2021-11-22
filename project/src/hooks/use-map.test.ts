@@ -1,5 +1,4 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { isNull } from 'lodash';
 import { fakeStateAuth } from '../mocks/mock-store';
 import useMap from './use-map';
 
