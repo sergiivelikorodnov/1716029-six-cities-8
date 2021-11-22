@@ -1,27 +1,8 @@
 import { AuthorizationStatus } from '../consts';
 import { fakeFrontendOffers, fakeSortedOffersByPriceDown, fakeSortedOffersByPriceUp, fakeSortedOffersByTopRated, firstFrontendOffer, forthFrontendOffer, secondFrontendOffer, thirdFrontendOffer } from '../mocks/mock-offers';
-import { getOffersByCity, getSortedOffersPriceDown, getSortedOffersPriceUp, getSortedOffersTopRated, isCheckedAuth, isLogged } from './utils';
-
-describe('Function: isCheckedAuth', () => {
-
-  it('should return "TRUE" when Authorization Status Unknown', () => {
-    expect(isCheckedAuth(AuthorizationStatus.Unknown))
-      .toBe(true);
-  });
-
-  it('should return "FALSE" when Authorization Status is NoAuth', () => {
-    expect(isCheckedAuth(AuthorizationStatus.NoAuth))
-      .toBe(false);
-  });
-
-  it('should return "FALSE" when Authorization Status is Auth', () => {
-    expect(isCheckedAuth(AuthorizationStatus.Auth))
-      .toBe(false);
-  });
-});
+import { getOffersByCity, getSortedOffersPriceDown, getSortedOffersPriceUp, getSortedOffersTopRated, isLogged } from './utils';
 
 describe('Function: isLogged', () => {
-
 
   it('should return "TRUE" when Authorization Status AUTH', () => {
     expect(isLogged(AuthorizationStatus.Auth))
