@@ -122,7 +122,7 @@ function Property(): JSX.Element {
       <Header />
       <main className="page__main page__main--property">
         <section className="property">
-          <div className="property__gallery-container container">
+          <div className="property__gallery-container container" data-testid='gallery'>
             <div className="property__gallery">
               {images.slice(0, MAX_GALLERY_IMAGES).map((image) => {
                 const keyValue = `${id}-${image}`;
@@ -144,7 +144,7 @@ function Property(): JSX.Element {
                 ''
               )}
               <div className="property__name-wrapper">
-                <h1 className="property__name">{title}</h1>
+                <h1 className="property__name" data-testid='title'>{title}</h1>
                 <button
                   onClick={
                     isLogged(authorizationStatus)
@@ -155,6 +155,7 @@ function Property(): JSX.Element {
                     isFavoriteStatus ? 'property__bookmark-button--active' : ''
                   } button`}
                   type="button"
+                  data-testid = "favorite-button"
                 >
                   <svg
                     className="property__bookmark-icon"
@@ -187,7 +188,7 @@ function Property(): JSX.Element {
                   Max {maxAdults} {`${maxAdults > 1}` ? 'adults' : 'adult'}
                 </li>
               </ul>
-              <div className="property__price">
+              <div className="property__price" data-testid="price">
                 <b className="property__price-value">&euro;{price}</b>
                 <span className="property__price-text">&nbsp;night</span>
               </div>
@@ -220,11 +221,11 @@ function Property(): JSX.Element {
                     ''
                   )}
                 </div>
-                <div className="property__description">
+                <div className="property__description" data-testid="description">
                   <p className="property__text">{description}</p>
                 </div>
               </div>
-              <section className="property__reviews reviews">
+              <section className="property__reviews reviews" data-testid="reviews">
                 <PropertyComments comments={comments} />
                 {isLogged(authorizationStatus) ? <PropertyReviewsForm /> : ''}
               </section>
