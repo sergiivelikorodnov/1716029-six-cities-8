@@ -6,7 +6,7 @@ import { Offer, Offers } from './offer';
 
 export type AuthDataType = {
   authorizationStatus: AuthorizationStatus;
-  userAuthInfo: FrontAuthInfo;
+  userAuthInfo: FrontAuthInfo | null;
 };
 
 export type OffersDataType = {
