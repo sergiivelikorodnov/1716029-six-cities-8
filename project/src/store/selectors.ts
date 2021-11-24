@@ -16,7 +16,7 @@ export const getFavoriteOffers = (state: State): Offers =>
 export const getNearByOffers = (state: State): Offers =>
   state[NameSpace.offers].nearbyOffers;
 
-export const getCurrentOffer = (state: State): Offer =>
+export const getCurrentOffer = (state: State): Offer | null =>
   state[NameSpace.location].currentOffer;
 
 export const getCurrentCity = (state: State): string =>

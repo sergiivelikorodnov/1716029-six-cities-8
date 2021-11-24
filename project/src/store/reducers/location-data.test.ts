@@ -1,5 +1,5 @@
-import { DEFAULT_CITY, DEFAULT_SINGLE_OFFER } from '../../consts';
-import { fakeFrontendOffers } from '../../mocks/mock-offers';
+import { DEFAULT_CITY } from '../../consts';
+import { fakeFrontendOffers, firstFrontendOffer } from '../../mocks/mock-offers';
 import { ActionType } from '../../types/action';
 import {  LocationDataType } from '../../types/state';
 import { locationDataReducer } from './location-data';
@@ -8,7 +8,7 @@ describe('Location Data Reducer', () => {
   it('should get "New City"', () => {
     const state: LocationDataType = {
       currentCity: DEFAULT_CITY,
-      currentOffer: DEFAULT_SINGLE_OFFER,
+      currentOffer: firstFrontendOffer,
     };
 
     const changeCityAction = {
@@ -19,14 +19,14 @@ describe('Location Data Reducer', () => {
     expect(locationDataReducer(state, changeCityAction))
       .toEqual({
         currentCity: 'New City',
-        currentOffer: DEFAULT_SINGLE_OFFER,
+        currentOffer: firstFrontendOffer,
       });
   });
 
   it('should\'t change "Current Offer"', () => {
     const state: LocationDataType = {
       currentCity: DEFAULT_CITY,
-      currentOffer: DEFAULT_SINGLE_OFFER,
+      currentOffer: firstFrontendOffer,
     };
 
     const changeCityAction = {
@@ -37,14 +37,14 @@ describe('Location Data Reducer', () => {
     expect(locationDataReducer(state, changeCityAction))
       .toEqual({
         currentCity: DEFAULT_CITY,
-        currentOffer: DEFAULT_SINGLE_OFFER,
+        currentOffer: firstFrontendOffer,
       });
   });
 
   it('should\'t change "State"', () => {
     const state: LocationDataType = {
       currentCity: DEFAULT_CITY,
-      currentOffer: DEFAULT_SINGLE_OFFER,
+      currentOffer: firstFrontendOffer,
     };
 
     const changeCityAction = {
@@ -55,14 +55,14 @@ describe('Location Data Reducer', () => {
     expect(locationDataReducer(state, changeCityAction))
       .toEqual({
         currentCity: DEFAULT_CITY,
-        currentOffer: DEFAULT_SINGLE_OFFER,
+        currentOffer: firstFrontendOffer,
       });
   });
 
   it('should get "New Current Offer"', () => {
     const state: LocationDataType = {
       currentCity: DEFAULT_CITY,
-      currentOffer: DEFAULT_SINGLE_OFFER,
+      currentOffer: firstFrontendOffer,
     };
 
     const changeCurrentOfferAction = {
@@ -80,7 +80,7 @@ describe('Location Data Reducer', () => {
   it('should\'t get "Wrong Current Offer"', () => {
     const state: LocationDataType = {
       currentCity: DEFAULT_CITY,
-      currentOffer: DEFAULT_SINGLE_OFFER,
+      currentOffer: firstFrontendOffer,
     };
 
     const changeCurrentOfferAction = {

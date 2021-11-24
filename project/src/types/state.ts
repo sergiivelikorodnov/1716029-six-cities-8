@@ -17,7 +17,7 @@ export type OffersDataType = {
 
 export type LocationDataType = {
   currentCity: string;
-  currentOffer: Offer;
+  currentOffer: Offer | null;
 };
 
 export type CommentsDataType = {
