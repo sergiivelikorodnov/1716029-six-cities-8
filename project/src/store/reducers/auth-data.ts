@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { AuthorizationStatus, DEFAULT_USER_DATA } from '../../consts';
+import { AuthorizationStatus } from '../../consts';
 import { AuthDataType } from '../../types/state';
 import {
   requireAuthorization,
@@ -9,7 +9,7 @@ import {
 
 const initialState: AuthDataType = {
   authorizationStatus: AuthorizationStatus.Unknown,
-  userAuthInfo: DEFAULT_USER_DATA,
+  userAuthInfo: null,
 };
 
 const authDataReducer = createReducer(initialState, (builder) => {

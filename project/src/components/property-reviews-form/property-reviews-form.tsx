@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 import React from 'react';
 import { FormEvent, useState, ChangeEvent, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import {
   APIRoute,
@@ -12,12 +13,10 @@ import {
 } from '../../consts';
 import { createApiWithoutCallback } from '../../services/api';
 import { getCommentsAction } from '../../store/action';
-import { getCurrentOffer } from '../../store/selectors';
 import { CommentPost } from '../../types/comment-post';
 import { adaptCommentsBackToFront } from '../../utils/adapters';
 
 function PropertyReviewsForm(): JSX.Element {
-  const currentOffer = useSelector(getCurrentOffer);
   const dispatch = useDispatch();
   const [userComment, setUserComment] = useState<string>('');
   const [userRating, setUserRating] = useState<number>(0);
@@ -36,7 +35,9 @@ function PropertyReviewsForm(): JSX.Element {
       setDisabledForm(false);
     }
   }, [userComment, userRating, disabledForm]);
-  const { id } = currentOffer;
+
+  const { id } = useParams<{ id: string }>();
+  const urlId = Number(id);
 
   const postNewComment = async (
     offerId: number,
@@ -52,7 +53,7 @@ function PropertyReviewsForm(): JSX.Element {
     };
     setDisabledForm(true);
 
-    postNewComment(id, customerReview)
+    postNewComment(urlId, customerReview)
       .then(({ data }) => {
         dispatch(getCommentsAction(adaptCommentsBackToFront(data)));
         setUserComment('');

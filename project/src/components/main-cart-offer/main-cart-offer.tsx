@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { APIRoute, AppRoute, DEFAULT_SINGLE_OFFER, NotificationMessage } from '../../consts';
+import { APIRoute, AppRoute, NotificationMessage } from '../../consts';
 import { Offer } from '../../types/offer';
 import { isLogged } from '../../utils/utils';
 import { getAuthorizationStatus } from '../../store/selectors';
@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { BackOffer } from '../../types/backdata-offer';
 import { fetchSingleOfferAction } from '../../store/api-actions';
-import { loadSingleOfferAction } from '../../store/action';
 import { createApiWithoutCallback } from '../../services/api';
 import { adaptSingleOfferBackToFront } from '../../utils/adapters';
+import { loadSingleOfferAction } from '../../store/action';
 
 type SingleOffer = {
   offer: Offer;
@@ -47,7 +47,7 @@ function CartOffer({ offer }: SingleOffer): JSX.Element {
     <article
       className="cities__place-card place-card"
       onMouseOver={() => dispatch(fetchSingleOfferAction(id))}
-      onMouseOut={() => dispatch(loadSingleOfferAction(DEFAULT_SINGLE_OFFER))}
+      onMouseOut={() => dispatch(loadSingleOfferAction(null))}
     >
       {isPremium ? (
         <div className="place-card__mark">

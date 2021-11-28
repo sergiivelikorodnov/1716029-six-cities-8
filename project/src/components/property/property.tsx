@@ -1,5 +1,4 @@
 import { isLogged } from '../../utils/utils';
-import { adaptSingleOfferBackToFront } from '../../utils/adapters';
 import PropertyReviewsForm from '../property-reviews-form/property-reviews-form';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -57,10 +56,20 @@ function Property(): JSX.Element {
   }, [dispatch]);
 
   useEffect(() => {
-    if (currentOffer.id === Number(urlId) && nearbyOffers) {
+    if (currentOffer && currentOffer.id === Number(urlId) && nearbyOffers) {
       initFetchStatus();
     }
   }, [currentOffer, initFetchStatus, nearbyOffers, urlId]);
+
+
+  const [activeOffer, setActiveOffer] = useState(0);
+  const offerHandler = (idActive: number) => {
+    setActiveOffer(idActive);
+  };
+
+  if (fetchStatus === FetchStatus.InProgress || currentOffer === null) {
+    return <LoadingScreen />;
+  }
 
   const {
     id,
@@ -78,35 +87,18 @@ function Property(): JSX.Element {
     isFavorite,
   } = currentOffer;
 
-  useEffect(() => {
-    setIsFavoriteStatus(isFavorite);
-    return (() => {
-      setIsFavoriteStatus(!isFavorite);
-    });
-  }, [currentOffer, isFavorite]);
 
   const { name, avatarUrl, isPro } = host;
-
-  const [activeOffer, setActiveOffer] = useState(0);
-  const offerHandler = (idActive: number) => {
-    setActiveOffer(idActive);
-  };
-
-  const [isFavoriteStatus, setIsFavoriteStatus] = useState(isFavorite);
-
-  if (fetchStatus === FetchStatus.InProgress) {
-    return <LoadingScreen />;
-  }
 
   const api = createApiWithoutCallback();
 
   const setFavoriteHandler = async (idOffer: number): Promise<void> => {
-    const favoriteStatus = Number(!isFavoriteStatus);
+    const favoriteStatus = Number(!isFavorite);
     await api
       .post<BackOffer>(`${APIRoute.Favorites}/${idOffer}/${favoriteStatus}`)
       .then(({ data }) => {
-        setIsFavoriteStatus(adaptSingleOfferBackToFront(data).isFavorite);
-        if (isFavoriteStatus) {
+        dispatch(fetchSingleOfferAction(Number(urlId)));
+        if (!favoriteStatus) {
           toast.success(NotificationMessage.FavoriteRemove);
         } else {
           toast.success(NotificationMessage.FavoriteAdd);
@@ -116,6 +108,7 @@ function Property(): JSX.Element {
   };
 
   const MAX_GALLERY_IMAGES = 6;
+
 
   return (
     <div className="page">
@@ -152,7 +145,7 @@ function Property(): JSX.Element {
                       : () => history.push(AppRoute.Login)
                   }
                   className={`property__bookmark-button ${
-                    isFavoriteStatus ? 'property__bookmark-button--active' : ''
+                    isFavorite ? 'property__bookmark-button--active' : ''
                   } button`}
                   type="button"
                   data-testid = "favorite-button"

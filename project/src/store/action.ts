@@ -45,7 +45,7 @@ export const setUserAuthInfo = createAction(
 
 export const loadSingleOfferAction = createAction(
   ActionType.LoadSingleOfferData,
-  (offer: Offer) => ({
+  (offer: Offer | null) => ({
     payload: offer,
   }),
 );

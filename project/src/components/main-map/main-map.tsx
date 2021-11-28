@@ -60,7 +60,7 @@ function MainMap({
 
         marker
           .setIcon(
-            currentOffer.id === offer.id
+            currentOffer && currentOffer.id === offer.id
               ? currentCustomIcon
               : defaultCustomIcon,
           )

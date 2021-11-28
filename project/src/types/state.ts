@@ -6,7 +6,7 @@ import { Offer, Offers } from './offer';
 
 export type AuthDataType = {
   authorizationStatus: AuthorizationStatus;
-  userAuthInfo: FrontAuthInfo;
+  userAuthInfo: FrontAuthInfo | null;
 };
 
 export type OffersDataType = {
@@ -17,7 +17,7 @@ export type OffersDataType = {
 
 export type LocationDataType = {
   currentCity: string;
-  currentOffer: Offer;
+  currentOffer: Offer | null;
 };
 
 export type CommentsDataType = {
